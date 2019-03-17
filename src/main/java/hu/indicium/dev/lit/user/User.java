@@ -2,6 +2,7 @@ package hu.indicium.dev.lit.user;
 
 import hu.indicium.dev.lit.group.GroupMembership;
 import hu.indicium.dev.lit.membership.Membership;
+import hu.indicium.dev.lit.study.Study;
 import hu.indicium.dev.lit.userdata.UserData;
 
 import javax.persistence.*;
@@ -25,6 +26,9 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_data_id")
     private UserData userData;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Study> studies = new HashSet<>();
 
     public User() {
     }

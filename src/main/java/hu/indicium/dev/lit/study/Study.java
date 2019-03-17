@@ -1,6 +1,6 @@
 package hu.indicium.dev.lit.study;
 
-import hu.indicium.dev.lit.userdata.UserData;
+import hu.indicium.dev.lit.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,15 +16,15 @@ public class Study {
     private Date startDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private UserData userData;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "fk_study")
     private StudyType type;
 
-    public Study(Date startDate, UserData userData, StudyType type) {
+    public Study(Date startDate, User user, StudyType type) {
         this.startDate = startDate;
-        this.userData = userData;
+        this.user = user;
         this.type = type;
     }
 
@@ -44,12 +44,12 @@ public class Study {
         this.startDate = startDate;
     }
 
-    public UserData getUserData() {
-        return userData;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserData(UserData userData) {
-        this.userData = userData;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public StudyType getType() {
