@@ -1,6 +1,7 @@
 package hu.indicium.dev.lit.study;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class StudyType {
@@ -14,6 +15,9 @@ public class StudyType {
 
     @Column(nullable = false)
     private String longName;
+
+    @OneToMany(mappedBy = "type")
+    private Set<Study> studies;
 
     public StudyType(String shortName, String longName) {
         this.shortName = shortName;

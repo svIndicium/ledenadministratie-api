@@ -1,11 +1,14 @@
 package hu.indicium.dev.lit.userdata;
 
+import hu.indicium.dev.lit.study.Study;
 import hu.indicium.dev.lit.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class UserData {
@@ -62,6 +65,9 @@ public class UserData {
 
     @OneToOne(mappedBy = "userData", fetch = FetchType.LAZY, optional = false)
     private User user;
+
+    @OneToMany(mappedBy = "userData")
+    private Set<Study> studies = new HashSet<>();
 
     public UserData(User user) {
         this.user = user;
