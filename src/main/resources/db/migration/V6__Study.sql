@@ -1,3 +1,15 @@
+create table study_type
+(
+  id         bigint       not null
+    constraint study_type_pkey
+      primary key,
+  long_name  varchar(255) not null,
+  short_name varchar(255) not null
+);
+
+
+create sequence study_type_seq;
+
 create table study
 (
   id           bigint    not null
@@ -12,11 +24,4 @@ create table study
       references user_data
 );
 
-create table study_type
-(
-  id         bigint       not null
-    constraint study_type_pkey
-      primary key,
-  long_name  varchar(255) not null,
-  short_name varchar(255) not null
-);
+create sequence study_seq;
