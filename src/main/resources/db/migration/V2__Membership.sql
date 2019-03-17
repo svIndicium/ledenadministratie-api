@@ -12,9 +12,4 @@ create table memberships
       references users
 );
 
-alter table memberships
-  owner to postgres;
-
 create sequence member_seq;
-
-alter sequence member_seq owner to postgres;

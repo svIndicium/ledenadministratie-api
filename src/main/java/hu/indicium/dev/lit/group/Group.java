@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "groups")
 public class Group {
     @Id
     @SequenceGenerator(name = "group_id_generator", sequenceName = "group_seq", allocationSize = 1)

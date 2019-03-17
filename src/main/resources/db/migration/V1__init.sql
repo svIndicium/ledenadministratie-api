@@ -5,10 +5,5 @@ create table users
       primary key
 );
 
-alter table users
-  owner to postgres;
-
 create sequence user_seq;
-
-alter sequence user_seq owner to postgres;
 
