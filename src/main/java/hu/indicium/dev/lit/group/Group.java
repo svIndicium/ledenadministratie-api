@@ -1,6 +1,8 @@
 package hu.indicium.dev.lit.group;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Group {
@@ -11,6 +13,9 @@ public class Group {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "group")
+    private Set<GroupMembership> memberships = new HashSet<>();
 
     public Group(String name) {
         this.name = name;
@@ -30,5 +35,13 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<GroupMembership> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(Set<GroupMembership> memberships) {
+        this.memberships = memberships;
     }
 }
