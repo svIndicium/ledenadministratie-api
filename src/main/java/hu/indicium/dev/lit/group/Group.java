@@ -1,6 +1,9 @@
 package hu.indicium.dev.lit.group;
 
+import hu.indicium.dev.lit.user.User;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,5 +46,9 @@ public class Group {
 
     public void setMemberships(Set<GroupMembership> memberships) {
         this.memberships = memberships;
+    }
+
+    public void addMembership(User user, Date dateStart, Date dateEnd) {
+        this.memberships.add(new GroupMembership(dateStart, dateEnd, this, user));
     }
 }
