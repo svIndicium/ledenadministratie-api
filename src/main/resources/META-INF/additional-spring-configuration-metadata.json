@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "indicium.oauth.check-token-url",
+      "type": "java.lang.String",
+      "description": "Description for indicium.oauth.check-token-url."
+    },
+    {
+      "name": "indicium.oauth.client-id",
+      "type": "java.lang.String",
+      "description": "Description for indicium.oauth.client-id."
+    },
+    {
+      "name": "indicium.oauth.client-secret",
+      "type": "java.lang.String",
+      "description": "Description for indicium.oauth.client-secret."
+    }
+  ]
+}
