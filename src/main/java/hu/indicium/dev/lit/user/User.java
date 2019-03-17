@@ -1,5 +1,6 @@
 package hu.indicium.dev.lit.user;
 
+import hu.indicium.dev.lit.group.GroupMembership;
 import hu.indicium.dev.lit.membership.Membership;
 
 import javax.persistence.*;
@@ -16,6 +17,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Membership> memberships = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<GroupMembership> groupMemberships = new HashSet<>();
 
     public User() {
     }
@@ -38,5 +42,13 @@ public class User {
 
     public void addMembership(Membership membership) {
         this.memberships.add(membership);
+    }
+
+    public Set<GroupMembership> getGroupMemberships() {
+        return groupMemberships;
+    }
+
+    public void setGroupMemberships(Set<GroupMembership> groupMemberships) {
+        this.groupMemberships = groupMemberships;
     }
 }

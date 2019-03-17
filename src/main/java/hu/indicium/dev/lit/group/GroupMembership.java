@@ -1,5 +1,6 @@
 package hu.indicium.dev.lit.group;
 
+import hu.indicium.dev.lit.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -29,10 +30,15 @@ public class GroupMembership {
     @JoinColumn(name = "fk_group")
     private Group group;
 
-    public GroupMembership(Date startDate, Date endDate, Group group) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user")
+    private User user;
+
+    public GroupMembership(Date startDate, Date endDate, Group group, User user) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.group = group;
+        this.user = user;
     }
 
     public Long getId() {
@@ -81,5 +87,13 @@ public class GroupMembership {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
