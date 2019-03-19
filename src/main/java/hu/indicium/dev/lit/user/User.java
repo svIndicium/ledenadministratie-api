@@ -13,8 +13,6 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     @Id
-    @SequenceGenerator(name = "user_id_generator", sequenceName = "user_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     private Long id;
 
     @OneToMany(mappedBy = "user")
@@ -36,7 +34,7 @@ public class User {
         return id;
     }
 
-    protected void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

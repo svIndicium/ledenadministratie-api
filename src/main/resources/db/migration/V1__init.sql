@@ -5,5 +5,3 @@ create table users
       primary key
 );
 
-create sequence user_seq;
-
