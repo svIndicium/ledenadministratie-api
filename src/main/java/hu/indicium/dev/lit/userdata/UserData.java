@@ -64,8 +64,8 @@ public class UserData {
     @UpdateTimestamp
     private Date updated;
 
-    public UserData(User user) {
-        this.user = user;
+    public UserData(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

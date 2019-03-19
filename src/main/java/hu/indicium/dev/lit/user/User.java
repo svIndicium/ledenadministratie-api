@@ -27,9 +27,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Study> studies = new HashSet<>();
 
-    public User() {
-    }
-
     public Long getId() {
         return id;
     }
