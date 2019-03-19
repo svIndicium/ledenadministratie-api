@@ -23,8 +23,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<GroupMembership> groupMemberships = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_data_id")
+    @OneToOne(mappedBy = "user")
     private UserData userData;
 
     @OneToMany(mappedBy = "user")

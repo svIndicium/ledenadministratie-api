@@ -9,10 +9,14 @@ import java.util.Date;
 
 @Entity
 public class UserData {
+
     @Id
-    @SequenceGenerator(name = "user_data_id_generator", sequenceName = "user_data_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_data_id_generator")
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "id")
+    @MapsId
+    private User user;
 
     @Column(nullable = false)
     private String firstName;
@@ -60,9 +64,6 @@ public class UserData {
     @UpdateTimestamp
     private Date updated;
 
-    @OneToOne(mappedBy = "userData", fetch = FetchType.LAZY, optional = false)
-    private User user;
-
     public UserData(User user) {
         this.user = user;
     }
@@ -73,6 +74,14 @@ public class UserData {
 
     protected void setId(Long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getFirstName() {
@@ -193,13 +202,5 @@ public class UserData {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

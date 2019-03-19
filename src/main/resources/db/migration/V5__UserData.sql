@@ -2,7 +2,9 @@ create table user_data
 (
   id               bigint       not null
     constraint user_data_pkey
-      primary key,
+      primary key
+    constraint fkr485y1dylmvsgld351w5r3m08
+      references users,
   city             varchar(255) not null,
   country          varchar(255) not null,
   created          timestamp,
@@ -19,12 +21,3 @@ create table user_data
   updated          timestamp,
   zip_code         varchar(255) not null
 );
-
-create sequence user_data_seq;
-
-alter table users
-
-  add column
-    user_data_id bigint
-      constraint fkakgvxgowqbd2cuhfyx2kyfu0u
-        references user_data;
