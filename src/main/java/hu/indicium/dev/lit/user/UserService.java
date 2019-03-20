@@ -23,6 +23,6 @@ public class UserService implements UserServiceInterface {
         User user = new User(userDTO.getId());
         user = userRepository.save(user);
         user.setUserData(userDataServiceInterface.createUserData(userDTO));
-        return user;
+        return userRepository.save(user);
     }
 }
