@@ -1,5 +1,7 @@
 package hu.indicium.dev.lit.userdata;
 
+import hu.indicium.dev.lit.user.User;
+
 import java.util.Date;
 
 public interface UserDataBuilderInterface {
@@ -26,6 +28,8 @@ public interface UserDataBuilderInterface {
     UserDataBuilderInterface setPhoneNumber(String phoneNumber);
 
     UserDataBuilderInterface setStudentId(int studentId);
+
+    UserDataBuilderInterface setUser(User user);
 
     UserData build();
 }

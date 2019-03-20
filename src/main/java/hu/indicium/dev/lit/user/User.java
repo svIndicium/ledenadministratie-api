@@ -21,11 +21,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<GroupMembership> groupMemberships = new HashSet<>();
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.ALL})
     private UserData userData;
 
     @OneToMany(mappedBy = "user")
     private Set<Study> studies = new HashSet<>();
+
+    protected User() {
+    }
 
     public User(Long id) {
         this.id = id;

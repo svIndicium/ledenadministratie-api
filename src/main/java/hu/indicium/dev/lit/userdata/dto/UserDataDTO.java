@@ -1,87 +1,32 @@
-package hu.indicium.dev.lit.userdata;
+package hu.indicium.dev.lit.userdata.dto;
 
-import hu.indicium.dev.lit.user.User;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import hu.indicium.dev.lit.userdata.Gender;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-public class UserData {
-
-    @Id
+public class UserDataDTO {
     private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "id")
-    @MapsId
-    private User user;
-
-    @Column(nullable = false)
     private String firstName;
-
-    @Column(nullable = false)
     private String lastName;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
     private Gender gender;
-
-    @Column(nullable = false)
     private Date dateOfBirth;
-
-    @Column(nullable = false)
     private String street;
-
-    @Column(nullable = false)
     private String houseNumber;
-
-    @Column(nullable = false)
     private String zipCode;
-
-    @Column(nullable = false)
     private String city;
-
-    @Column(nullable = false)
     private String country;
-
-    @Column(nullable = false)
     private String email;
-
-    @Column(nullable = false)
     private String phoneNumber;
-
-    @Column(nullable = false)
     private int studentId;
-
-    @CreationTimestamp
     private Date created;
-
-    @UpdateTimestamp
     private Date updated;
-
-    protected UserData() {
-    }
-
-    public UserData(Long id) {
-        this.id = id;
-    }
 
     public Long getId() {
         return id;
     }
 
-    protected void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getFirstName() {

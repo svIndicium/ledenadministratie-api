@@ -1,5 +1,7 @@
 package hu.indicium.dev.lit.userdata;
 
+import hu.indicium.dev.lit.user.User;
+
 import java.util.Date;
 
 public class UserDataBuilder implements UserDataBuilderInterface {
@@ -7,7 +9,7 @@ public class UserDataBuilder implements UserDataBuilderInterface {
     private UserData userData;
 
     public UserDataBuilder(Long userId) {
-        this.userData = new UserData(userId);
+        this.userData = new UserData();
     }
 
     @Override
@@ -79,6 +81,12 @@ public class UserDataBuilder implements UserDataBuilderInterface {
     @Override
     public UserDataBuilderInterface setStudentId(int studentId) {
         this.userData.setStudentId(studentId);
+        return this;
+    }
+
+    @Override
+    public UserDataBuilderInterface setUser(User user) {
+        this.userData.setUser(user);
         return this;
     }
 

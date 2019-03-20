@@ -1,5 +1,6 @@
 package hu.indicium.dev.lit.userdata;
 
+import hu.indicium.dev.lit.user.User;
 import hu.indicium.dev.lit.user.dto.NewUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,9 @@ public class UserDataService implements UserDataServiceInterface {
     }
 
     @Override
-    public UserData createUserData(NewUserDTO userDTO) {
+    public UserData saveUserData(User user, NewUserDTO userDTO) {
         UserData userData = new UserDataBuilder(userDTO.getId())
+                .setUser(user)
                 .setFirstName(userDTO.getFirstName())
                 .setLastName(userDTO.getLastName())
                 .setGender(userDTO.getGender())
@@ -31,5 +33,11 @@ public class UserDataService implements UserDataServiceInterface {
                 .setStudentId(userDTO.getStudentId())
                 .build();
         return userDataRepository.save(userData);
+    }
+
+    @Override
+    public UserData getUserData(Long userId) {
+        return userDataRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("kek"));
     }
 }
