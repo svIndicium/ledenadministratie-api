@@ -30,4 +30,11 @@ public class UserService implements UserServiceInterface {
         user.setUserData(userData);
         return user;
     }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(RuntimeException::new);
+    }
+
 }
