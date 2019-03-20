@@ -21,8 +21,6 @@ public interface UserDataBuilderInterface {
 
     UserDataBuilderInterface setCountry(String country);
 
-    UserDataBuilderInterface setDateOfRegister(Date dateOfRegister);
-
     UserDataBuilderInterface setEmail(String email);
 
     UserDataBuilderInterface setPhoneNumber(String phoneNumber);

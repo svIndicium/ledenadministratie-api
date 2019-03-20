@@ -27,6 +27,26 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Study> studies = new HashSet<>();
 
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public UserData getUserData() {
+        return userData;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+    }
+
+    public Set<Study> getStudies() {
+        return studies;
+    }
+
+    public void setStudies(Set<Study> studies) {
+        this.studies = studies;
+    }
+
     public Long getId() {
         return id;
     }

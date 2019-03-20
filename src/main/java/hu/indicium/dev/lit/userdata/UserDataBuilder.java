@@ -65,12 +65,6 @@ public class UserDataBuilder implements UserDataBuilderInterface {
     }
 
     @Override
-    public UserDataBuilderInterface setDateOfRegister(Date dateOfRegister) {
-        this.userData.setDateOfRegister(dateOfRegister);
-        return this;
-    }
-
-    @Override
     public UserDataBuilderInterface setEmail(String email) {
         this.userData.setEmail(email);
         return this;
