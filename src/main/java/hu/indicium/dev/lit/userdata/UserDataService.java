@@ -60,6 +60,11 @@ public class UserDataService implements UserDataServiceInterface {
         return validateAndSave(userData);
     }
 
+    @Override
+    public void deleteUserData(Long userId) {
+        userDataRepository.deleteById(userId);
+    }
+
     private UserData validateAndSave(UserData userData) {
         return userDataRepository.save(userData);
     }

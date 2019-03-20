@@ -9,4 +9,6 @@ public interface UserDataServiceInterface {
     UserData getUserData(Long userId);
 
     UserData updateUserData(UserData userData);
+
+    void deleteUserData(Long userId);
 }

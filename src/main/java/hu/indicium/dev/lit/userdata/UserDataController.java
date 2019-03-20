@@ -30,6 +30,11 @@ public class UserDataController {
         return convertToDTO(userDataService.updateUserData(userData));
     }
 
+    @DeleteMapping("/userdata/{userId}")
+    public void deleteData(@PathVariable Long userId) {
+        userDataService.deleteUserData(userId);
+    }
+
     private UserDataDTO convertToDTO(UserData userData) {
         return modelMapper.map(userData, UserDataDTO.class);
     }
