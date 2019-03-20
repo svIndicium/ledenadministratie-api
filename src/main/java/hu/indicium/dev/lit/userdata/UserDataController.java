@@ -1,5 +1,7 @@
 package hu.indicium.dev.lit.userdata;
 
+import hu.indicium.dev.lit.response.Response;
+import hu.indicium.dev.lit.response.SuccessResponse;
 import hu.indicium.dev.lit.userdata.dto.UpdateUserDataDTO;
 import hu.indicium.dev.lit.userdata.dto.UserDataDTO;
 import org.modelmapper.ModelMapper;
@@ -19,20 +21,21 @@ public class UserDataController {
     }
 
     @GetMapping("/userdata/{userId}")
-    public UserDataDTO getDataById(@PathVariable Long userId) {
-        return convertToDTO(userDataService.getUserData(userId));
+    public Response getDataById(@PathVariable Long userId) {
+        return new SuccessResponse(convertToDTO(userDataService.getUserData(userId)));
     }
 
     @PutMapping("/userdata/{userId}")
-    public UserDataDTO updateData(@PathVariable Long userId, @RequestBody UpdateUserDataDTO userDataDTO) {
+    public Response updateData(@PathVariable Long userId, @RequestBody UpdateUserDataDTO userDataDTO) {
         UserData userData = convertToEntity(userDataDTO);
         userData.setId(userId);
-        return convertToDTO(userDataService.updateUserData(userData));
+        return new SuccessResponse(convertToDTO(userDataService.updateUserData(userData)));
     }
 
     @DeleteMapping("/userdata/{userId}")
-    public void deleteData(@PathVariable Long userId) {
+    public Response deleteData(@PathVariable Long userId) {
         userDataService.deleteUserData(userId);
+        return new SuccessResponse(null);
     }
 
     private UserDataDTO convertToDTO(UserData userData) {

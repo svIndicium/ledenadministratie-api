@@ -1,5 +1,7 @@
 package hu.indicium.dev.lit.user;
 
+import hu.indicium.dev.lit.response.Response;
+import hu.indicium.dev.lit.response.SuccessResponse;
 import hu.indicium.dev.lit.user.dto.NewUserDTO;
 import hu.indicium.dev.lit.userdata.UserData;
 import hu.indicium.dev.lit.userdata.dto.UserDataDTO;
@@ -24,8 +26,8 @@ public class UserController {
 
     @PostMapping("/users")
     @PreAuthorize("#oauth2.hasScope('lit:create')")
-    public UserDataDTO saveUser(@RequestBody NewUserDTO userDTO) {
-        return convertToDTO(userService.createUser(userDTO).getUserData());
+    public Response saveUser(@RequestBody NewUserDTO userDTO) {
+        return new SuccessResponse(convertToDTO(userService.createUser(userDTO).getUserData()));
     }
 
     private UserDataDTO convertToDTO(UserData userData) {
