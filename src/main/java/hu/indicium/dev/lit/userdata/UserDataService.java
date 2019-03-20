@@ -32,12 +32,34 @@ public class UserDataService implements UserDataServiceInterface {
                 .setPhoneNumber(userDTO.getPhoneNumber())
                 .setStudentId(userDTO.getStudentId())
                 .build();
-        return userDataRepository.save(userData);
+        return validateAndSave(userData);
     }
 
     @Override
     public UserData getUserData(Long userId) {
         return userDataRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("kek"));
+    }
+
+    @Override
+    public UserData updateUserData(UserData newUserData) {
+        UserData userData = this.getUserData(newUserData.getId());
+        userData.setFirstName(newUserData.getFirstName());
+        userData.setLastName(newUserData.getLastName());
+        userData.setGender(newUserData.getGender());
+        userData.setDateOfBirth(newUserData.getDateOfBirth());
+        userData.setStreet(newUserData.getStreet());
+        userData.setHouseNumber(newUserData.getHouseNumber());
+        userData.setZipCode(newUserData.getZipCode());
+        userData.setCity(newUserData.getCity());
+        userData.setCountry(newUserData.getCountry());
+        userData.setEmail(newUserData.getEmail());
+        userData.setPhoneNumber(newUserData.getPhoneNumber());
+        userData.setStudentId(newUserData.getStudentId());
+        return validateAndSave(userData);
+    }
+
+    private UserData validateAndSave(UserData userData) {
+        return userDataRepository.save(userData);
     }
 }

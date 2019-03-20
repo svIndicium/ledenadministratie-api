@@ -7,4 +7,6 @@ public interface UserDataServiceInterface {
     UserData saveUserData(User user, NewUserDTO userDTO);
 
     UserData getUserData(Long userId);
+
+    UserData updateUserData(UserData userData);
 }

@@ -1,11 +1,10 @@
 package hu.indicium.dev.lit.userdata;
 
+import hu.indicium.dev.lit.userdata.dto.UpdateUserDataDTO;
 import hu.indicium.dev.lit.userdata.dto.UserDataDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserDataController {
@@ -24,7 +23,18 @@ public class UserDataController {
         return convertToDTO(userDataService.getUserData(userId));
     }
 
+    @PutMapping("/userdata/{userId}")
+    public UserDataDTO updateData(@PathVariable Long userId, @RequestBody UpdateUserDataDTO userDataDTO) {
+        UserData userData = convertToEntity(userDataDTO);
+        userData.setId(userId);
+        return convertToDTO(userDataService.updateUserData(userData));
+    }
+
     private UserDataDTO convertToDTO(UserData userData) {
         return modelMapper.map(userData, UserDataDTO.class);
+    }
+
+    private UserData convertToEntity(UpdateUserDataDTO updateUserDataDTO) {
+        return modelMapper.map(updateUserDataDTO, UserData.class);
     }
 }
