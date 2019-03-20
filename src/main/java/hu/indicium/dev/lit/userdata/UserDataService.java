@@ -2,6 +2,7 @@ package hu.indicium.dev.lit.userdata;
 
 import hu.indicium.dev.lit.user.User;
 import hu.indicium.dev.lit.user.dto.NewUserDTO;
+import hu.indicium.dev.lit.userdata.exceptions.UserDataAlreadyStoredException;
 import hu.indicium.dev.lit.userdata.exceptions.UserDataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class UserDataService implements UserDataServiceInterface {
 
     @Override
     public UserData saveUserData(User user, NewUserDTO userDTO) {
+        if (this.exists(user.getId())) {
+            throw new UserDataAlreadyStoredException();
+        }
         UserData userData = new UserDataBuilder(userDTO.getId())
                 .setUser(user)
                 .setFirstName(userDTO.getFirstName())
@@ -63,6 +67,11 @@ public class UserDataService implements UserDataServiceInterface {
     @Override
     public void deleteUserData(Long userId) {
         userDataRepository.deleteById(userId);
+    }
+
+    @Override
+    public boolean exists(Long userId) {
+        return userDataRepository.existsById(userId);
     }
 
     private UserData validateAndSave(UserData userData) {

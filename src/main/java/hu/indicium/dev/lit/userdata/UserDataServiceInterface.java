@@ -11,4 +11,6 @@ public interface UserDataServiceInterface {
     UserData updateUserData(UserData userData);
 
     void deleteUserData(Long userId);
+
+    boolean exists(Long userId);
 }
