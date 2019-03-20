@@ -31,9 +31,10 @@ public class Membership {
     @JoinColumn(name = "fk_user")
     private User user;
 
-    public Membership(Date startDate, Date endDate) {
+    public Membership(Date startDate, Date endDate, User user) {
         this.startDate = startDate;
         this.endDate = endDate;
+        this.user = user;
     }
 
     public Long getId() {
