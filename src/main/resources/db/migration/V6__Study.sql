@@ -17,10 +17,10 @@ create table study
       primary key,
   start_date timestamp not null,
   fk_study   bigint    not null
-    constraint fkiffboyxuu1jrfougav5gbn40s
+    constraint fk_study_type
       references study_type,
   user_id    bigint    not null
-    constraint fk9cfmipl6hu4jqkvba1kh6xxju
+    constraint fk_study_user
       references users
 );
 

@@ -8,10 +8,10 @@ create table group_membership
   start_date timestamp not null,
   updated    timestamp,
   fk_group   bigint
-    constraint fkrt63b9r9c6486w03mtmbxlao3
+    constraint fk_membership_group
       references groups,
   fk_user    bigint
-    constraint fk4nhclc1gdfebd16h62662j2q5
+    constraint fk_membership_user
       references users
 );
 
