@@ -60,6 +60,11 @@ public class GroupService implements GroupServiceInterface {
         return groupMembershipRepository.save(groupMembership);
     }
 
+    @Override
+    public void removeUserFromGroup(Long groupMembershipId) {
+        groupMembershipRepository.deleteById(groupMembershipId);
+    }
+
     private Group saveAndValidateGroup(Group group) {
         if (groupRepository.existsByName(group.getName())) {
             Group nameGroup = groupRepository.findByName(group.getName());

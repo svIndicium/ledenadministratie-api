@@ -60,6 +60,12 @@ public class GroupController {
         return new SuccessResponse(convertToDTO(groupService.addUserToGroup(userId, groupId, groupMembershipDTO)));
     }
 
+    @DeleteMapping("/groupmemberships/{groupMembershipId}")
+    public Response removeUserFromGroup(@PathVariable Long groupMembershipId) {
+        groupService.removeUserFromGroup(groupMembershipId);
+        return new DeleteSuccessResponse();
+    }
+
     private GroupDTO convertToDTO(Group group) {
         return modelMapper.map(group, GroupDTO.class);
     }
