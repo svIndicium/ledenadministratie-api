@@ -2,6 +2,7 @@ package hu.indicium.dev.lit.group;
 
 import hu.indicium.dev.lit.group.dto.GroupDTO;
 import hu.indicium.dev.lit.group.dto.NewGroupDTO;
+import hu.indicium.dev.lit.response.DeleteSuccessResponse;
 import hu.indicium.dev.lit.response.Response;
 import hu.indicium.dev.lit.response.SuccessResponse;
 import org.modelmapper.ModelMapper;
@@ -49,7 +50,7 @@ public class GroupController {
     @DeleteMapping("/groups/{groupId}")
     public Response deleteGroup(@PathVariable Long groupId) {
         groupService.deleteGroup(groupId);
-        return new SuccessResponse(null);
+        return new DeleteSuccessResponse();
     }
 
     private GroupDTO convertToDTO(Group group) {
