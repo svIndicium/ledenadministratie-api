@@ -20,6 +20,9 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private Set<GroupMembership> memberships = new HashSet<>();
 
+    protected Group() {
+    }
+
     public Group(String name) {
         this.name = name;
     }
