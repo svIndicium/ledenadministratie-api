@@ -53,6 +53,11 @@ public class GroupService implements GroupServiceInterface {
     }
 
     @Override
+    public List<GroupMembership> getAllMembersByGroupId(Long groupId) {
+        return groupMembershipRepository.getByGroupId(groupId);
+    }
+
+    @Override
     public GroupMembership addUserToGroup(Long userId, Long groupId, NewGroupMembershipDTO groupMembershipDTO) {
         User user = userService.getUserById(userId);
         Group group = this.getGroupById(groupId);

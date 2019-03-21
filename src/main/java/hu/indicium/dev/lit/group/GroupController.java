@@ -55,6 +55,16 @@ public class GroupController {
         return new DeleteSuccessResponse();
     }
 
+    @GetMapping("/groups/{groupId}/members")
+    public Response getGroupMembers(@PathVariable Long groupId) {
+        return new SuccessResponse(groupService.getAllMembersByGroupId(groupId)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList())
+        );
+    }
+
+
     @PostMapping("/groups/{groupId}/members/{userId}")
     public Response addUserToGroup(@PathVariable Long groupId, @PathVariable Long userId, @RequestBody NewGroupMembershipDTO groupMembershipDTO) {
         return new SuccessResponse(convertToDTO(groupService.addUserToGroup(userId, groupId, groupMembershipDTO)));

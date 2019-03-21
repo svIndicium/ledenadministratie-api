@@ -15,6 +15,8 @@ public interface GroupServiceInterface {
 
     List<Group> getAllGroups();
 
+    List<GroupMembership> getAllMembersByGroupId(Long groupId);
+
     GroupMembership addUserToGroup(Long userId, Long groupId, NewGroupMembershipDTO groupMembershipDTO);
 
     void removeUserFromGroup(Long groupMembershipId);
