@@ -1,7 +1,9 @@
 package hu.indicium.dev.lit.group;
 
 import hu.indicium.dev.lit.group.dto.GroupDTO;
+import hu.indicium.dev.lit.group.dto.GroupMembershipDTO;
 import hu.indicium.dev.lit.group.dto.NewGroupDTO;
+import hu.indicium.dev.lit.group.dto.NewGroupMembershipDTO;
 import hu.indicium.dev.lit.response.DeleteSuccessResponse;
 import hu.indicium.dev.lit.response.Response;
 import hu.indicium.dev.lit.response.SuccessResponse;
@@ -53,8 +55,17 @@ public class GroupController {
         return new DeleteSuccessResponse();
     }
 
+    @PostMapping("/groups/{groupId}/members/{userId}")
+    public Response addUserToGroup(@PathVariable Long groupId, @PathVariable Long userId, @RequestBody NewGroupMembershipDTO groupMembershipDTO) {
+        return new SuccessResponse(convertToDTO(groupService.addUserToGroup(userId, groupId, groupMembershipDTO)));
+    }
+
     private GroupDTO convertToDTO(Group group) {
         return modelMapper.map(group, GroupDTO.class);
+    }
+
+    private GroupMembershipDTO convertToDTO(GroupMembership groupMembership) {
+        return modelMapper.map(groupMembership, GroupMembershipDTO.class);
     }
 
     private Group convertToEntity(NewGroupDTO groupDTO) {

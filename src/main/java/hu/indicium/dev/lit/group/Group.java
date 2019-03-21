@@ -17,7 +17,7 @@ public class Group {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private Set<GroupMembership> memberships = new HashSet<>();
 
     protected Group() {
@@ -51,7 +51,9 @@ public class Group {
         this.memberships = memberships;
     }
 
-    public void addMembership(User user, Date dateStart, Date dateEnd) {
-        this.memberships.add(new GroupMembership(dateStart, dateEnd, this, user));
+    public GroupMembership addMembership(User user, Date dateStart, Date dateEnd) {
+        GroupMembership groupMembership = new GroupMembership(dateStart, dateEnd, this, user);
+        this.memberships.add(groupMembership);
+        return groupMembership;
     }
 }

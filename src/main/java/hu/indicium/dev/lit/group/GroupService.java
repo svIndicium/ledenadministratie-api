@@ -1,6 +1,10 @@
 package hu.indicium.dev.lit.group;
 
+import hu.indicium.dev.lit.group.dto.NewGroupMembershipDTO;
 import hu.indicium.dev.lit.group.exceptions.GroupNameAlreadyInUseException;
+import hu.indicium.dev.lit.group.exceptions.GroupNotFoundException;
+import hu.indicium.dev.lit.user.User;
+import hu.indicium.dev.lit.user.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +15,21 @@ public class GroupService implements GroupServiceInterface {
 
     private final GroupRepository groupRepository;
 
+    private final UserServiceInterface userService;
+
+    private final GroupMembershipRepository groupMembershipRepository;
+
     @Autowired
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, UserServiceInterface userService, GroupMembershipRepository groupMembershipRepository) {
         this.groupRepository = groupRepository;
+        this.userService = userService;
+        this.groupMembershipRepository = groupMembershipRepository;
+    }
+
+    @Override
+    public Group getGroupById(Long groupId) {
+        return groupRepository.findById(groupId)
+                .orElseThrow(() -> new GroupNotFoundException(groupId));
     }
 
     @Override
@@ -34,6 +50,14 @@ public class GroupService implements GroupServiceInterface {
     @Override
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
+    }
+
+    @Override
+    public GroupMembership addUserToGroup(Long userId, Long groupId, NewGroupMembershipDTO groupMembershipDTO) {
+        User user = userService.getUserById(userId);
+        Group group = this.getGroupById(groupId);
+        GroupMembership groupMembership = group.addMembership(user, groupMembershipDTO.getStartDate(), groupMembershipDTO.getEndDate());
+        return groupMembershipRepository.save(groupMembership);
     }
 
     private Group saveAndValidateGroup(Group group) {

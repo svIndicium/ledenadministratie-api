@@ -34,6 +34,9 @@ public class GroupMembership {
     @JoinColumn(name = "fk_user")
     private User user;
 
+    protected GroupMembership() {
+    }
+
     public GroupMembership(Date startDate, Date endDate, Group group, User user) {
         this.startDate = startDate;
         this.endDate = endDate;
