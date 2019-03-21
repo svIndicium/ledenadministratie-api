@@ -17,7 +17,11 @@ public interface GroupServiceInterface {
 
     List<GroupMembership> getAllMembersByGroupId(Long groupId);
 
+    GroupMembership getGroupMembershipById(Long groupMembershipId);
+
     GroupMembership addUserToGroup(Long userId, Long groupId, NewGroupMembershipDTO groupMembershipDTO);
+
+    GroupMembership updateGroupMembership(GroupMembership groupMembership);
 
     void removeUserFromGroup(Long groupMembershipId);
 }

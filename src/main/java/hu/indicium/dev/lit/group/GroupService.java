@@ -1,8 +1,10 @@
 package hu.indicium.dev.lit.group;
 
 import hu.indicium.dev.lit.group.dto.NewGroupMembershipDTO;
+import hu.indicium.dev.lit.group.exceptions.GroupMembershipNotFoundException;
 import hu.indicium.dev.lit.group.exceptions.GroupNameAlreadyInUseException;
 import hu.indicium.dev.lit.group.exceptions.GroupNotFoundException;
+import hu.indicium.dev.lit.group.exceptions.StartDateAfterEndDateException;
 import hu.indicium.dev.lit.user.User;
 import hu.indicium.dev.lit.user.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +60,25 @@ public class GroupService implements GroupServiceInterface {
     }
 
     @Override
+    public GroupMembership getGroupMembershipById(Long groupMembershipId) {
+        return groupMembershipRepository.findById(groupMembershipId)
+                .orElseThrow(GroupMembershipNotFoundException::new);
+    }
+
+    @Override
     public GroupMembership addUserToGroup(Long userId, Long groupId, NewGroupMembershipDTO groupMembershipDTO) {
         User user = userService.getUserById(userId);
         Group group = this.getGroupById(groupId);
         GroupMembership groupMembership = group.addMembership(user, groupMembershipDTO.getStartDate(), groupMembershipDTO.getEndDate());
-        return groupMembershipRepository.save(groupMembership);
+        return this.saveAndValidateGroupMembership(groupMembership);
+    }
+
+    @Override
+    public GroupMembership updateGroupMembership(GroupMembership newGroupMembership) {
+        GroupMembership groupMembership = this.getGroupMembershipById(newGroupMembership.getId());
+        groupMembership.setStartDate(newGroupMembership.getStartDate());
+        groupMembership.setEndDate(newGroupMembership.getEndDate());
+        return this.saveAndValidateGroupMembership(groupMembership);
     }
 
     @Override
@@ -78,5 +94,12 @@ public class GroupService implements GroupServiceInterface {
             }
         }
         return groupRepository.save(group);
+    }
+
+    private GroupMembership saveAndValidateGroupMembership(GroupMembership groupMembership) {
+        if (groupMembership.getStartDate().after(groupMembership.getEndDate())) {
+            throw new StartDateAfterEndDateException();
+        }
+        return groupMembershipRepository.save(groupMembership);
     }
 }
