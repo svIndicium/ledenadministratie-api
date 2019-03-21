@@ -19,6 +19,9 @@ public class StudyType {
     @OneToMany(mappedBy = "type")
     private Set<Study> studies;
 
+    protected StudyType() {
+    }
+
     public StudyType(String shortName, String longName) {
         this.shortName = shortName;
         this.longName = longName;

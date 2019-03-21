@@ -31,6 +31,9 @@ public class Membership {
     @JoinColumn(name = "fk_user")
     private User user;
 
+    protected Membership() {
+    }
+
     public Membership(Date startDate, Date endDate, User user) {
         this.startDate = startDate;
         this.endDate = endDate;

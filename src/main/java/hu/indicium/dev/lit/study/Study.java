@@ -22,6 +22,9 @@ public class Study {
     @JoinColumn(name = "fk_study")
     private StudyType type;
 
+    protected Study() {
+    }
+
     public Study(Date startDate, User user, StudyType type) {
         this.startDate = startDate;
         this.user = user;
