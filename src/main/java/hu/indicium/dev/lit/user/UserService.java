@@ -1,6 +1,7 @@
 package hu.indicium.dev.lit.user;
 
 import hu.indicium.dev.lit.user.dto.NewUserDTO;
+import hu.indicium.dev.lit.user.exceptions.UserNotFoundException;
 import hu.indicium.dev.lit.userdata.UserData;
 import hu.indicium.dev.lit.userdata.UserDataServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
 }
