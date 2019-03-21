@@ -1,5 +1,6 @@
 package hu.indicium.dev.lit.study;
 
+import hu.indicium.dev.lit.study.exceptions.StudyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,12 @@ public class StudyService implements StudyServiceInterface {
     }
 
     @Override
+    public Study getStudyById(Long studyId) {
+        return studyRepository.findById(studyId)
+                .orElseThrow(StudyNotFoundException::new);
+    }
+
+    @Override
     public List<Study> getStudiesByUserId(Long userId) {
         return studyRepository.getByUserId(userId);
     }
@@ -26,7 +33,10 @@ public class StudyService implements StudyServiceInterface {
     }
 
     @Override
-    public Study updateStudy(Study study) {
+    public Study updateStudy(Study newStudy) {
+        Study study = this.getStudyById(newStudy.getId());
+        study.setType(newStudy.getType());
+        study.setStartDate(newStudy.getStartDate());
         return this.validateAndSaveStudy(study);
     }
 
