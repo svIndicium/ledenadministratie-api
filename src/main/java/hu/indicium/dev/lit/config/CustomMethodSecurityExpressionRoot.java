@@ -1,22 +1,23 @@
 package hu.indicium.dev.lit.config;
 
+import hu.indicium.dev.lit.user.UserServiceInterface;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Objects;
 
 public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
 
     private Object filterObject;
     private Object returnObject;
 
-    public CustomMethodSecurityExpressionRoot(Authentication authentication) {
-        super(authentication);
-    }
+    private UserServiceInterface userService;
 
-    @Override
-    public void setFilterObject(Object filterObject) {
-        this.filterObject = filterObject;
+    public CustomMethodSecurityExpressionRoot(Authentication authentication, UserServiceInterface userService) {
+        super(authentication);
+        this.userService = userService;
     }
 
     @Override
@@ -25,13 +26,18 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     }
 
     @Override
-    public void setReturnObject(Object returnObject) {
-        this.returnObject = returnObject;
+    public void setFilterObject(Object filterObject) {
+        this.filterObject = filterObject;
     }
 
     @Override
     public Object getReturnObject() {
         return returnObject;
+    }
+
+    @Override
+    public void setReturnObject(Object returnObject) {
+        this.returnObject = returnObject;
     }
 
     @Override
@@ -41,5 +47,9 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
 
     public boolean hasPermission(String permission) {
         return getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(permission));
+    }
+
+    public boolean isUser(Long userId) {
+        return Objects.equals(userService.getUserByAuthUserId((String) getAuthentication().getPrincipal()).getId(), userId);
     }
 }

@@ -6,4 +6,6 @@ public interface UserServiceInterface {
     User createUser(NewUserDTO userDTO);
 
     User getUserById(Long userId);
+
+    User getUserByAuthUserId(String authUserId);
 }

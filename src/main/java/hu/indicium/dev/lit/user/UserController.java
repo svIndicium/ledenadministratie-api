@@ -7,6 +7,7 @@ import hu.indicium.dev.lit.userdata.UserData;
 import hu.indicium.dev.lit.userdata.dto.UserDataDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-//    @PreAuthorize("#oauth2.hasScope('lit:create')")
+    @PreAuthorize("hasPermission('create:user')")
     public Response saveUser(@RequestBody NewUserDTO userDTO) {
         return new SuccessResponse(convertToDTO(userService.createUser(userDTO).getUserData()));
     }

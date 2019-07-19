@@ -8,6 +8,7 @@ import hu.indicium.dev.lit.study.dto.StudyTypeDTO;
 import hu.indicium.dev.lit.study.dto.UpdateStudyTypeDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class StudyTypeController {
     }
 
     @GetMapping("/studytypes")
+    @PreAuthorize("hasPermission('read:study_types')")
     public Response getAllStudyTypes() {
         return new SuccessResponse(studyTypeService.getAllStudyTypes()
                 .stream()
@@ -35,11 +37,13 @@ public class StudyTypeController {
     }
 
     @PostMapping("/studytypes")
+    @PreAuthorize("hasPermission('create:study_types')")
     public Response createStudyType(@RequestBody NewStudyTypeDTO studyTypeDTO) {
         return new SuccessResponse(studyTypeService.createStudyType(convertToEntity(studyTypeDTO)));
     }
 
     @PutMapping("/studytypes/{studyTypeId}")
+    @PreAuthorize("hasPermission('edit:study_types')")
     public Response updateStudyType(@PathVariable Long studyTypeId, @RequestBody UpdateStudyTypeDTO studyTypeDTO) {
         StudyType studyType = convertToEntity(studyTypeDTO);
         studyType.setId(studyTypeId);
@@ -47,6 +51,7 @@ public class StudyTypeController {
     }
 
     @DeleteMapping("/studytypes/{studyTypeId}")
+    @PreAuthorize("hasPermission('delete:study_types')")
     public Response deleteStudyTypes(@PathVariable Long studyTypeId) {
         studyTypeService.deleteStudyType(studyTypeId);
         return new DeleteSuccessResponse();

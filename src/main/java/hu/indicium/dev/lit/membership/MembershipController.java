@@ -6,6 +6,7 @@ import hu.indicium.dev.lit.response.Response;
 import hu.indicium.dev.lit.response.SuccessResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class MembershipController {
     }
 
     @GetMapping("/users/{userId}/memberships")
+    @PreAuthorize("(hasPermission('read:memberships') && isUser(#userId)) || hasPermission('read:all_memberships')")
     public Response getMembershipsByUserId(@PathVariable Long userId) {
         return new SuccessResponse(membershipService.getMembershipsByUserId(userId)
                 .stream()
@@ -32,6 +34,7 @@ public class MembershipController {
     }
 
     @PostMapping("/users/{userId}/memberships")
+    @PreAuthorize("hasPermission('create:memberships')")
     public Response addMembership(@PathVariable Long userId, @RequestBody NewMembershipDTO newMembershipDTO) {
         return new SuccessResponse(convertToDTO(membershipService.createMembership(convertToEntity(newMembershipDTO), userId)));
     }
