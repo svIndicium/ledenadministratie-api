@@ -15,4 +15,4 @@ services:
   - postgresql
 
 script:
-  - ./gradlew build sonarqube -s
+  - ./gradlew build sonarqube
