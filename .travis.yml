@@ -14,4 +14,4 @@ services:
   - docker
 
 script:
-  - ./gradlew build sonarqube
+  - ./gradlew build jacocoTestReport sonarqube
