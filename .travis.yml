@@ -21,7 +21,7 @@ script:
 
 after_success:
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-  - export IMAGE_NAME=indicium/lit
+  - export IMAGE_NAME=svidicium/lit
   - docker build -t $IMAGE_NAME:$TAG .
   - docker push $IMAGE_NAME
 
