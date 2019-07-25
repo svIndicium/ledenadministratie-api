@@ -9,4 +9,4 @@ services:
   - postgresql
 
 script:
-  - ./gradlew sonarqube --debug
+  - ./gradlew sonarqube
