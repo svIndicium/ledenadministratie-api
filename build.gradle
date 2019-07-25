@@ -5,6 +5,7 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
 
 group = 'hu.indicium.dev'
 version = '0.0.1-SNAPSHOT'
@@ -40,5 +41,17 @@ sonarqube {
         property 'sonar.organization', System.getenv('SONAR_ORGANIZATION')
         property 'sonar.login', System.getenv('SONAR_TOKEN')
         property "sonar.host.url", System.getenv('SONAR_URL')
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
     }
 }
