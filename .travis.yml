@@ -16,12 +16,14 @@ before_script:
 script:
   - ./gradlew build jacocoTestReport sonarqube
 
+after_success:
+  - export IMAGE_NAME=svindicium/lit
+  - export TAG=latest
+
 deploy:
   provider: script
   script:
     docker login -u $DOCKER_USER -p $DOCKER_PASS;
-    export IMAGE_NAME=svindicium/lit;
-    export TAG=latest;
     docker build -t $IMAGE_NAME:$TAG .;
     docker push $IMAGE_NAME;
   on:
