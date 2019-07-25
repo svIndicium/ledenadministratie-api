@@ -1,7 +1,7 @@
 package hu.indicium.dev.lit.userdata;
 
+import hu.indicium.dev.lit.user.SignUp;
 import hu.indicium.dev.lit.user.User;
-import hu.indicium.dev.lit.user.dto.NewUserDTO;
 import hu.indicium.dev.lit.userdata.exceptions.UserDataAlreadyStoredException;
 import hu.indicium.dev.lit.userdata.exceptions.UserDataNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +18,16 @@ public class UserDataService implements UserDataServiceInterface {
     }
 
     @Override
-    public UserData saveUserData(User user, NewUserDTO userDTO) {
+    public UserData saveUserData(User user, SignUp signUp) {
         if (this.exists(user.getId())) {
             throw new UserDataAlreadyStoredException();
         }
-        UserData userData = new UserDataBuilder(userDTO.getId())
-                .setUser(user)
-                .setFirstName(userDTO.getFirstName())
-                .setLastName(userDTO.getLastName())
-                .setGender(userDTO.getGender())
-                .setDateOfBirth(userDTO.getDateOfBirth())
-                .setStreet(userDTO.getStreet())
-                .setHouseNumber(userDTO.getHouseNumber())
-                .setZipCode(userDTO.getZipCode())
-                .setCity(userDTO.getCity())
-                .setCountry(userDTO.getCountry())
-                .setEmail(userDTO.getEmail())
-                .setPhoneNumber(userDTO.getPhoneNumber())
-                .setStudentId(userDTO.getStudentId())
-                .build();
-        return validateAndSave(userData);
+        UserData userData = new UserData();
+        userData.setUser(user);
+        userData.setFirstName(signUp.getFirstName());
+        userData.setLastName(signUp.getLastName());
+        userData.setEmail(signUp.getEmail());
+        return userDataRepository.save(userData);
     }
 
     @Override

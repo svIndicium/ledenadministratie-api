@@ -1,11 +1,9 @@
 package hu.indicium.dev.lit.user;
 
-import hu.indicium.dev.lit.user.dto.NewUserDTO;
 import hu.indicium.dev.lit.user.exceptions.UserNotFoundException;
 import hu.indicium.dev.lit.userdata.UserData;
 import hu.indicium.dev.lit.userdata.UserDataServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,10 +23,10 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public User createUser(NewUserDTO userDTO) {
-        User user = new User(userDTO.getId(), (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    public User createUser(SignUp signUp) {
+        User user = new User();
         user = userRepository.save(user);
-        UserData userData = userDataService.saveUserData(user, userDTO);
+        UserData userData = userDataService.saveUserData(user, signUp);
         user.setUserData(userData);
         return user;
     }

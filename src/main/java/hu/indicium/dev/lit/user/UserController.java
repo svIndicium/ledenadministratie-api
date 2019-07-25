@@ -1,18 +1,12 @@
 package hu.indicium.dev.lit.user;
 
-import hu.indicium.dev.lit.response.Response;
-import hu.indicium.dev.lit.response.SuccessResponse;
-import hu.indicium.dev.lit.user.dto.NewUserDTO;
 import hu.indicium.dev.lit.userdata.UserData;
 import hu.indicium.dev.lit.userdata.dto.UserDataDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -28,12 +22,6 @@ public class UserController {
     public UserController(UserServiceInterface userService, ModelMapper modelMapper) {
         this.userService = userService;
         this.modelMapper = modelMapper;
-    }
-
-    @PostMapping("/users")
-    @PreAuthorize("hasPermission('create:user')")
-    public Response saveUser(@RequestBody NewUserDTO userDTO) {
-        return new SuccessResponse(convertToDTO(userService.createUser(userDTO).getUserData()));
     }
 
     @GetMapping("/whoami")
