@@ -12,7 +12,6 @@ before_script:
 
 services:
   - docker
-  - postgresql
 
 script:
   - ./gradlew build sonarqube

@@ -41,11 +41,18 @@ sonarqube {
         property 'sonar.organization', System.getenv('SONAR_ORGANIZATION')
         property 'sonar.login', System.getenv('SONAR_TOKEN')
         property "sonar.host.url", System.getenv('SONAR_URL')
+        property "sonar.jacoco.xmlReportPath", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 
 jacoco {
     toolVersion = "0.8.4"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 test {
