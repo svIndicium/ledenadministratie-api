@@ -41,12 +41,13 @@ sonarqube {
         property 'sonar.organization', System.getenv('SONAR_ORGANIZATION')
         property 'sonar.login', System.getenv('SONAR_TOKEN')
         property "sonar.host.url", System.getenv('SONAR_URL')
-        property 'sonar.jacoco.reportPath', jacocoDestinationFile
-        property 'sonar.coverage.exclusions', jacocoExclusions
     }
 }
 
-ext {
-    jacocoDestinationFile = '${buildDir}/jacoco/test.exec'
-    jacocoExclusions = ['**/Main*']
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+test {
+    useJUnitPlatform()
 }

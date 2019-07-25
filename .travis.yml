@@ -12,4 +12,4 @@ services:
   - postgresql
 
 script:
-  - ./gradlew build jacocoTestReport sonarqube
+  - ./gradlew build sonarqube
