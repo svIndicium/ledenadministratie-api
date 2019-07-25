@@ -36,6 +36,6 @@ dependencies {
 
 sonarqube {
     properties {
-        sonar.projectKey = 'svIndicium_lit'
+        property 'sonar.projectKey', 'svIndicium_lit'
     }
 }
