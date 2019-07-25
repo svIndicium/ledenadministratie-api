@@ -19,11 +19,14 @@ before_script:
 script:
   - ./gradlew build jacocoTestReport sonarqube
 
-after_success:
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-  - export IMAGE_NAME=svidicium/lit
-  - docker build -t $IMAGE_NAME:$TAG .
-  - docker push $IMAGE_NAME
+deploy:
+  provider: script
+  script:
+    export IMAGE_NAME=svidicium/lit
+    docker build -t $IMAGE_NAME:latest .
+    docker push $IMAGE_NAME
+  on:
+    branch: master
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
