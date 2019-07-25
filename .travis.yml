@@ -14,5 +14,8 @@ services:
   - docker
   - postgresql
 
+addons:
+  postgresql: "11.4"
+
 script:
   - ./gradlew build sonarqube
