@@ -19,10 +19,10 @@ script:
 deploy:
   provider: script
   script:
-    docker login -u $DOCKER_USER -p $DOCKER_PASS
-    export IMAGE_NAME=svidicium/lit
-    docker build -t $IMAGE_NAME:latest .
-    docker push $IMAGE_NAME
+    docker login -u $DOCKER_USER -p $DOCKER_PASS;
+    export IMAGE_NAME=svidicium/lit;
+    docker build -t $IMAGE_NAME:latest .;
+    docker push $IMAGE_NAME;
   on:
     branch: master
 
