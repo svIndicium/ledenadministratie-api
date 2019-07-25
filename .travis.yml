@@ -4,6 +4,9 @@ language: java
 
 jdk: openjdk11
 
+git:
+  depth: 9999999
+
 services:
   - docker
   - postgresql
