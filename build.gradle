@@ -41,7 +41,7 @@ sonarqube {
         property 'sonar.organization', System.getenv('SONAR_ORGANIZATION')
         property 'sonar.login', System.getenv('SONAR_TOKEN')
         property "sonar.host.url", System.getenv('SONAR_URL')
-        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test"
     }
 }
 
