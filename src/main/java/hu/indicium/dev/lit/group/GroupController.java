@@ -6,6 +6,7 @@ import hu.indicium.dev.lit.response.Response;
 import hu.indicium.dev.lit.response.SuccessResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class GroupController {
     }
 
     @GetMapping("/groups")
+    @PreAuthorize("hasPermission('read:groups')")
     public Response getAllGroups() {
         return new SuccessResponse(
                 groupService.getAllGroups()
@@ -33,6 +35,7 @@ public class GroupController {
     }
 
     @PostMapping("/groups")
+    @PreAuthorize("hasPermission('create:groups')")
     public Response createNewGroup(@RequestBody NewGroupDTO newGroupDTO) {
         return new SuccessResponse(
                 convertToDTO(groupService.createNewGroup(convertToEntity(newGroupDTO)))
@@ -40,6 +43,7 @@ public class GroupController {
     }
 
     @PutMapping("/groups/{groupId}")
+    @PreAuthorize("hasPermission('edit:groups')")
     public Response updateGroup(@RequestBody GroupDTO groupDTO, @PathVariable Long groupId) {
         Group group = convertToEntity(groupDTO);
         group.setId(groupId);
@@ -47,12 +51,14 @@ public class GroupController {
     }
 
     @DeleteMapping("/groups/{groupId}")
+    @PreAuthorize("hasPermission('delete:groups')")
     public Response deleteGroup(@PathVariable Long groupId) {
         groupService.deleteGroup(groupId);
         return new DeleteSuccessResponse();
     }
 
     @GetMapping("/groups/{groupId}/members")
+    @PreAuthorize("hasPermission('read:group_members')")
     public Response getGroupMembers(@PathVariable Long groupId) {
         return new SuccessResponse(groupService.getAllMembersByGroupId(groupId)
                 .stream()
@@ -61,19 +67,21 @@ public class GroupController {
         );
     }
 
-
     @PostMapping("/groups/{groupId}/members/{userId}")
+    @PreAuthorize("hasPermission('add:group_members')")
     public Response addUserToGroup(@PathVariable Long groupId, @PathVariable Long userId, @RequestBody NewGroupMembershipDTO groupMembershipDTO) {
         return new SuccessResponse(convertToDTO(groupService.addUserToGroup(userId, groupId, groupMembershipDTO)));
     }
 
     @DeleteMapping("/groupmemberships/{groupMembershipId}")
+    @PreAuthorize("hasPermission('delete:group_members')")
     public Response removeUserFromGroup(@PathVariable Long groupMembershipId) {
         groupService.removeUserFromGroup(groupMembershipId);
         return new DeleteSuccessResponse();
     }
 
     @PutMapping("/groupmemberships/{groupMembershipId}")
+    @PreAuthorize("hasPermission('edit:group_members')")
     public Response editGroupMembership(@PathVariable Long groupMembershipId, @RequestBody UpdateGroupMembershipDTO groupMembershipDTO) {
         GroupMembership groupMembership = convertToEntity(groupMembershipDTO);
         groupMembership.setId(groupMembershipId);

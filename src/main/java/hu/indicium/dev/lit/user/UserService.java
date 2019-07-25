@@ -1,6 +1,5 @@
 package hu.indicium.dev.lit.user;
 
-import hu.indicium.dev.lit.user.dto.NewUserDTO;
 import hu.indicium.dev.lit.user.exceptions.UserNotFoundException;
 import hu.indicium.dev.lit.userdata.UserData;
 import hu.indicium.dev.lit.userdata.UserDataServiceInterface;
@@ -24,10 +23,10 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public User createUser(NewUserDTO userDTO) {
-        User user = new User(userDTO.getId());
+    public User createUser(SignUp signUp) {
+        User user = new User();
         user = userRepository.save(user);
-        UserData userData = userDataService.saveUserData(user, userDTO);
+        UserData userData = userDataService.saveUserData(user, signUp);
         user.setUserData(userData);
         return user;
     }
@@ -36,6 +35,11 @@ public class UserService implements UserServiceInterface {
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public User getUserByAuthUserId(String authUserId) {
+        return userRepository.findByAuthUserId(authUserId);
     }
 
 }

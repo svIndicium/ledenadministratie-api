@@ -1,0 +1,36 @@
+sudo: required
+
+language: java
+
+jdk: openjdk11
+
+git:
+  depth: 9999999
+
+services:
+  - docker
+
+before_script:
+  - bash ./.travis/install-postgres-11.sh
+
+script:
+  - ./gradlew build jacocoTestReport sonarqube
+
+deploy:
+  provider: script
+  script:
+    docker login -u $DOCKER_USER -p $DOCKER_PASS
+    export IMAGE_NAME=svidicium/lit
+    docker build -t $IMAGE_NAME:latest .
+    docker push $IMAGE_NAME
+  on:
+    branch: master
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/

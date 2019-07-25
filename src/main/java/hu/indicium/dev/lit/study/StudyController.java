@@ -8,6 +8,7 @@ import hu.indicium.dev.lit.study.dto.UpdateStudyDTO;
 import hu.indicium.dev.lit.user.UserServiceInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class StudyController {
     }
 
     @GetMapping("/users/{userId}/studies")
+    @PreAuthorize("(hasPermission('read:studies') && isUser(#userId)) || hasPermission('admin:studies')")
     public Response getStudiesByUserId(@PathVariable Long userId) {
         return new SuccessResponse(studyService.getStudiesByUserId(userId)
                 .stream()
@@ -40,6 +42,7 @@ public class StudyController {
     }
 
     @PostMapping("/users/{userId}/studies")
+    @PreAuthorize("hasPermission('create:studies')")
     public Response createStudy(@PathVariable Long userId, @RequestBody NewStudyDTO studyDTO) {
         Study study = convertToEntity(studyDTO);
         study.setUser(userService.getUserById(userId));
@@ -47,6 +50,7 @@ public class StudyController {
     }
 
     @PutMapping("/users/{userId}/studies/{studyId}")
+    @PreAuthorize("hasPermission('edit:studies')")
     public Response updateStudy(@PathVariable Long userId, @PathVariable Long studyId, @RequestBody UpdateStudyDTO studyDTO) {
         Study study = convertToEntity(studyDTO);
         study.setId(studyId);

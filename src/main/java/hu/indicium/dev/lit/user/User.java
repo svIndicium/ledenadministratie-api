@@ -27,11 +27,15 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Study> studies = new HashSet<>();
 
+    @Column(unique = true)
+    private String authUserId;
+
     protected User() {
     }
 
-    public User(Long id) {
+    public User(Long id, String authUserId) {
         this.id = id;
+        this.authUserId = authUserId;
     }
 
     public UserData getUserData() {
@@ -76,5 +80,9 @@ public class User {
 
     public void setGroupMemberships(Set<GroupMembership> groupMemberships) {
         this.groupMemberships = groupMemberships;
+    }
+
+    public String getAuthUserId() {
+        return authUserId;
     }
 }
