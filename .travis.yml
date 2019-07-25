@@ -8,14 +8,11 @@ git:
   depth: 9999999
 
 before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
+  - bash ./.travis/install-postgres-11.sh
 
 services:
   - docker
   - postgresql
-
-addons:
-  postgresql: "11.4"
 
 script:
   - ./gradlew build sonarqube
