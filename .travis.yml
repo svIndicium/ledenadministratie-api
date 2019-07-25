@@ -8,11 +8,5 @@ services:
   - docker
   - postgresql
 
-addons:
-  sonarcloud:
-    organization: "indicium"
-    token:
-      secure: "ROB33NeI6FMEZuDXb2BNnmrHaaLvmkS3PEmkSJtOkCd6nPGfz/G0IlKER40uJI3AB/r61z8XI081PGN6a6+AzE0UpZCW6Vad6PmCl8I4dfQlh4t/Z5NL9sA1Kv0cHL11MEtvDeZGyjuXuNzp7rZYl/BRfgw7/L3gZUDOtdRAiaJs8J5dyeosauzWOi++hxsdB7M83IxXE5CLIz+W+q1VBuh42t0ZdITgGApJ6DRDKhLoLrjAs/dyxYVdN5D9tcYeof7dXE7aXm4HmS5mLdvk4/Vsk1bA5r4cuwJmJ68d7RPQORuSSB+kl2QZW9NGQ6fUHOA+MuSqKlyZ9DAPmSxTWxiUytCGM1awA50qOtUpZ7kk15/lsCZZiKK/RHjyGg87T0lbhtuzy7MeZBSgBhxsSoE5dZtPzo9LW/3QfCn1FhyqRqutGYsR6Szich6v4XvgCvilvl/BqpopLiOVagSb1deybWZrPgKvSWn48F8lRxDb6EUb9cARXNAAlrl6uPfbb5ZOeNPd4wV2WMmL7LbcsuIwVx6/QUeiMbWSumI8pD+YR0fk0QQMAK9CWVVetRCxtNqyZcmJXf1DFhszBH6hBqYlQoYBQ0dwfQFGjMlIenVG00HDIPzG9nLMSdPNsbTEY0EkkSSXrQEGZ42IiWYurSq5iJJ9fh+xDDxUVVBfovU="
-
 script:
   - ./gradlew sonarqube --debug
