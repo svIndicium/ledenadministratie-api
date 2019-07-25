@@ -21,6 +21,7 @@ after_success:
   - export TAG=latest
 
 deploy:
+  skip_cleanup: true
   provider: script
   script:
     docker login -u $DOCKER_USER -p $DOCKER_PASS;
