@@ -21,7 +21,8 @@ deploy:
   script:
     docker login -u $DOCKER_USER -p $DOCKER_PASS;
     export IMAGE_NAME=svidicium/lit;
-    docker build -t $IMAGE_NAME:latest .;
+    export TAG=latest
+    docker build -t $IMAGE_NAME:$TAG .;
     docker push $IMAGE_NAME;
   on:
     branch: master
