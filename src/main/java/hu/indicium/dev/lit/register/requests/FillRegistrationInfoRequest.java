@@ -1,32 +1,20 @@
-package hu.indicium.dev.lit.user;
+package hu.indicium.dev.lit.register.requests;
 
-import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
-@Entity
-public class SignUp {
-    @Id
-    @SequenceGenerator(name = "sign_up_id_generator", sequenceName = "sign_up_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sign_up_id_generator")
-    private Long id;
-
+public class FillRegistrationInfoRequest {
     private String token;
 
+    @NotEmpty
     private String firstName;
 
+    @NotEmpty
     private String lastName;
 
+    @Email
+    @NotEmpty
     private String email;
-
-    public SignUp() {
-    }
-
-    public SignUp(String token) {
-        this.token = token;
-    }
-
-    public Long getId() {
-        return id;
-    }
 
     public String getToken() {
         return token;

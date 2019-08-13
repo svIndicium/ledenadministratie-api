@@ -1,8 +1,14 @@
 package hu.indicium.dev.lit.user;
 
+import hu.indicium.dev.lit.register.Registration;
+import hu.indicium.dev.lit.register.dto.RegistrationDTO;
+import hu.indicium.dev.lit.register.mapper.RegistrationMapper;
+import hu.indicium.dev.lit.user.dto.UserDTO;
 import hu.indicium.dev.lit.user.exceptions.UserNotFoundException;
 import hu.indicium.dev.lit.userdata.UserData;
 import hu.indicium.dev.lit.userdata.UserDataServiceInterface;
+import hu.indicium.dev.lit.util.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +29,15 @@ public class UserService implements UserServiceInterface {
 
     @Override
     @Transactional
-    public User createUser(SignUp signUp) {
+    public UserDTO createUser(RegistrationDTO registrationDTO) {
+        Mapper<Registration, RegistrationDTO> registrationMapper = new RegistrationMapper();
+        Registration registration = registrationMapper.toEntity(registrationDTO);
         User user = new User();
         user = userRepository.save(user);
-        UserData userData = userDataService.saveUserData(user, signUp);
+        UserData userData = userDataService.saveUserData(user, registration);
         user.setUserData(userData);
-        return user;
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Override

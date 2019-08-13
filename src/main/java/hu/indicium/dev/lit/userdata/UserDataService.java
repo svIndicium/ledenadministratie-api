@@ -1,6 +1,6 @@
 package hu.indicium.dev.lit.userdata;
 
-import hu.indicium.dev.lit.user.SignUp;
+import hu.indicium.dev.lit.register.Registration;
 import hu.indicium.dev.lit.user.User;
 import hu.indicium.dev.lit.userdata.exceptions.UserDataAlreadyStoredException;
 import hu.indicium.dev.lit.userdata.exceptions.UserDataNotFoundException;
@@ -18,15 +18,15 @@ public class UserDataService implements UserDataServiceInterface {
     }
 
     @Override
-    public UserData saveUserData(User user, SignUp signUp) {
+    public UserData saveUserData(User user, Registration registration) {
         if (this.exists(user.getId())) {
             throw new UserDataAlreadyStoredException();
         }
         UserData userData = new UserData();
         userData.setUser(user);
-        userData.setFirstName(signUp.getFirstName());
-        userData.setLastName(signUp.getLastName());
-        userData.setEmail(signUp.getEmail());
+        userData.setFirstName(registration.getFirstName());
+        userData.setLastName(registration.getLastName());
+        userData.setEmail(registration.getEmail());
         return userDataRepository.save(userData);
     }
 
