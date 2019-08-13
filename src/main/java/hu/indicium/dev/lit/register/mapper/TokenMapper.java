@@ -13,7 +13,7 @@ public class TokenMapper implements Mapper<Token, TokenDTO> {
     @Override
     public TokenDTO toDTO(Token token) {
         TokenDTO tokenDTO = new TokenDTO();
-        tokenDTO.setToken(token.getToken());
+        tokenDTO.setToken(token.getJwtToken());
         return tokenDTO;
     }
 }

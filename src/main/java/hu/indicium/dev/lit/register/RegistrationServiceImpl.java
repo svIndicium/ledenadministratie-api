@@ -32,7 +32,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         Mapper<Token, TokenDTO> tokenMapper = new TokenMapper();
         Token token = tokenMapper.toEntity(tokenDTO);
         tokenValidator.validate(token);
-        Registration registration = new Registration(token.getToken());
+        Registration registration = new Registration(token.getJwtToken());
         registrationRepository.save(registration);
     }
 
@@ -49,7 +49,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         Mapper<Token, TokenDTO> tokenMapper = new TokenMapper();
         Mapper<Registration, RegistrationDTO> registrationMapper = new RegistrationMapper();
         Token token = tokenMapper.toEntity(tokenDTO);
-        Registration registration = registrationRepository.getByToken(token.getToken());
+        Registration registration = registrationRepository.getByToken(token.getJwtToken());
         RegistrationDTO registrationDTO = registrationMapper.toDTO(registration);
         return userService.createUser(registrationDTO);
     }

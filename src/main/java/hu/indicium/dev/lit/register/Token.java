@@ -1,17 +1,17 @@
 package hu.indicium.dev.lit.register;
 
 public class Token {
-    private String token;
+    private String jwtToken;
 
-    public Token(String token) {
-        this.token = token;
+    public Token(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 
-    public String getToken() {
-        return token;
+    public String getJwtToken() {
+        return jwtToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 }
