@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class FirstNameValidator implements Validator<Registration> {
 
-    public static String ERROR_MESSAGE = "First name invalid";
+    public static final String ERROR_MESSAGE = "First name invalid";
 
     @Override
     public void validate(Registration validationEntity) {

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class EmailValidator implements Validator<Registration> {
 
-    public static String ERROR_MESSAGE = "Email address incorrect";
+    public static final String ERROR_MESSAGE = "Email address incorrect";
 
     @Override
     public void validate(Registration validationEntity) {
