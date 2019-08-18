@@ -15,6 +15,6 @@ public class RegistrationValidator implements Validator<Registration> {
 
     @Override
     public void validate(Registration registration) {
-        validators.forEach(registrationValidator -> validate(registration));
+        validators.forEach(registrationValidator -> registrationValidator.validate(registration));
     }
 }
