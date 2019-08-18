@@ -3,7 +3,9 @@ package hu.indicium.dev.lit.register.mapper;
 import hu.indicium.dev.lit.register.Token;
 import hu.indicium.dev.lit.register.dto.TokenDTO;
 import hu.indicium.dev.lit.util.Mapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TokenMapper implements Mapper<Token, TokenDTO> {
     @Override
     public Token toEntity(TokenDTO tokenDTO) {

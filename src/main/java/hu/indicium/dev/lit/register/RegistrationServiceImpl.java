@@ -2,8 +2,6 @@ package hu.indicium.dev.lit.register;
 
 import hu.indicium.dev.lit.register.dto.RegistrationDTO;
 import hu.indicium.dev.lit.register.dto.TokenDTO;
-import hu.indicium.dev.lit.register.mapper.RegistrationMapper;
-import hu.indicium.dev.lit.register.mapper.TokenMapper;
 import hu.indicium.dev.lit.user.UserServiceInterface;
 import hu.indicium.dev.lit.user.dto.UserDTO;
 import hu.indicium.dev.lit.util.Mapper;
@@ -20,16 +18,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final UserServiceInterface userService;
 
-    public RegistrationServiceImpl(Validator<Token> tokenValidator, RegistrationRepository registrationRepository, Validator<Registration> registrationValidator, UserServiceInterface userService) {
-        this.tokenValidator = tokenValidator;
+    private final Mapper<Token, TokenDTO> tokenMapper;
+
+    private final Mapper<Registration, RegistrationDTO> registrationMapper;
+
+    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Validator<Token> tokenValidator, Validator<Registration> registrationValidator, UserServiceInterface userService, Mapper<Token, TokenDTO> tokenMapper, Mapper<Registration, RegistrationDTO> registrationMapper) {
         this.registrationRepository = registrationRepository;
+        this.tokenValidator = tokenValidator;
         this.registrationValidator = registrationValidator;
         this.userService = userService;
+        this.tokenMapper = tokenMapper;
+        this.registrationMapper = registrationMapper;
     }
 
     @Override
     public void startRegistration(TokenDTO tokenDTO) {
-        Mapper<Token, TokenDTO> tokenMapper = new TokenMapper();
         Token token = tokenMapper.toEntity(tokenDTO);
         tokenValidator.validate(token);
         Registration registration = new Registration(token.getJwtToken());
@@ -38,18 +41,19 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void fillRegistrationInfo(RegistrationDTO registrationDTO) {
-        Mapper<Registration, RegistrationDTO> registrationMapper = new RegistrationMapper();
-        Registration registration = registrationMapper.toEntity(registrationDTO);
+        Registration registration = registrationRepository.getByToken(registrationDTO.getToken());
+        registration.setFirstName(registrationDTO.getFirstName());
+        registration.setLastName(registrationDTO.getLastName());
+        registration.setEmail(registrationDTO.getEmail());
         registrationValidator.validate(registration);
         registrationRepository.save(registration);
     }
 
     @Override
     public UserDTO completeRegistration(TokenDTO tokenDTO) {
-        Mapper<Token, TokenDTO> tokenMapper = new TokenMapper();
-        Mapper<Registration, RegistrationDTO> registrationMapper = new RegistrationMapper();
         Token token = tokenMapper.toEntity(tokenDTO);
         Registration registration = registrationRepository.getByToken(token.getJwtToken());
+        registrationValidator.validate(registration);
         RegistrationDTO registrationDTO = registrationMapper.toDTO(registration);
         return userService.createUser(registrationDTO);
     }
