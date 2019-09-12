@@ -1,4 +1,4 @@
-package hu.indicium.dev.lit;
+package hu.indicium.dev.ledenadministratie;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class LitApplication {
+public class LedenadministratieApplication {
 
     @Bean
     public ModelMapper modelMapper() {
@@ -14,7 +14,7 @@ public class LitApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(LitApplication.class, args);
+        SpringApplication.run(LedenadministratieApplication.class, args);
     }
 
 }

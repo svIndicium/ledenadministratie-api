@@ -1,4 +1,4 @@
-package hu.indicium.dev.lit;
+package hu.indicium.dev.ledenadministratie;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @SpringBootTest
 @DisplayName("Application")
 @Tag("Application")
-class LitApplicationTests {
+class LedenadministratieApplicationTests {
 
     @Test
     @DisplayName("Test context loading")
@@ -23,7 +23,7 @@ class LitApplicationTests {
     @Test
     @DisplayName("Test startup")
     void main() {
-        LitApplication.main(new String[]{});
+        LedenadministratieApplication.main(new String[]{});
         assertThat(true).isTrue();
     }
 
