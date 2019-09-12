@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_seq", allocationSize = 1)
@@ -24,6 +25,8 @@ public class User {
 
     private Date dateOfBirth;
 
+    @ManyToOne
+    @JoinColumn(name = "study_type_id", nullable = false)
     private StudyType studyType;
 
     public User() {
