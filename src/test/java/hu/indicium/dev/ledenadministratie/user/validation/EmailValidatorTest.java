@@ -50,4 +50,16 @@ class EmailValidatorTest {
             assertThat(e.getMessage()).isEqualTo(EmailValidator.EMPTY_EMAIL_ERROR_MESSAGE);
         }
     }
+
+    @Test
+    @DisplayName("Validate email address without apenstaartje")
+    void validateEmailWithoutApenstaartjeShouldThrowException() {
+        user.setEmail("johndoe.com");
+        try {
+            emailValidator.validate(user);
+            fail();
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo(EmailValidator.EMAIL_INCORRECT);
+        }
+    }
 }
