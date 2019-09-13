@@ -3,6 +3,10 @@ package hu.indicium.dev.ledenadministratie.studytype;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 
 public class StudyTypeMapper {
+
+    private StudyTypeMapper() {
+    }
+
     public static StudyTypeDTO toDTO(StudyType studyType) {
         StudyTypeDTO dto = new StudyTypeDTO();
         dto.setId(studyType.getId());

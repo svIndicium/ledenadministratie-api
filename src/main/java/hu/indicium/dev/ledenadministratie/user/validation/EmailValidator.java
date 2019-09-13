@@ -5,7 +5,9 @@ import hu.indicium.dev.ledenadministratie.util.Validator;
 
 public class EmailValidator implements Validator<User> {
 
-    public final static String EMPTY_EMAIL_ERROR_MESSAGE = "Empty email supplied";
+    public static final String EMPTY_EMAIL_ERROR_MESSAGE = "Empty email supplied";
+
+    public static final String EMAIL_INCORRECT = "Email incorrect";
 
     @Override
     public void validate(User user) {
@@ -13,7 +15,7 @@ public class EmailValidator implements Validator<User> {
             throw new IllegalArgumentException(EMPTY_EMAIL_ERROR_MESSAGE);
         }
         if (!user.getEmail().contains("@")) {
-            throw new IllegalArgumentException("Email incorrect");
+            throw new IllegalArgumentException(EMAIL_INCORRECT);
         }
     }
 }

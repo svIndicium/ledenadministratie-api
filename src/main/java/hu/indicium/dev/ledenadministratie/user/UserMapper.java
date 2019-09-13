@@ -4,6 +4,10 @@ import hu.indicium.dev.ledenadministratie.studytype.StudyTypeMapper;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 
 public class UserMapper {
+
+    private UserMapper() {
+    }
+
     public static UserDTO toDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
