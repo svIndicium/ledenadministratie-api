@@ -29,8 +29,8 @@ public class User {
     @JoinColumn(name = "study_type_id", nullable = false)
     private StudyType studyType;
 
-    //  Public no-args constructor for Hibernate
     public User() {
+        //  Public no-args constructor for Hibernate
     }
 
     public Long getId() {
