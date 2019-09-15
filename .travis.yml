@@ -5,10 +5,16 @@ language: java
 jdk: openjdk11
 
 git:
-  depth: 9999999
+  depth: false
 
 services:
   - docker
+
+env:
+  global:
+    - secure: "hIxnWejeVo+NCbOKt2UkWMdYeOvkgaq4VNJg0Uu4GwMOPGKJ3otRtw7YQusA3/fd94YdAS4rNk0FGKtYyNFnotwPCNJqTwyLHb2DjEiEOrGA6HgxXiXiT1ajLK24mSEV6V84mzLpNx1AKAGscL52SY08Za/EMlESn4PmmebGjeHGwBOWf/GAnCwpLD2jfcEEDa/0dVO6GOd8q+Yyp5Us0J3L1mBSqh5t5u8KGcM1J7A0Dndmc8M3blEn5ExvDNXoxkoIljAw8VjZmR2I9CcYpO5ywRxIlEZn3gm8aaW3wQUAvldiE07CbAUd5IzomCxIlBjPKH+JhoYTIjNUrYiTrNIBhuEFDz+k1EIYgo6dK0pJ6pES7OOmhVX+x6ULxAZezNZnUKWEGiUDtajD7dk9YFceevXiD3vKVippG96xXqtfVq9O+hlc5jLusCEHdxRxDuukmyOT2BJw1lbB6JOJZwk8Ai3tohfR02WjVfTfBxXtqXG5esfsQgpoXUZWYZGUJvK/HtvVxMqsHB0P4Dwsw5cfNRmETsmi2pax+/km+/KLuToxQI+KxgVymETA9tMfF1bz47CvGkLqYTvwqPlKikyvT49YPeKMktTHAfDuTWRVIzsyePyG/YfeAwp+5bZ1gY4Kv346H8nQg7tkk5P007Sz/lFMgrysb3JQBal8zS0="
+    - secure: "a2XmvEM1Q4VH53BYgSoX9/vv+fLiNdvC0ZIbia5ZTUr5rhHBcMYGCrncpQQMBiAdxVDouxzhwe8Qi6Ipc5zXrH4ZIT/eFcM8etfsTrl8/7KxYOtVxKo1jUGn3P+NplCnCJhrWvRFyJdNKHWlR/MJl21pFnT+p6tAHP2XjvpLfUaeg41e21unQPS905SjlyM1drnMSImI7Nfj+oEQY8QbqdkdB0Zrdqra/C+5M3KZ/LtM01/vgv2ofZjQ8Y6H8BWfrCxYwzNqo510+4pdkg6DIN/IHSian3Vn4mHqcEN12LZxRvi+iLl2yV+zM54S7EEucLN3uyP7RZfEzMpsmhSRnHWSvLpS3AHUjqk6OUj0jzqObDM1DZEvLaY1ec+6GnMTQIsBkYBOPEvKEI74XEuOPstZcpHRsqbNEV7KAsXKoGpidG83JLF39nb05fEkH8o1EWoTjlb/IGu59+yZjrMGSGzDfj2evnfRIqPs0Ck70dOENf3874IkvlU93qaYoZtvZ6BfS4g/4ZaIrXSmr5Vmpaat7I+Svn87XsZsN/3SnYZUIdIIT99sq4JTsMpRrNTO9eT5IsDNr0ZiE+iFLfRLPOXK9PY5J1zkMKyZo6JceK6MMIyIfuIg8xKVEnMJboktOeAPkfUC3Ig5eoKds4Ofd7IwWHzsfHOKvGCc1KJLxpg="
+    - secure: "wH/5Qw9Qt9ALc1Gk1HUo4eU0ri7i2WrP8onpu5p+vh7H1SBhruKGjOrJ2ZtqTYGdO+xWZzCDH3BRG/tSxTAVAzUrVunqW80K3oobxk0FTbrIh0et/EhyUjFnOBy5iWfbWSIFcbbQ8nuA++MmtkpD0XTKNs/5uCDOKLmEVFsPd4Sf4MDt0UH2KA+LSk6RRq1lgH4W801jAwyHPW3gqc+OdjomlMoqJUWVQb5PY4Ga9YI/rsi7qtKcTXQ9aIt0UqOrmIdJ+YSveDzjxRifiibcdFflIq70Ckp1g9e4st9TC0DGlgj0yMbNEOxkKcLhVuPfXBbRIroacNFRnuzl5hcRKjmiTvCpiIAHb9nCztM+p4OHHY2tzN0Vzpke/HwYxn+5I+wISaEYdP0NrhHP/HL05wALzOP7gNGfxnzZh0mR+CVkTslTw2/RFGmOQHG2j7qM0m7sikE74ylSSRNgtcuZXtOcWFxwLoj9gKSryIdYFk/NQRzhE6Fw/lhdGFgrsz44Qi+CEai+7m0E7wp6sQSMPEqN7wfGSaSXebkInM9ny7/PWSEFCre/M0KFT+AP4kWb0rtQ9TjYBaEkUpVnW0e2rHiFncrzEoPV6SCrp+L5rrUg4ZD7rqSfLdas3aRS9UqJiB2uui7bbDWDxz99efrP/+7SHDq3qIgzdTO7a19aqLU="
 
 before_script:
   - bash ./.travis/install-postgres-11.sh
@@ -24,7 +30,7 @@ deploy:
   skip_cleanup: true
   provider: script
   script:
-    docker login -u $DOCKER_USER -p $DOCKER_PASS;
+    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin;
     docker build -t $IMAGE_NAME:$TAG .;
     docker push $IMAGE_NAME;
   on:
