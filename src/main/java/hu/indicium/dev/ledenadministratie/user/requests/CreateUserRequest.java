@@ -2,6 +2,7 @@ package hu.indicium.dev.ledenadministratie.user.requests;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class CreateUserRequest {
@@ -20,8 +21,10 @@ public class CreateUserRequest {
     @NotEmpty
     private String phoneNumber;
 
-    @NotEmpty
+    @NotNull
     private Date dateOfBirth;
+
+    private Long studyTypeId;
 
     public String getFirstName() {
         return firstName;
@@ -45,5 +48,9 @@ public class CreateUserRequest {
 
     public Date getDateOfBirth() {
         return dateOfBirth;
+    }
+
+    public Long getStudyTypeId() {
+        return studyTypeId;
     }
 }

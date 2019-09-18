@@ -1,10 +1,13 @@
 package hu.indicium.dev.ledenadministratie.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UserDTO {
+
     private Long id;
 
     private String firstName;

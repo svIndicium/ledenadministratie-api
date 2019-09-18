@@ -23,9 +23,7 @@ public class UserController {
 
     @PostMapping("/users")
     public UserDTO createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        UserDTO userDTO = modelMapper.map(createUserRequest, UserDTO.class);
+        UserDTO userDTO = UserRequestMapper.toDTO(createUserRequest);
         return userService.createUser(userDTO);
     }
-
-
 }

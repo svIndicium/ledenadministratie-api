@@ -16,21 +16,24 @@ public class UserServiceImpl implements UserService {
 
     private final Validator<User> userValidator;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator) {
+    private final UserMapper userMapper;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
+        this.userMapper = userMapper;
     }
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
-        User user = UserMapper.toEntity(userDTO);
+        User user = userMapper.toEntity(userDTO);
         user = this.saveUser(user);
-        return UserMapper.toDTO(user);
+        return userMapper.toDTO(user);
     }
 
     @Override
     public UserDTO editUser(UserDTO userDTO) {
-        User user = UserMapper.toEntity(userDTO);
+        User user = findUserById(userDTO.getId());
         user.setFirstName(userDTO.getFirstName());
         user.setMiddleName(userDTO.getMiddleName());
         user.setLastName(userDTO.getLastName());
@@ -39,14 +42,13 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setStudyType(StudyTypeMapper.toEntity(userDTO.getStudyType()));
         user = this.saveUser(user);
-        return UserMapper.toDTO(user);
+        return userMapper.toDTO(user);
     }
 
     @Override
     public UserDTO getUserById(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found!"));
-        return UserMapper.toDTO(user);
+        User user = findUserById(userId);
+        return userMapper.toDTO(user);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
-            UserDTO userDTO = UserMapper.toDTO(user);
+            UserDTO userDTO = userMapper.toDTO(user);
             userDTOS.add(userDTO);
         }
         return userDTOS;
@@ -63,5 +65,10 @@ public class UserServiceImpl implements UserService {
     private User saveUser(User user) {
         userValidator.validate(user);
         return userRepository.save(user);
+    }
+
+    private User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found!"));
     }
 }
