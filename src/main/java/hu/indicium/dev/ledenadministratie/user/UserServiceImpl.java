@@ -2,6 +2,7 @@ package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeMapper;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
+import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,9 @@ public class UserServiceImpl implements UserService {
 
     private final Validator<User> userValidator;
 
-    private final UserMapper userMapper;
+    private final Mapper<User, UserDTO> userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.userMapper = userMapper;

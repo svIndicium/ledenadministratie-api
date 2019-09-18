@@ -3,10 +3,11 @@ package hu.indicium.dev.ledenadministratie.user;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeMapper;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
+import hu.indicium.dev.ledenadministratie.util.Mapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper {
+public class UserMapper implements Mapper<User, UserDTO> {
 
     private final StudyTypeService studyTypeService;
 
@@ -14,6 +15,7 @@ public class UserMapper {
         this.studyTypeService = studyTypeService;
     }
 
+    @Override
     public UserDTO toDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
@@ -27,6 +29,7 @@ public class UserMapper {
         return dto;
     }
 
+    @Override
     public User toEntity(UserDTO userDTO) {
         User user = new User();
         user.setId(userDTO.getId());
