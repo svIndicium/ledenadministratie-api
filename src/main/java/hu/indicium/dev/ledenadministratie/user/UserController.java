@@ -2,14 +2,17 @@ package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.requests.CreateUserRequest;
+import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping(value = "/api/users")
+@Api(tags = "User Endpoint", value = "Users")
 public class UserController {
 
     private final UserService userService;
@@ -21,7 +24,8 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/users")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         UserDTO userDTO = UserRequestMapper.toDTO(createUserRequest);
         return userService.createUser(userDTO);
