@@ -13,16 +13,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
     private Long id;
 
+    @Column(nullable = false)
     private String firstName;
 
+    @Column()
     private String middleName;
 
+    @Column(nullable = false)
     private String lastName;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private Date dateOfBirth;
 
     @ManyToOne
