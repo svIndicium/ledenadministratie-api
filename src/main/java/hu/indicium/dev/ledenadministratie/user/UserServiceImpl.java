@@ -1,9 +1,9 @@
 package hu.indicium.dev.ledenadministratie.user;
 
-import hu.indicium.dev.ledenadministratie.studytype.StudyTypeMapper;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Validator;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,10 +19,13 @@ public class UserServiceImpl implements UserService {
 
     private final Mapper<User, UserDTO> userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper) {
+    private final ModelMapper modelMapper;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.userMapper = userMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -35,13 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UserDTO userDTO) {
         User user = findUserById(userDTO.getId());
-        user.setFirstName(userDTO.getFirstName());
-        user.setMiddleName(userDTO.getMiddleName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setDateOfBirth(userDTO.getDateOfBirth());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setStudyType(StudyTypeMapper.toEntity(userDTO.getStudyType()));
+        modelMapper.map(userDTO, user);
         user = this.saveUser(user);
         return userMapper.toDTO(user);
     }
