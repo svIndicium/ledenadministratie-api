@@ -1,29 +1,33 @@
 package hu.indicium.dev.ledenadministratie.user.requests;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 public class CreateUserRequest {
 
-    @NotEmpty
+    @NotBlank
+    @NotNull
     private String firstName;
 
     private String middleName;
 
-    @NotEmpty
+    @NotBlank
+    @NotNull
     private String lastName;
 
     @Email
+    @NotNull
     private String email;
 
     @NotEmpty
+    @NotNull
     private String phoneNumber;
 
     @NotNull
     private Date dateOfBirth;
 
+    @Positive
+    @NotNull
     private Long studyTypeId;
 
     public String getFirstName() {
