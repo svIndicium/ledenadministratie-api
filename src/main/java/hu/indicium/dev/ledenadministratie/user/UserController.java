@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/users")
@@ -41,5 +42,17 @@ public class UserController {
         UserDTO userDTO = userRequestMapper.toDTO(updateUserRequest);
         userDTO.setId(userId);
         return userService.updateUser(userDTO);
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getUser(@PathVariable("id") Long userId) {
+        return userService.getUserById(userId);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDTO> getUsers() {
+        return userService.getUsers();
     }
 }
