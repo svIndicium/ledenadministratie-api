@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO editUser(UserDTO userDTO) {
+    public UserDTO updateUser(UserDTO userDTO) {
         User user = findUserById(userDTO.getId());
         user.setFirstName(userDTO.getFirstName());
         user.setMiddleName(userDTO.getMiddleName());
