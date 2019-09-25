@@ -1,5 +1,7 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
+import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Validator;
@@ -21,25 +23,36 @@ public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper) {
+    private final CreationHook<UserDTO> creationHook;
+
+    private final UpdateHook<UserDTO> updateHook;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.userMapper = userMapper;
         this.modelMapper = modelMapper;
+        this.creationHook = creationHook;
+        this.updateHook = updateHook;
     }
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
         user = this.saveUser(user);
+        UserDTO newUserDTO = userMapper.toDTO(user);
+        creationHook.execute(null, newUserDTO);
         return userMapper.toDTO(user);
     }
 
     @Override
     public UserDTO updateUser(UserDTO userDTO) {
         User user = findUserById(userDTO.getId());
+        UserDTO oldUser = userMapper.toDTO(user);
         modelMapper.map(userDTO, user);
         user = this.saveUser(user);
+        UserDTO updatedUser = userMapper.toDTO(user);
+        updateHook.execute(oldUser, updatedUser);
         return userMapper.toDTO(user);
     }
 
