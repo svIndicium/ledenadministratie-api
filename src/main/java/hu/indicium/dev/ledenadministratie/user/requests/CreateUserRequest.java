@@ -30,6 +30,9 @@ public class CreateUserRequest {
     @NotNull
     private Long studyTypeId;
 
+    @NotNull
+    private boolean isToReceiveNewsletter;
+
     public String getFirstName() {
         return firstName;
     }
@@ -56,5 +59,9 @@ public class CreateUserRequest {
 
     public Long getStudyTypeId() {
         return studyTypeId;
+    }
+
+    public boolean getToReceiveNewsletter() {
+        return isToReceiveNewsletter;
     }
 }

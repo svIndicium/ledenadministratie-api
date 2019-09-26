@@ -17,6 +17,6 @@ public class MailListUserCreationHook implements CreationHook<UserDTO> {
 
     @Override
     public void execute(UserDTO oldUser, UserDTO newUser) {
-        mailListService.addUserToMailingList(new MailEntryDTO(newUser.getFirstName(), Util.getFullLastName(newUser.getMiddleName(), newUser.getLastName()), newUser.getEmail(), true));
+        mailListService.addUserToMailingList(new MailEntryDTO(newUser.getFirstName(), Util.getFullLastName(newUser.getMiddleName(), newUser.getLastName()), newUser.getEmail(), newUser.isToReceiveNewsletter()));
     }
 }

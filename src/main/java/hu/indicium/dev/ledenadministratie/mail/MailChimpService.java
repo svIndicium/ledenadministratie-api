@@ -32,6 +32,7 @@ public class MailChimpService implements MailListService {
         httpHeaders.setBasicAuth(mailSettings.getUsername(), mailSettings.getApiKey());
         HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(mailEntryDTO), httpHeaders);
         ResponseEntity<String> response = restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getListId() + "/members", httpEntity, String.class);
+        System.out.println(response);
     }
 
     @Override

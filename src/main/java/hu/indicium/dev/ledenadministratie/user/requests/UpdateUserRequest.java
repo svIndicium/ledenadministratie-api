@@ -20,6 +20,8 @@ public class UpdateUserRequest {
 
     private Long studyTypeId;
 
+    private boolean isToReceiveNewsletter;
+
     public String getFirstName() {
         return firstName;
     }
@@ -46,5 +48,9 @@ public class UpdateUserRequest {
 
     public Long getStudyTypeId() {
         return studyTypeId;
+    }
+
+    public boolean getToReceiveNewsletter() {
+        return isToReceiveNewsletter;
     }
 }

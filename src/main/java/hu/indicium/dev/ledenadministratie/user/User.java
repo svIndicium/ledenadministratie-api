@@ -31,6 +31,9 @@ public class User {
     @Column(nullable = false)
     private Date dateOfBirth;
 
+    @Column(nullable = false)
+    private boolean isToReceiveNewsletter;
+
     @ManyToOne
     @JoinColumn(name = "study_type_id", nullable = false)
     private StudyType studyType;
@@ -97,6 +100,14 @@ public class User {
 
     public StudyType getStudyType() {
         return studyType;
+    }
+
+    public boolean isToReceiveNewsletter() {
+        return isToReceiveNewsletter;
+    }
+
+    public void setToReceiveNewsletter(boolean toReceiveNewsletter) {
+        isToReceiveNewsletter = toReceiveNewsletter;
     }
 
     public void setStudyType(StudyType studyType) {

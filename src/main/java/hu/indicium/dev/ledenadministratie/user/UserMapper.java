@@ -26,6 +26,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
         dto.setDateOfBirth(user.getDateOfBirth());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setStudyType(StudyTypeMapper.toDTO(user.getStudyType()));
+        dto.setToReceiveNewsletter(user.isToReceiveNewsletter());
         return dto;
     }
 
@@ -40,6 +41,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
         user.setDateOfBirth(userDTO.getDateOfBirth());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setStudyType(StudyTypeMapper.toEntity(studyTypeService.getStudyTypeById(userDTO.getStudyType().getId())));
+        user.setToReceiveNewsletter(userDTO.isToReceiveNewsletter());
         return user;
     }
 }

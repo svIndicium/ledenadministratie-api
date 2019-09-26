@@ -24,6 +24,8 @@ public class UserDTO {
 
     private StudyTypeDTO studyType;
 
+    private boolean isToReceiveNewsletter;
+
     public Long getId() {
         return id;
     }
@@ -86,5 +88,13 @@ public class UserDTO {
 
     public void setStudyType(StudyTypeDTO studyType) {
         this.studyType = studyType;
+    }
+
+    public boolean isToReceiveNewsletter() {
+        return isToReceiveNewsletter;
+    }
+
+    public void setToReceiveNewsletter(boolean toReceiveNewsletter) {
+        isToReceiveNewsletter = toReceiveNewsletter;
     }
 }
