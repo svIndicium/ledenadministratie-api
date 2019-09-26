@@ -102,15 +102,15 @@ public class User {
         return studyType;
     }
 
+    public void setStudyType(StudyType studyType) {
+        this.studyType = studyType;
+    }
+
     public boolean isToReceiveNewsletter() {
         return isToReceiveNewsletter;
     }
 
     public void setToReceiveNewsletter(boolean toReceiveNewsletter) {
         isToReceiveNewsletter = toReceiveNewsletter;
-    }
-
-    public void setStudyType(StudyType studyType) {
-        this.studyType = studyType;
     }
 }

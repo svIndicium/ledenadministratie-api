@@ -61,7 +61,7 @@ public class CreateUserRequest {
         return studyTypeId;
     }
 
-    public boolean getToReceiveNewsletter() {
+    public boolean getIsToReceiveNewsletter() {
         return isToReceiveNewsletter;
     }
 }

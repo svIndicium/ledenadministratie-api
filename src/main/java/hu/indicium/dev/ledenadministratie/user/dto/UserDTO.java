@@ -94,7 +94,7 @@ public class UserDTO {
         return isToReceiveNewsletter;
     }
 
-    public void setToReceiveNewsletter(boolean toReceiveNewsletter) {
-        isToReceiveNewsletter = toReceiveNewsletter;
+    public void setToReceiveNewsletter(boolean isToReceiveNewsletter) {
+        this.isToReceiveNewsletter = isToReceiveNewsletter;
     }
 }

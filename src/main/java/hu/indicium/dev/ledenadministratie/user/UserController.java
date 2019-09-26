@@ -31,6 +31,7 @@ public class UserController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @CrossOrigin(origins = "http://localhost:8082")
     public UserDTO createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         UserDTO userDTO = userRequestMapper.toDTO(createUserRequest);
         return userService.createUser(userDTO);
