@@ -16,16 +16,20 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
+@ExtendWith(SpringExtension.class)
 @DisplayName("Study type service")
 class StudyTypeServiceImplTest {
 
     @MockBean
     private StudyTypeRepository studyTypeRepository;
+
+    @MockBean
+    private StudyTypeMapper studyTypeMapper;
 
     @Autowired
     private StudyTypeService studyTypeService;
@@ -36,6 +40,11 @@ class StudyTypeServiceImplTest {
         StudyType studyType = new StudyType("Software Development");
         studyType.setId(1L);
 
+        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
+        studyTypeDTO.setId(studyType.getId());
+        studyTypeDTO.setName(studyType.getName());
+
+        when(studyTypeMapper.toDTO(any(StudyType.class))).thenReturn(studyTypeDTO);
         when(studyTypeRepository.findById(eq(1L))).thenReturn(Optional.of(studyType));
 
         StudyTypeDTO foundStudyType = studyTypeService.getStudyTypeById(1L);
@@ -63,9 +72,12 @@ class StudyTypeServiceImplTest {
         @Autowired
         private StudyTypeRepository studyTypeRepository;
 
+        @Autowired
+        private StudyTypeMapper studyTypeMapper;
+
         @Bean
         public StudyTypeService studyTypeService() {
-            return new StudyTypeServiceImpl(studyTypeRepository);
+            return new StudyTypeServiceImpl(studyTypeRepository, studyTypeMapper);
         }
     }
 }
