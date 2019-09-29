@@ -15,13 +15,13 @@ public class MailChimpService implements MailListService {
 
     private final MailSettings mailSettings;
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     private MD5 md5;
 
-    public MailChimpService(MailSettings mailSettings) {
+    public MailChimpService(MailSettings mailSettings, RestTemplate restTemplate) {
         this.mailSettings = mailSettings;
-        this.restTemplate = new RestTemplate();
+        this.restTemplate = restTemplate;
         this.md5 = new MD5();
     }
 
