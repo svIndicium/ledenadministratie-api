@@ -16,7 +16,7 @@ public class StudyTypeServiceImpl implements StudyTypeService {
 
     @Override
     public StudyTypeDTO getStudyTypeById(Long studyTypeId) {
-        StudyType studyType = studyTypeRepository.findById(studyTypeId).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+        StudyType studyType = studyTypeRepository.findById(studyTypeId).orElseThrow(() -> new EntityNotFoundException("Studytype " + studyTypeId + " not found"));
         return StudyTypeMapper.toDTO(studyType);
     }
 }
