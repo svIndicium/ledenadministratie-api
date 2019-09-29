@@ -10,13 +10,16 @@ public class StudyTypeServiceImpl implements StudyTypeService {
 
     private final StudyTypeRepository studyTypeRepository;
 
-    public StudyTypeServiceImpl(StudyTypeRepository studyTypeRepository) {
+    private final StudyTypeMapper studyTypeMapper;
+
+    public StudyTypeServiceImpl(StudyTypeRepository studyTypeRepository, StudyTypeMapper studyTypeMapper) {
         this.studyTypeRepository = studyTypeRepository;
+        this.studyTypeMapper = studyTypeMapper;
     }
 
     @Override
     public StudyTypeDTO getStudyTypeById(Long studyTypeId) {
         StudyType studyType = studyTypeRepository.findById(studyTypeId).orElseThrow(() -> new EntityNotFoundException("Studytype " + studyTypeId + " not found"));
-        return StudyTypeMapper.toDTO(studyType);
+        return studyTypeMapper.toDTO(studyType);
     }
 }

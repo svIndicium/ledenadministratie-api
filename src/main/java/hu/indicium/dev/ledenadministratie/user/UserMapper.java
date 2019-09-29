@@ -11,8 +11,11 @@ public class UserMapper implements Mapper<User, UserDTO> {
 
     private final StudyTypeService studyTypeService;
 
-    public UserMapper(StudyTypeService studyTypeService) {
+    private final StudyTypeMapper studyTypeMapper;
+
+    public UserMapper(StudyTypeService studyTypeService, StudyTypeMapper studyTypeMapper) {
         this.studyTypeService = studyTypeService;
+        this.studyTypeMapper = studyTypeMapper;
     }
 
     @Override
@@ -25,7 +28,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
         dto.setEmail(user.getEmail());
         dto.setDateOfBirth(user.getDateOfBirth());
         dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setStudyType(StudyTypeMapper.toDTO(user.getStudyType()));
+        dto.setStudyType(studyTypeMapper.toDTO(user.getStudyType()));
         dto.setToReceiveNewsletter(user.isToReceiveNewsletter());
         return dto;
     }
@@ -40,7 +43,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
         user.setEmail(userDTO.getEmail());
         user.setDateOfBirth(userDTO.getDateOfBirth());
         user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setStudyType(StudyTypeMapper.toEntity(studyTypeService.getStudyTypeById(userDTO.getStudyType().getId())));
+        user.setStudyType(studyTypeMapper.toEntity(studyTypeService.getStudyTypeById(userDTO.getStudyType().getId())));
         user.setToReceiveNewsletter(userDTO.isToReceiveNewsletter());
         return user;
     }
