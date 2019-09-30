@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = UserServiceImpl.class)
+@SpringBootTest(classes = {UserServiceImpl.class, ModelMapper.class})
 @DisplayName("User Service")
 @Tag("Services")
 class UserServiceImplTest {
@@ -43,7 +43,7 @@ class UserServiceImplTest {
     @MockBean
     private Validator<User> userValidator;
 
-    @MockBean
+    @Autowired
     private ModelMapper modelMapper;
 
     @MockBean
@@ -58,29 +58,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Create user")
     void createUser() {
-        StudyType studyType = new StudyType("Software Development");
-        studyType.setId(1L);
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyTypeDTO.setId(studyType.getId());
-        studyTypeDTO.setName(studyType.getName());
-
-        User user = new User();
-        user.setFirstName("John");
-        user.setMiddleName("Daniel");
-        user.setLastName("Doe");
-        user.setEmail("John@doe.com");
-        user.setStudyType(studyType);
-        user.setToReceiveNewsletter(false);
-        user.setDateOfBirth(new Date());
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setMiddleName(user.getMiddleName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setStudyType(studyTypeDTO);
-        userDTO.setToReceiveNewsletter(user.isToReceiveNewsletter());
-        userDTO.setDateOfBirth(user.getDateOfBirth());
+        UserDTO userDTO = getUserDTO();
+        User user = getUser();
 
         when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
         when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
@@ -99,29 +78,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Create invalid user should not be persisted")
     void creatingUserFails_shouldNotBePersisted() {
-        StudyType studyType = new StudyType("Software Development");
-        studyType.setId(1L);
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyTypeDTO.setId(studyType.getId());
-        studyTypeDTO.setName(studyType.getName());
-
-        User user = new User();
-        user.setFirstName("John");
-        user.setMiddleName("Daniel");
-        user.setLastName("Doe");
-        user.setEmail("John@doe.com");
-        user.setStudyType(studyType);
-        user.setToReceiveNewsletter(true);
-        user.setDateOfBirth(new Date());
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setMiddleName(user.getMiddleName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setStudyType(studyTypeDTO);
-        userDTO.setToReceiveNewsletter(user.isToReceiveNewsletter());
-        userDTO.setDateOfBirth(user.getDateOfBirth());
+        UserDTO userDTO = getUserDTO();
+        User user = getUser();
 
         when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
         when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
@@ -149,30 +107,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Get user by id")
     void getUserById() {
-        StudyType studyType = new StudyType("Software Development");
-        studyType.setId(1L);
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyTypeDTO.setId(studyType.getId());
-        studyTypeDTO.setName(studyType.getName());
-
-        User user = new User();
-        user.setId(1L);
-        user.setFirstName("John");
-        user.setMiddleName("Daniel");
-        user.setLastName("Doe");
-        user.setEmail("John@doe.com");
-        user.setStudyType(studyType);
-        user.setToReceiveNewsletter(true);
-        user.setDateOfBirth(new Date());
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setMiddleName(user.getMiddleName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setStudyType(studyTypeDTO);
-        userDTO.setToReceiveNewsletter(user.isToReceiveNewsletter());
-        userDTO.setDateOfBirth(user.getDateOfBirth());
+        UserDTO userDTO = getUserDTO();
+        User user = getUser();
 
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
         when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
@@ -194,8 +130,71 @@ class UserServiceImplTest {
             assertThat(ex.getClass()).isEqualTo(EntityNotFoundException.class);
             assertThat(ex.getMessage()).isEqualTo("User 1 not found!");
         }
+    }
 
+    @Test
+    @DisplayName("Update user")
+    void shouldUpdateUserAndRunHook_whenUpdateUser() {
+        User user = getUser();
+        UserDTO userDTO = getUserDTO();
+        userDTO.setId(1L);
 
+        User updatedUser = getUser();
+        updatedUser.setFirstName("kek");
+        UserDTO updatedUserDTO = getUserDTO();
+        updatedUserDTO.setFirstName("kek");
+        updatedUserDTO.setId(1L);
+
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
+        when(userMapper.toDTO(refEq(user))).thenReturn(userDTO);
+        when(userMapper.toDTO(refEq(updatedUser))).thenReturn(updatedUserDTO);
+        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+
+        UserDTO newUserDTO = userService.updateUser(updatedUserDTO);
+
+        verify(updateHook).execute(refEq(userDTO), refEq(updatedUserDTO));
+        verify(userRepository, times(1)).save(any(User.class));
+        verify(userValidator, times(1)).validate(any(User.class));
+    }
+
+    private StudyType getStudyType() {
+        StudyType studyType = new StudyType("Software Development");
+        studyType.setId(1L);
+        return studyType;
+    }
+
+    private User getUser() {
+        User user = new User();
+        user.setFirstName("John");
+        user.setMiddleName("Daniel");
+        user.setLastName("Doe");
+        user.setEmail("John@doe.com");
+        user.setStudyType(getStudyType());
+        user.setToReceiveNewsletter(true);
+        user.setDateOfBirth(new Date());
+        return user;
+    }
+
+    private StudyTypeDTO getStudyTypeDTO() {
+        StudyType studyType = getStudyType();
+        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
+        studyTypeDTO.setId(studyType.getId());
+        studyTypeDTO.setName(studyType.getName());
+        return studyTypeDTO;
+    }
+
+    private UserDTO getUserDTO() {
+        User user = getUser();
+        StudyTypeDTO studyTypeDTO = getStudyTypeDTO();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setMiddleName(user.getMiddleName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setStudyType(studyTypeDTO);
+        userDTO.setToReceiveNewsletter(user.isToReceiveNewsletter());
+        userDTO.setDateOfBirth(user.getDateOfBirth());
+        return userDTO;
     }
 
     @TestConfiguration
