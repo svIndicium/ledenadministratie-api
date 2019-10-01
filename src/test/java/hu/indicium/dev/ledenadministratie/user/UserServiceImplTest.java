@@ -20,7 +20,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -116,6 +118,28 @@ class UserServiceImplTest {
         UserDTO receivedUser = userService.getUserById(1L);
 
         assertThat(receivedUser).isEqualTo(userDTO);
+    }
+
+    @Test
+    @DisplayName("Get all users")
+    void getAllUsers() {
+        UserDTO userDTO = getUserDTO();
+        User user = getUser();
+        UserDTO userDTO2 = getUserDTO();
+        userDTO2.setFirstName("Harry");
+        User user2 = getUser();
+        user2.setFirstName("Harry");
+
+        when(userMapper.toDTO(refEq(user))).thenReturn(userDTO);
+        when(userMapper.toDTO(refEq(user2))).thenReturn(userDTO2);
+
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user, user2));
+
+        List<UserDTO> users = userService.getUsers();
+
+        assertThat(users).hasSize(2);
+        assertThat(users.get(0)).isEqualToComparingFieldByField(userDTO);
+        assertThat(users.get(1)).isEqualToComparingFieldByField(userDTO2);
     }
 
     @Test
