@@ -4,7 +4,6 @@ import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.requests.CreateUserRequest;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
 import io.swagger.annotations.Api;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +18,10 @@ public class UserController {
 
     private final UserService userService;
 
-    private final ModelMapper modelMapper;
-
     private final UserRequestMapper userRequestMapper;
 
-    public UserController(UserService userService, ModelMapper modelMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.modelMapper = modelMapper;
         userRequestMapper = new UserRequestMapper();
     }
 
