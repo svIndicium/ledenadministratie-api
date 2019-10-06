@@ -3,6 +3,7 @@ package hu.indicium.dev.ledenadministratie.config;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
 
@@ -42,5 +43,14 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     @Override
     public Object getThis() {
         return this;
+    }
+
+    public boolean hasPermission(String permission) {
+        for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+            if (grantedAuthority.getAuthority().equals(permission)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
