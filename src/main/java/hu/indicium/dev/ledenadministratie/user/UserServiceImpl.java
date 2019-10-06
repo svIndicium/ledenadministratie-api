@@ -6,6 +6,7 @@ import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('create:user')")
     public UserDTO createUser(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
         user = this.saveUser(user);
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('write:user')")
     public UserDTO updateUser(UserDTO userDTO) {
         User user = findUserById(userDTO.getId());
         UserDTO oldUser = userMapper.toDTO(user);
@@ -57,12 +60,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('read:user')")
     public UserDTO getUserById(Long userId) {
         User user = findUserById(userId);
         return userMapper.toDTO(user);
     }
 
     @Override
+    @PreAuthorize("hasPermission('admin:user')")
     public List<UserDTO> getUsers() {
         List<User> users = userRepository.findAll();
         List<UserDTO> userDTOS = new ArrayList<>();
