@@ -55,6 +55,25 @@ class MailChimpServiceTest {
     }
 
     @Test
+    @DisplayName("Add user to mailing list but not to newsletter")
+    void shouldDoAPostRequestToMailChimpWithNoNewsletter_whenAddTheUserToTheMailingList() {
+
+        when(mailSettings.getListId()).thenReturn("test");
+        when(mailSettings.getApiKey()).thenReturn("testApiKey");
+        when(mailSettings.getUsername()).thenReturn("testUserName");
+        when(mailSettings.getRegion()).thenReturn("eu");
+
+        MailEntryDTO mailEntryDTO = new MailEntryDTO("John", "Doe", "john@doe.com", false);
+
+        when(restTemplate.postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), any(HttpHeaders.class), eq(String.class)))
+                .thenReturn(ResponseEntity.of(Optional.of("worked!")));
+
+        mailListService.addUserToMailingList(mailEntryDTO);
+
+        verify(restTemplate, times(1)).postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), any(), any());
+    }
+
+    @Test
     @DisplayName("Add user to mailing list")
     void shouldPatchTheUser_whenUpdateMailingListUser() {
 
