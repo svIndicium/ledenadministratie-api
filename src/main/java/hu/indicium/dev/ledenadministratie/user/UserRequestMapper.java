@@ -17,7 +17,7 @@ public class UserRequestMapper {
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
         studyTypeDTO.setId(createUserRequest.getStudyTypeId());
         userDTO.setStudyType(studyTypeDTO);
-        userDTO.setToReceiveNewsletter(createUserRequest.getIsToReceiveNewsletter());
+        userDTO.setToReceiveNewsletter(createUserRequest.isToReceiveNewsletter());
         return userDTO;
     }
 
@@ -27,7 +27,7 @@ public class UserRequestMapper {
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
         studyTypeDTO.setId(updateUserRequest.getStudyTypeId());
         userDTO.setStudyType(studyTypeDTO);
-        userDTO.setToReceiveNewsletter(updateUserRequest.getToReceiveNewsletter());
+        userDTO.setToReceiveNewsletter(updateUserRequest.isToReceiveNewsletter());
         return userDTO;
     }
 }

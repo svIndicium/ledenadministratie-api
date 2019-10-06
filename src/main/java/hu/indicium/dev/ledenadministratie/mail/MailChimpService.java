@@ -6,7 +6,6 @@ import hu.indicium.dev.ledenadministratie.util.MD5;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,8 +30,7 @@ public class MailChimpService implements MailListService {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
         httpHeaders.setBasicAuth(mailSettings.getUsername(), mailSettings.getApiKey());
         HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(mailEntryDTO), httpHeaders);
-        ResponseEntity<String> response = restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getListId() + "/members", httpEntity, String.class);
-        System.out.println(response);
+        restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getListId() + "/members", httpEntity, String.class);
     }
 
     @Override
@@ -43,6 +41,6 @@ public class MailChimpService implements MailListService {
         httpHeaders.add("X-HTTP-Method-Override", "PATCH");
         httpHeaders.setBasicAuth(mailSettings.getUsername(), mailSettings.getApiKey());
         HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(newEmail), httpHeaders);
-        ResponseEntity<String> response = restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getListId() + "/members/" + email, httpEntity, String.class);
+        restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getListId() + "/members/" + email, httpEntity, String.class);
     }
 }

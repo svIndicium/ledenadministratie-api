@@ -96,8 +96,4 @@ public class CreateUserRequest {
     public void setStudyTypeId(Long studyTypeId) {
         this.studyTypeId = studyTypeId;
     }
-
-    public boolean getIsToReceiveNewsletter() {
-        return isToReceiveNewsletter;
-    }
 }

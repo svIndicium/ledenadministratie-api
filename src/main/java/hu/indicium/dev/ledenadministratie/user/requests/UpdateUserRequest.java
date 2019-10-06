@@ -78,10 +78,6 @@ public class UpdateUserRequest {
         this.studyTypeId = studyTypeId;
     }
 
-    public boolean getToReceiveNewsletter() {
-        return isToReceiveNewsletter;
-    }
-
     public boolean isToReceiveNewsletter() {
         return isToReceiveNewsletter;
     }
