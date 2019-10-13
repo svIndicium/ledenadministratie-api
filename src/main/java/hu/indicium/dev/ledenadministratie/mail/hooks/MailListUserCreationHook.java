@@ -1,4 +1,4 @@
-package hu.indicium.dev.ledenadministratie.user.hooks;
+package hu.indicium.dev.ledenadministratie.mail.hooks;
 
 import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
 import hu.indicium.dev.ledenadministratie.mail.MailListService;

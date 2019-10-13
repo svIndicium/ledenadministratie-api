@@ -4,9 +4,9 @@ import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
 import hu.indicium.dev.ledenadministratie.hooks.HookGroup;
 import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
 import hu.indicium.dev.ledenadministratie.mail.MailListService;
+import hu.indicium.dev.ledenadministratie.mail.hooks.MailListUserCreationHook;
+import hu.indicium.dev.ledenadministratie.mail.hooks.MailListUserUpdateHook;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.user.hooks.MailListUserCreationHook;
-import hu.indicium.dev.ledenadministratie.user.hooks.MailListUserUpdateHook;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
