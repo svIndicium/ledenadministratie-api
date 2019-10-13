@@ -4,6 +4,8 @@ import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudyTypeServiceImpl implements StudyTypeService {
@@ -21,5 +23,13 @@ public class StudyTypeServiceImpl implements StudyTypeService {
     public StudyTypeDTO getStudyTypeById(Long studyTypeId) {
         StudyType studyType = studyTypeRepository.findById(studyTypeId).orElseThrow(() -> new EntityNotFoundException("Studytype " + studyTypeId + " not found"));
         return studyTypeMapper.toDTO(studyType);
+    }
+
+    @Override
+    public List<StudyTypeDTO> getAllStudyTypes() {
+        List<StudyType> studyTypes = studyTypeRepository.findAll();
+        return studyTypes.stream()
+                .map(studyTypeMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
