@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/users")
+@RequestMapping(value = "/api/user")
 @Api(tags = "User Endpoint", value = "Users")
 public class UserController {
 
@@ -25,9 +25,8 @@ public class UserController {
         userRequestMapper = new UserRequestMapper();
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @CrossOrigin(origins = "http://localhost:8082")
     public UserDTO createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         UserDTO userDTO = userRequestMapper.toDTO(createUserRequest);
         return userService.createUser(userDTO);
