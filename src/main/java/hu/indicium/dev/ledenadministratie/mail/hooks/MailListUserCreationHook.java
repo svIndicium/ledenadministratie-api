@@ -6,7 +6,6 @@ import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Util;
 
-
 public class MailListUserCreationHook implements CreationHook<UserDTO> {
 
     private MailListService mailListService;

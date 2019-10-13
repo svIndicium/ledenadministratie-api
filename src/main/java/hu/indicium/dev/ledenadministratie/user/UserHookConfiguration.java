@@ -22,12 +22,12 @@ public class UserHookConfiguration {
     }
 
     @Bean
-    CreationHook<UserDTO> userCreationHook() {
+    public CreationHook<UserDTO> userCreationHook() {
         return new HookGroup<>(Collections.singletonList(new MailListUserCreationHook(mailListService)));
     }
 
     @Bean
-    UpdateHook<UserDTO> userUpdateHook() {
+    public UpdateHook<UserDTO> userUpdateHook() {
         return new HookGroup<>(Collections.singletonList(new MailListUserUpdateHook(mailListService)));
     }
 }
