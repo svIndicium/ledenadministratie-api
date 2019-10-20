@@ -95,15 +95,15 @@ class StudyTypeServiceImplTest {
         studyType.setId(1L);
 
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyType.setId(studyType.getId());
-        studyType.setName(studyType.getName());
+        studyTypeDTO.setId(studyType.getId());
+        studyTypeDTO.setName(studyType.getName());
 
         StudyType studyType1 = new StudyType("TI");
         studyType1.setId(2L);
 
         StudyTypeDTO studyTypeDTO1 = new StudyTypeDTO();
-        studyType1.setId(studyType.getId());
-        studyType1.setName(studyType.getName());
+        studyTypeDTO1.setId(studyType.getId());
+        studyTypeDTO1.setName(studyType.getName());
 
         when(studyTypeMapper.toDTO(eq(studyType))).thenReturn(studyTypeDTO);
         when(studyTypeMapper.toDTO(eq(studyType1))).thenReturn(studyTypeDTO1);

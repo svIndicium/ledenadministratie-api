@@ -78,8 +78,8 @@ class StudyTypeControllerTest {
         studyType.setId(1L);
 
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyType.setId(studyType.getId());
-        studyType.setName(studyType.getName());
+        studyTypeDTO.setId(studyType.getId());
+        studyTypeDTO.setName(studyType.getName());
 
         CreateStudyTypeRequest createStudyTypeRequest = toCreateStudyTypeRequest(studyTypeDTO);
 
