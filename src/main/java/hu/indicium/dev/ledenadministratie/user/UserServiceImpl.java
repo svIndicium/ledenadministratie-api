@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("hasPermission('read:user')")
+    @PreAuthorize("hasPermission('read:user') || hasPermission('admin:user')")
     public UserDTO getUserById(Long userId) {
         User user = findUserById(userId);
         return userMapper.toDTO(user);
