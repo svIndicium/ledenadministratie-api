@@ -8,4 +8,6 @@ public interface StudyTypeService {
     StudyTypeDTO getStudyTypeById(Long studyTypeId);
 
     List<StudyTypeDTO> getAllStudyTypes();
+
+    StudyTypeDTO createStudyType(StudyTypeDTO studyType);
 }

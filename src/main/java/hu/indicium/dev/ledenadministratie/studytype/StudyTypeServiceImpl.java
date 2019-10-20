@@ -32,4 +32,11 @@ public class StudyTypeServiceImpl implements StudyTypeService {
                 .map(studyTypeMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public StudyTypeDTO createStudyType(StudyTypeDTO studyTypeDTO) {
+        StudyType studyType = studyTypeMapper.toEntity(studyTypeDTO);
+        studyType = studyTypeRepository.save(studyType);
+        return studyTypeMapper.toDTO(studyType);
+    }
 }
