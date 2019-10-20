@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.studytype;
 
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
+import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,9 @@ class StudyTypeServiceImplTest {
 
     @MockBean
     private StudyTypeMapper studyTypeMapper;
+
+    @MockBean
+    private Validator<StudyType> studyTypeValidator;
 
     @Autowired
     private StudyTypeService studyTypeService;
@@ -75,9 +79,12 @@ class StudyTypeServiceImplTest {
         @Autowired
         private StudyTypeMapper studyTypeMapper;
 
+        @Autowired
+        private Validator<StudyType> studyTypeValidator;
+
         @Bean
         public StudyTypeService studyTypeService() {
-            return new StudyTypeServiceImpl(studyTypeRepository, studyTypeMapper);
+            return new StudyTypeServiceImpl(studyTypeRepository, studyTypeMapper, studyTypeValidator);
         }
     }
 }
