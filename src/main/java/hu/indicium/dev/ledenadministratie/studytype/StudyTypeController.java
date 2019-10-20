@@ -15,11 +15,9 @@ public class StudyTypeController {
 
     private final StudyTypeService studyTypeService;
 
-    private final StudyTypeMapper studyTypeMapper;
 
-    public StudyTypeController(StudyTypeService studyTypeService, StudyTypeMapper studyTypeMapper) {
+    public StudyTypeController(StudyTypeService studyTypeService) {
         this.studyTypeService = studyTypeService;
-        this.studyTypeMapper = studyTypeMapper;
     }
 
     @GetMapping
@@ -27,7 +25,7 @@ public class StudyTypeController {
         return studyTypeService.getAllStudyTypes();
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public StudyTypeDTO createStudyType(@RequestBody @Valid CreateStudyTypeRequest createStudyTypeRequest) {
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
