@@ -25,7 +25,7 @@ public class StudyTypeController {
         return studyTypeService.getAllStudyTypes();
     }
 
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public StudyTypeDTO createStudyType(@RequestBody @Valid CreateStudyTypeRequest createStudyTypeRequest) {
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
