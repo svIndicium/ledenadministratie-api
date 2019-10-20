@@ -10,4 +10,6 @@ public interface StudyTypeService {
     List<StudyTypeDTO> getAllStudyTypes();
 
     StudyTypeDTO createStudyType(StudyTypeDTO studyType);
+
+    boolean isNameInUse(String studyTypeName);
 }

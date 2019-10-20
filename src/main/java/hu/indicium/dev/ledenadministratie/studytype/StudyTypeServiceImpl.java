@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.studytype;
 
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
+import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,9 +15,12 @@ public class StudyTypeServiceImpl implements StudyTypeService {
 
     private final StudyTypeMapper studyTypeMapper;
 
-    public StudyTypeServiceImpl(StudyTypeRepository studyTypeRepository, StudyTypeMapper studyTypeMapper) {
+    private final Validator<StudyType> studyTypeValidator;
+
+    public StudyTypeServiceImpl(StudyTypeRepository studyTypeRepository, StudyTypeMapper studyTypeMapper, Validator<StudyType> studyTypeValidator) {
         this.studyTypeRepository = studyTypeRepository;
         this.studyTypeMapper = studyTypeMapper;
+        this.studyTypeValidator = studyTypeValidator;
     }
 
     @Override
@@ -36,7 +40,13 @@ public class StudyTypeServiceImpl implements StudyTypeService {
     @Override
     public StudyTypeDTO createStudyType(StudyTypeDTO studyTypeDTO) {
         StudyType studyType = studyTypeMapper.toEntity(studyTypeDTO);
+        studyTypeValidator.validate(studyType);
         studyType = studyTypeRepository.save(studyType);
         return studyTypeMapper.toDTO(studyType);
+    }
+
+    @Override
+    public boolean isNameInUse(String studyTypeName) {
+        return studyTypeRepository.existsByName(studyTypeName);
     }
 }
