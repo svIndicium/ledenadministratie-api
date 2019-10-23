@@ -21,17 +21,17 @@ before_script:
 
 script:
   - ./gradlew build jacocoTestReport sonarqube
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "stable"; elif [ "$TRAVIS_BRANCH" == "dev" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
 
 deploy:
   skip_cleanup: true
   provider: script
   script:
-    export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "stable"; elif [ "$TRAVIS_BRANCH" == "dev" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`;
     echo "$DOCKER_PASS" | docker login docker.pkg.github.com -u "$DOCKER_USER" --password-stdin;
     docker build -t docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG .;
-    docker push docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie;
+    docker push docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG;
   on:
-    branch: master
+    all_branches: true
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
