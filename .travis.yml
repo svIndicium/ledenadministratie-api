@@ -31,7 +31,7 @@ deploy:
     docker build -t docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG .;
     docker push docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG;
   on:
-    branch: master
+    all_branches: true
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
