@@ -1,4 +1,4 @@
-create table if not exists registrations
+create table registrations
 (
     id                       bigint       not null
         constraint registrations_pkey
