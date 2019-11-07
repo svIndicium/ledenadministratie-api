@@ -28,8 +28,8 @@ deploy:
   provider: script
   script:
     echo "$DOCKER_PASS" | docker login docker.pkg.github.com -u "$DOCKER_USER" --password-stdin;
-    docker build -t docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG .;
-    docker push docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG;
+    docker build -t docker.pkg.github.com/svindicium/ledenadministratie-api/ledenadministratie-api:$TAG .;
+    docker push docker.pkg.github.com/svindicium/ledenadministratie-api/ledenadministratie-api:$TAG;
   on:
     all_branches: true
 
