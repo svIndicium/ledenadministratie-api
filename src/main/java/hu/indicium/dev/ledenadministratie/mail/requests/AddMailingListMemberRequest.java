@@ -35,31 +35,15 @@ public class AddMailingListMemberRequest {
         return emailAddress;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
     public Map<String, String> getMergeFields() {
         return mergeFields;
-    }
-
-    public void setMergeFields(Map<String, String> mergeFields) {
-        this.mergeFields = mergeFields;
     }
 }
