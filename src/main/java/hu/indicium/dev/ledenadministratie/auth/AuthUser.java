@@ -11,7 +11,7 @@ public class AuthUser {
 
     private String familyName;
 
-    private String nickName;
+    private String nickname;
 
     private String name;
 
@@ -25,13 +25,17 @@ public class AuthUser {
 
     private boolean emailVerified;
 
+    public AuthUser() {
+        // for modelmapper
+    }
+
     public AuthUser(UserInfoRequest userInfoRequest) {
         this.sub = userInfoRequest.getSub();
         this.givenName = userInfoRequest.getGivenName();
         this.familyName = userInfoRequest.getFamilyName();
-        this.nickName = userInfoRequest.getNickname();
+        this.nickname = userInfoRequest.getNickname();
         this.name = userInfoRequest.getName();
-        this.pictureUrl = userInfoRequest.getPicture();
+        this.pictureUrl = userInfoRequest.getPictureUrl();
         this.locale = userInfoRequest.getLocale();
         this.updatedAt = userInfoRequest.getUpdatedAt();
         this.email = userInfoRequest.getEmail();
@@ -62,12 +66,12 @@ public class AuthUser {
         this.familyName = familyName;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getName() {

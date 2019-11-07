@@ -22,7 +22,7 @@ public class UserInfoRequest {
     private String name;
 
     @JsonProperty("picture")
-    private String picture;
+    private String pictureUrl;
 
     @JsonProperty("locale")
     private String locale;
@@ -76,12 +76,12 @@ public class UserInfoRequest {
         this.name = name;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public String getLocale() {

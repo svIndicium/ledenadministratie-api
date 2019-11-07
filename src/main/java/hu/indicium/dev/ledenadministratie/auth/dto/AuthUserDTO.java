@@ -9,7 +9,7 @@ public class AuthUserDTO {
 
     private String familyName;
 
-    private String nickName;
+    private String nickname;
 
     private String name;
 
@@ -47,12 +47,12 @@ public class AuthUserDTO {
         this.familyName = familyName;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getName() {
