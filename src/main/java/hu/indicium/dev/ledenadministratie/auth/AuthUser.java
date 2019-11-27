@@ -3,6 +3,7 @@ package hu.indicium.dev.ledenadministratie.auth;
 import hu.indicium.dev.ledenadministratie.auth.requests.UserInfoRequest;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class AuthUser {
     private String sub;
@@ -120,5 +121,27 @@ public class AuthUser {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthUser authUser = (AuthUser) o;
+        return emailVerified == authUser.emailVerified &&
+                Objects.equals(sub, authUser.sub) &&
+                Objects.equals(givenName, authUser.givenName) &&
+                Objects.equals(familyName, authUser.familyName) &&
+                Objects.equals(nickname, authUser.nickname) &&
+                Objects.equals(name, authUser.name) &&
+                Objects.equals(pictureUrl, authUser.pictureUrl) &&
+                Objects.equals(locale, authUser.locale) &&
+                Objects.equals(updatedAt, authUser.updatedAt) &&
+                Objects.equals(email, authUser.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sub, givenName, familyName, nickname, name, pictureUrl, locale, updatedAt, email, emailVerified);
     }
 }

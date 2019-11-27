@@ -83,4 +83,9 @@ public class MockAuthenticationJsonWebToken implements Authentication, JwtAuthen
     public String getName() {
         return decodedJWT.getSubject();
     }
+
+    @Override
+    public String toString() {
+        return decodedJWT.getToken();
+    }
 }
