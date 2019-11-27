@@ -84,7 +84,7 @@ class MailChimpServiceTest {
 
         MailEntryDTO mailEntryDTO = new MailEntryDTO("John", "Doe", "john@doe.com", false);
 
-        when(restTemplate.postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), any(HttpHeaders.class), eq(String.class)))
+        when(restTemplate.postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), httpEntityArgumentCaptor.capture(), eq(String.class)))
                 .thenReturn(ResponseEntity.of(Optional.of("worked!")));
 
         mailListService.addUserToMailingList(mailEntryDTO);
