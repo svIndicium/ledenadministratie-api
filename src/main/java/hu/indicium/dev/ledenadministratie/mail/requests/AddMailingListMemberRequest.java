@@ -24,8 +24,12 @@ public class AddMailingListMemberRequest {
 
     public AddMailingListMemberRequest(MailEntryDTO mailEntryDTO) {
         this.emailAddress = mailEntryDTO.getEmail();
-        this.status = mailEntryDTO.isToReceiveNewsletter() ? "subscribed" : "unsubscribed";
-        this.tags = Arrays.asList("new", "newnew");
+        this.status = "subscribed";
+        if (mailEntryDTO.isToReceiveNewsletter()) {
+            this.tags = Arrays.asList("new", "newnew", "nieuwsbrief");
+        } else {
+            this.tags = Arrays.asList("new", "newnew");
+        }
         this.mergeFields = new HashMap<>();
         this.mergeFields.put("FNAME", mailEntryDTO.getFirstName());
         this.mergeFields.put("LNAME", mailEntryDTO.getLastName());

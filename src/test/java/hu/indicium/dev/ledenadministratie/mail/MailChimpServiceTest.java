@@ -62,6 +62,7 @@ class MailChimpServiceTest {
         assertThat(addMailingListMemberRequest).isNotNull();
         assertThat(addMailingListMemberRequest.getEmailAddress()).isEqualTo(mailEntryDTO.getEmail());
         assertThat(addMailingListMemberRequest.getTags()).contains("new");
+        assertThat(addMailingListMemberRequest.getTags()).contains("nieuwsbrief");
         assertThat(addMailingListMemberRequest.getStatus()).isEqualTo("subscribed");
         assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("FNAME");
         assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("LNAME");
@@ -74,6 +75,8 @@ class MailChimpServiceTest {
     @DisplayName("Add user to mailing list but not to newsletter")
     void shouldDoAPostRequestToMailChimpWithNoNewsletter_whenAddTheUserToTheMailingList() {
 
+        ArgumentCaptor<HttpEntity> httpEntityArgumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
+
         when(mailSettings.getListId()).thenReturn("test");
         when(mailSettings.getApiKey()).thenReturn("testApiKey");
         when(mailSettings.getUsername()).thenReturn("testUserName");
@@ -85,6 +88,16 @@ class MailChimpServiceTest {
                 .thenReturn(ResponseEntity.of(Optional.of("worked!")));
 
         mailListService.addUserToMailingList(mailEntryDTO);
+
+        HttpEntity httpEntity = httpEntityArgumentCaptor.getValue();
+        AddMailingListMemberRequest addMailingListMemberRequest = (AddMailingListMemberRequest) httpEntity.getBody();
+        assertThat(addMailingListMemberRequest).isNotNull();
+        assertThat(addMailingListMemberRequest.getEmailAddress()).isEqualTo(mailEntryDTO.getEmail());
+        assertThat(addMailingListMemberRequest.getTags()).contains("new");
+        assertThat(addMailingListMemberRequest.getTags()).doesNotContain("nieuwsbrief");
+        assertThat(addMailingListMemberRequest.getStatus()).isEqualTo("subscribed");
+        assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("FNAME");
+        assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("LNAME");
 
         verify(restTemplate, times(1)).postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), any(), any());
     }
