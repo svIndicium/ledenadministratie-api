@@ -14,11 +14,11 @@ import javax.persistence.EntityNotFoundException;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthSettings authSettings;
-
     private final RestTemplate restTemplate;
 
     private final Mapper<AuthUser, AuthUserDTO> authUserMapper;
+
+    private final AuthSettings authSettings;
 
     public AuthServiceImpl(RestTemplate restTemplate, Mapper<AuthUser, AuthUserDTO> authUserMapper, AuthSettings authSettings) {
         this.restTemplate = restTemplate;
