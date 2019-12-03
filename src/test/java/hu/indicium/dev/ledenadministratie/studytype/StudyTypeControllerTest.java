@@ -60,7 +60,7 @@ class StudyTypeControllerTest {
 
         when(studyTypeService.getAllStudyTypes()).thenReturn(Arrays.asList(studyTypeDTO, studyTypeDTO1));
 
-        mvc.perform(get("/api/studytype")
+        mvc.perform(get("/api/v1/studytype")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -85,7 +85,7 @@ class StudyTypeControllerTest {
 
         given(studyTypeService.createStudyType(any(StudyTypeDTO.class))).willReturn(studyTypeDTO);
 
-        mvc.perform(post("/api/studytype")
+        mvc.perform(post("/api/v1/studytype")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())

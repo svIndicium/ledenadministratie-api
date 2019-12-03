@@ -61,7 +61,7 @@ class RegistrationControllerTest {
 
         when(registrationService.register(registrationDTOArgumentCaptor.capture())).thenReturn(registrationDTO);
 
-        mvc.perform(post("/api/registration")
+        mvc.perform(post("/api/v1/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
