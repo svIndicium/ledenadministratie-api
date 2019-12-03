@@ -7,15 +7,10 @@ public class FinishRegistrationDTO {
 
     private boolean approved;
 
-    public FinishRegistrationDTO(Long registrationId) {
-        this.registrationId = registrationId;
-        this.approved = true;
-    }
-
-    public FinishRegistrationDTO(Long registrationId, String comment) {
+    public FinishRegistrationDTO(Long registrationId, String comment, boolean approved) {
         this.registrationId = registrationId;
         this.comment = comment;
-        this.approved = false;
+        this.approved = approved;
     }
 
     public Long getRegistrationId() {
