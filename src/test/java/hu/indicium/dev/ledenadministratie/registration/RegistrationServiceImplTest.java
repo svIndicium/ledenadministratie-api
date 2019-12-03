@@ -166,7 +166,7 @@ class RegistrationServiceImplTest {
         when(registrationMapper.toDTO(any(Registration.class))).thenReturn(registrationDTO);
         when(authService.getAuthUser()).thenReturn(authUserDTO);
 
-        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L);
+        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L, null, true);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(registrationDTO.getFirstName());
@@ -215,7 +215,7 @@ class RegistrationServiceImplTest {
         when(registrationMapper.toDTO(any(Registration.class))).thenReturn(registrationDTO);
         when(authService.getAuthUser()).thenReturn(authUserDTO);
 
-        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L, "Troll");
+        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L, "Troll", false);
 
         RegistrationDTO returnedRegistration = registrationService.finalizeRegistration(finishRegistrationDTO);
 
@@ -244,7 +244,7 @@ class RegistrationServiceImplTest {
     void shouldNotCreateUser_whenFinalizeRegistration_ifUserDoesNotExist() {
         when(registrationRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
-        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L, "Troll");
+        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L, "Troll", false);
 
         try {
             RegistrationDTO returnedRegistration = registrationService.finalizeRegistration(finishRegistrationDTO);
