@@ -1,7 +1,9 @@
 package hu.indicium.dev.ledenadministratie.registration;
 
+import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.requests.CreateRegistrationRequest;
+import hu.indicium.dev.ledenadministratie.registration.requests.FinishRegistrationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,5 +28,11 @@ public class RegistrationController {
     public RegistrationDTO register(@RequestBody @Valid CreateRegistrationRequest createRegistrationRequest) {
         RegistrationDTO registrationDTO = registrationRequestMapper.toDTO(createRegistrationRequest);
         return registrationService.register(registrationDTO);
+    }
+
+    @PostMapping("/{registrationId}/finalize")
+    public RegistrationDTO finalizeRegistration(@PathVariable Long registrationId, @RequestBody FinishRegistrationRequest finishRegistrationRequest) {
+        FinishRegistrationDTO finishRegistrationDTO = FinishRegistrationFactory.createFinishRegistrationDTO(registrationId, finishRegistrationRequest);
+        return registrationService.finalizeRegistration(finishRegistrationDTO);
     }
 }
