@@ -41,6 +41,6 @@ class MailSettingsTest {
 
     @Test
     void getListId() {
-        assertThat(mailSettings.getListId()).isEqualTo("test");
+        assertThat(mailSettings.getMemberListId()).isEqualTo("test");
     }
 }

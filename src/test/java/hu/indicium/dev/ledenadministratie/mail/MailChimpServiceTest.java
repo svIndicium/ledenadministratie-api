@@ -45,7 +45,7 @@ class MailChimpServiceTest {
 
         ArgumentCaptor<HttpEntity> httpEntityArgumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
-        when(mailSettings.getListId()).thenReturn("test");
+        when(mailSettings.getMemberListId()).thenReturn("test");
         when(mailSettings.getApiKey()).thenReturn("testApiKey");
         when(mailSettings.getUsername()).thenReturn("testUserName");
         when(mailSettings.getRegion()).thenReturn("eu");
@@ -77,7 +77,7 @@ class MailChimpServiceTest {
 
         ArgumentCaptor<HttpEntity> httpEntityArgumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
-        when(mailSettings.getListId()).thenReturn("test");
+        when(mailSettings.getMemberListId()).thenReturn("test");
         when(mailSettings.getApiKey()).thenReturn("testApiKey");
         when(mailSettings.getUsername()).thenReturn("testUserName");
         when(mailSettings.getRegion()).thenReturn("eu");
@@ -106,7 +106,7 @@ class MailChimpServiceTest {
     @DisplayName("Add user to mailing list")
     void shouldPatchTheUser_whenUpdateMailingListUser() {
 
-        when(mailSettings.getListId()).thenReturn("test");
+        when(mailSettings.getMemberListId()).thenReturn("test");
         when(mailSettings.getApiKey()).thenReturn("testApiKey");
         when(mailSettings.getUsername()).thenReturn("testUserName");
         when(mailSettings.getRegion()).thenReturn("eu");
