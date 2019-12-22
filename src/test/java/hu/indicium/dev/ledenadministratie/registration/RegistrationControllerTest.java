@@ -1,8 +1,10 @@
 package hu.indicium.dev.ledenadministratie.registration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.requests.CreateRegistrationRequest;
+import hu.indicium.dev.ledenadministratie.registration.requests.FinishRegistrationRequest;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import org.junit.jupiter.api.DisplayName;
@@ -90,6 +92,86 @@ class RegistrationControllerTest {
         assertThat(capturedRegistrationDTO.getComment()).isNull();
     }
 
+    @Test
+    @DisplayName("Finalize registration")
+    void shouldFinalizeRegistration() throws Exception {
+        ArgumentCaptor<FinishRegistrationDTO> finishRegistrationDTOArgumentCaptor = ArgumentCaptor.forClass(FinishRegistrationDTO.class);
+
+        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(5L, null, true);
+
+        FinishRegistrationRequest finishRegistrationRequest = toFinishRegistrationRequest(finishRegistrationDTO);
+
+        RegistrationDTO registrationDTO = getRegistrationDTO();
+        registrationDTO.setApproved(finishRegistrationDTO.isApproved());
+        registrationDTO.setComment(finishRegistrationDTO.getComment());
+        registrationDTO.setId(5L);
+        finishRegistrationDTO.setRegistrationId(5L);
+
+        when(registrationService.finalizeRegistration(finishRegistrationDTOArgumentCaptor.capture())).thenReturn(registrationDTO);
+
+        mvc.perform(post("/registration/5/finalize")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .with(user("user"))
+                .with(csrf())
+                .content(objectMapper.writer().writeValueAsString(finishRegistrationRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(registrationDTO.getId().intValue())))
+                .andExpect(jsonPath("$.firstName", is(registrationDTO.getFirstName())))
+                .andExpect(jsonPath("$.middleName", is(registrationDTO.getMiddleName())))
+                .andExpect(jsonPath("$.lastName", is(registrationDTO.getLastName())))
+                .andExpect(jsonPath("$.email", is(registrationDTO.getEmail())))
+                .andExpect(jsonPath("$.studyType", notNullValue()))
+                .andExpect(jsonPath("$.studyType.id", is(1)))
+                .andExpect(jsonPath("$.toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
+                .andExpect(jsonPath("$.comment").doesNotExist())
+                .andExpect(jsonPath("$.approved", is(true)));
+
+        FinishRegistrationDTO capturedFinishRegistrationDTO = finishRegistrationDTOArgumentCaptor.getValue();
+        assertThat(capturedFinishRegistrationDTO.getRegistrationId()).isEqualTo(finishRegistrationDTO.getRegistrationId());
+        assertThat(capturedFinishRegistrationDTO.isApproved()).isTrue();
+        assertThat(capturedFinishRegistrationDTO.getComment()).isNull();
+    }
+
+    @Test
+    @DisplayName("Finalize registration with a negative outcome")
+    void shouldFinalizeRegistration_withNegativeOutcome() throws Exception {
+        ArgumentCaptor<FinishRegistrationDTO> finishRegistrationDTOArgumentCaptor = ArgumentCaptor.forClass(FinishRegistrationDTO.class);
+
+        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(5L, "null", false);
+
+        FinishRegistrationRequest finishRegistrationRequest = toFinishRegistrationRequest(finishRegistrationDTO);
+
+        RegistrationDTO registrationDTO = getRegistrationDTO();
+        registrationDTO.setApproved(finishRegistrationDTO.isApproved());
+        registrationDTO.setComment(finishRegistrationDTO.getComment());
+        registrationDTO.setId(5L);
+        finishRegistrationDTO.setRegistrationId(5L);
+
+        when(registrationService.finalizeRegistration(finishRegistrationDTOArgumentCaptor.capture())).thenReturn(registrationDTO);
+
+        mvc.perform(post("/registration/5/finalize")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .with(user("user"))
+                .with(csrf())
+                .content(objectMapper.writer().writeValueAsString(finishRegistrationRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(registrationDTO.getId().intValue())))
+                .andExpect(jsonPath("$.firstName", is(registrationDTO.getFirstName())))
+                .andExpect(jsonPath("$.middleName", is(registrationDTO.getMiddleName())))
+                .andExpect(jsonPath("$.lastName", is(registrationDTO.getLastName())))
+                .andExpect(jsonPath("$.email", is(registrationDTO.getEmail())))
+                .andExpect(jsonPath("$.studyType", notNullValue()))
+                .andExpect(jsonPath("$.studyType.id", is(1)))
+                .andExpect(jsonPath("$.toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
+                .andExpect(jsonPath("$.comment", is(finishRegistrationDTO.getComment())))
+                .andExpect(jsonPath("$.approved", is(false)));
+
+        FinishRegistrationDTO capturedFinishRegistrationDTO = finishRegistrationDTOArgumentCaptor.getValue();
+        assertThat(capturedFinishRegistrationDTO.getRegistrationId()).isEqualTo(finishRegistrationDTO.getRegistrationId());
+        assertThat(capturedFinishRegistrationDTO.isApproved()).isFalse();
+        assertThat(capturedFinishRegistrationDTO.getComment()).isEqualTo(finishRegistrationDTO.getComment());
+    }
+
 
     private StudyType getStudyType() {
         StudyType studyType = new StudyType("Software Development");
@@ -144,5 +226,12 @@ class RegistrationControllerTest {
         createRegistrationRequest.setToReceiveNewsletter(registrationDTO.isToReceiveNewsletter());
         createRegistrationRequest.setEmail(registrationDTO.getEmail());
         return createRegistrationRequest;
+    }
+
+    private FinishRegistrationRequest toFinishRegistrationRequest(FinishRegistrationDTO finishRegistrationDTO) {
+        FinishRegistrationRequest finishRegistrationRequest = new FinishRegistrationRequest();
+        finishRegistrationRequest.setApproved(finishRegistrationDTO.isApproved());
+        finishRegistrationRequest.setComment(finishRegistrationDTO.getComment());
+        return finishRegistrationRequest;
     }
 }
