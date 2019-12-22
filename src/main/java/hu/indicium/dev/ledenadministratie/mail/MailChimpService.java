@@ -26,11 +26,7 @@ public class MailChimpService implements MailListService {
 
     @Override
     public void addUserToMailingList(MailEntryDTO mailEntryDTO) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        httpHeaders.setBasicAuth(mailSettings.getUsername(), mailSettings.getApiKey());
-        HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(mailEntryDTO), httpHeaders);
-        restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getListId() + "/members", httpEntity, String.class);
+        addUserToList(mailEntryDTO, mailSettings.getMemberListId());
     }
 
     @Override
@@ -41,6 +37,33 @@ public class MailChimpService implements MailListService {
         httpHeaders.add("X-HTTP-Method-Override", "PATCH");
         httpHeaders.setBasicAuth(mailSettings.getUsername(), mailSettings.getApiKey());
         HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(newEmail), httpHeaders);
-        restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getListId() + "/members/" + email, httpEntity, String.class);
+        restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + mailSettings.getMemberListId() + "/members/" + email, httpEntity, String.class);
+    }
+
+    @Override
+    public void addUserToNewsLetter(MailEntryDTO mailEntryDTO) {
+        addUserToList(mailEntryDTO, mailSettings.getNewsletterListId());
+    }
+
+    @Override
+    public void removeUserFromNewsLetter(MailEntryDTO mailEntryDTO) {
+        archiveUser(mailEntryDTO, mailSettings.getNewsletterListId());
+    }
+
+    private void addUserToList(MailEntryDTO mailEntryDTO, String listId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        httpHeaders.setBasicAuth(mailSettings.getUsername(), mailSettings.getApiKey());
+        HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(mailEntryDTO), httpHeaders);
+        restTemplate.postForEntity("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + listId + "/members", httpEntity, String.class);
+    }
+
+    private void archiveUser(MailEntryDTO mailEntryDTO, String listId) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        String emailHash = md5.hash(mailEntryDTO.getEmail());
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        httpHeaders.setBasicAuth(mailSettings.getUsername(), mailSettings.getApiKey());
+        HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(mailEntryDTO), httpHeaders);
+        restTemplate.delete("https://" + mailSettings.getRegion() + ".api.mailchimp.com/3.0/lists/" + listId + "/members/" + emailHash, httpEntity, String.class);
     }
 }

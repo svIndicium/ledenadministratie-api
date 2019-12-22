@@ -15,7 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Mail Settings")
 @TestPropertySource(properties = {
         "mailchimp.region=eu",
-        "mailchimp.listId=test",
+        "mailchimp.memberListId=test",
+        "mailchimp.newsletterListId=test",
         "mailchimp.username=testUser",
         "mailchimp.apiKey=testKey"
 })
@@ -40,7 +41,12 @@ class MailSettingsTest {
     }
 
     @Test
-    void getListId() {
+    void getMemberListId() {
         assertThat(mailSettings.getMemberListId()).isEqualTo("test");
+    }
+
+    @Test
+    void getNewsletterListId() {
+        assertThat(mailSettings.getNewsletterListId()).isEqualTo("test");
     }
 }
