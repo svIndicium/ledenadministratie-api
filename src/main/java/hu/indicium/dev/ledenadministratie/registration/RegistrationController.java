@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/registration")
@@ -30,9 +31,19 @@ public class RegistrationController {
         return registrationService.register(registrationDTO);
     }
 
+    @GetMapping
+    public List<RegistrationDTO> getRegistrations() {
+        return registrationService.getRegistrations();
+    }
+
+    @GetMapping("/unfinalized")
+    public List<RegistrationDTO> getUnfinalizedRegistrations() {
+        return registrationService.getUnfinalizedRegistrations();
+    }
+
     @PostMapping("/{registrationId}/finalize")
     public RegistrationDTO finalizeRegistration(@PathVariable Long registrationId, @RequestBody FinishRegistrationRequest finishRegistrationRequest) {
-        FinishRegistrationDTO finishRegistrationDTO = FinishRegistrationFactory.createFinishRegistrationDTO(registrationId, finishRegistrationRequest);
+        FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(registrationId, finishRegistrationRequest.getComment(), finishRegistrationRequest.isApproved());
         return registrationService.finalizeRegistration(finishRegistrationDTO);
     }
 }

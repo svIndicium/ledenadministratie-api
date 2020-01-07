@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -66,6 +68,22 @@ public class RegistrationServiceImpl implements RegistrationService {
             userService.createUser(userDTO);
         }
         return registrationDTO;
+    }
+
+    @Override
+    public List<RegistrationDTO> getRegistrations() {
+        return registrationRepository.findAll()
+                .stream()
+                .map(registrationMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RegistrationDTO> getUnfinalizedRegistrations() {
+        return registrationRepository.findAllByApprovedIsFalseAndCommentIsNull()
+                .stream()
+                .map(registrationMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     private Registration getRegistrationById(Long id) {

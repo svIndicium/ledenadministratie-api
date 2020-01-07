@@ -23,7 +23,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -255,6 +257,30 @@ class RegistrationServiceImplTest {
 
         verify(registrationRepository, times(0)).save(any(Registration.class));
         verify(userService, never()).createUser(any(UserDTO.class));
+    }
+
+    @Test
+    @DisplayName("Get registrations")
+    void shouldReturnListOfRegistrations() {
+        when(registrationRepository.findAll()).thenReturn(Arrays.asList(registration, registration));
+        when(registrationMapper.toDTO(eq(registration))).thenReturn(registrationDTO);
+
+        List<RegistrationDTO> returnedRegistrations = registrationService.getRegistrations();
+
+        assertThat(returnedRegistrations).hasSize(2);
+        assertThat(returnedRegistrations).contains(registrationDTO);
+    }
+
+    @Test
+    @DisplayName("Get Unfinalized registrations")
+    void shouldReturnListOfUnfinalizedRegistrations() {
+        when(registrationRepository.findAllByApprovedIsFalseAndCommentIsNull()).thenReturn(Arrays.asList(registration, registration));
+        when(registrationMapper.toDTO(eq(registration))).thenReturn(registrationDTO);
+
+        List<RegistrationDTO> returnedRegistrations = registrationService.getUnfinalizedRegistrations();
+
+        assertThat(returnedRegistrations).hasSize(2);
+        assertThat(returnedRegistrations).contains(registrationDTO);
     }
 
 

@@ -20,14 +20,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.Date;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -90,6 +93,54 @@ class RegistrationControllerTest {
         assertThat(capturedRegistrationDTO.getFinalizedAt()).isNull();
         assertThat(capturedRegistrationDTO.getFinalizedBy()).isNull();
         assertThat(capturedRegistrationDTO.getComment()).isNull();
+    }
+
+    @Test
+    @DisplayName("Get registrations")
+    void shouldReturnJsonArrayOfRegistrations() throws Exception {
+        RegistrationDTO registrationDTO = getRegistrationDTO();
+        registrationDTO.setId(1L);
+
+        when(registrationService.getRegistrations()).thenReturn(Collections.singletonList(registrationDTO));
+
+        mvc.perform(get("/registration")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .with(user("user")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(registrationDTO.getId().intValue())))
+                .andExpect(jsonPath("$[0].firstName", is(registrationDTO.getFirstName())))
+                .andExpect(jsonPath("$[0].middleName", is(registrationDTO.getMiddleName())))
+                .andExpect(jsonPath("$[0].lastName", is(registrationDTO.getLastName())))
+                .andExpect(jsonPath("$[0].email", is(registrationDTO.getEmail())))
+                .andExpect(jsonPath("$[0].studyType", notNullValue()))
+                .andExpect(jsonPath("$[0].studyType.id", is(1)))
+                .andExpect(jsonPath("$[0].toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())));
+    }
+
+    @Test
+    @DisplayName("Get unfinalized registrations")
+    void shouldReturnJsonArrayOfUnfinalizedRegistrations() throws Exception {
+        RegistrationDTO registrationDTO = getRegistrationDTO();
+        registrationDTO.setId(1L);
+
+        when(registrationService.getUnfinalizedRegistrations()).thenReturn(Collections.singletonList(registrationDTO));
+
+        mvc.perform(get("/registration/unfinalized")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .with(user("user")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(registrationDTO.getId().intValue())))
+                .andExpect(jsonPath("$[0].firstName", is(registrationDTO.getFirstName())))
+                .andExpect(jsonPath("$[0].middleName", is(registrationDTO.getMiddleName())))
+                .andExpect(jsonPath("$[0].lastName", is(registrationDTO.getLastName())))
+                .andExpect(jsonPath("$[0].email", is(registrationDTO.getEmail())))
+                .andExpect(jsonPath("$[0].studyType", notNullValue()))
+                .andExpect(jsonPath("$[0].studyType.id", is(1)))
+                .andExpect(jsonPath("$[0].toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
+                .andExpect(jsonPath("$[0].approved", is(false)))
+                .andExpect(jsonPath("$[0].comment").doesNotExist());
     }
 
     @Test
