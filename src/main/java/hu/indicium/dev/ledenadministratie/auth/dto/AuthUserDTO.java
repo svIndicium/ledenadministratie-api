@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.auth.dto;
 
 import java.util.Date;
+import java.util.Map;
 
 public class AuthUserDTO {
     private String sub;
@@ -22,6 +23,8 @@ public class AuthUserDTO {
     private String email;
 
     private boolean emailVerified;
+
+    private Map<String, Object> appMetadata;
 
     public String getSub() {
         return sub;
@@ -101,5 +104,13 @@ public class AuthUserDTO {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public Map<String, Object> getAppMetadata() {
+        return appMetadata;
+    }
+
+    public void setAppMetadata(Map<String, Object> appMetadata) {
+        this.appMetadata = appMetadata;
     }
 }

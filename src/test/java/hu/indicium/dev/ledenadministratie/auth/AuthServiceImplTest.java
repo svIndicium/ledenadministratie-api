@@ -21,9 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -96,6 +94,8 @@ class AuthServiceImplTest {
     }
 
     private UserInfoRequest getUserInfoRequest() {
+        Map<String, Object> appMetadata = new HashMap<>();
+        appMetadata.put("id", 1);
         UserInfoRequest userInfoRequest = new UserInfoRequest();
         userInfoRequest.setSub("sub");
         userInfoRequest.setGivenName("John");
@@ -107,6 +107,7 @@ class AuthServiceImplTest {
         userInfoRequest.setUpdatedAt(new Date());
         userInfoRequest.setEmail("john@doe.com");
         userInfoRequest.setEmailVerified(true);
+        userInfoRequest.setAppMetadata(appMetadata);
         return userInfoRequest;
     }
 
@@ -122,6 +123,7 @@ class AuthServiceImplTest {
         authUser.setUpdatedAt(userInfoRequest.getUpdatedAt());
         authUser.setEmail(userInfoRequest.getEmail());
         authUser.setEmailVerified(userInfoRequest.isEmailVerified());
+        authUser.setAppMetadata(userInfoRequest.getAppMetadata());
         return authUser;
     }
 
@@ -137,6 +139,7 @@ class AuthServiceImplTest {
         authUserDTO.setUpdatedAt(authUser.getUpdatedAt());
         authUserDTO.setEmail(authUser.getEmail());
         authUserDTO.setEmailVerified(authUser.isEmailVerified());
+        authUserDTO.setAppMetadata(authUser.getAppMetadata());
         return authUserDTO;
     }
 

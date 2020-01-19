@@ -3,6 +3,7 @@ package hu.indicium.dev.ledenadministratie.auth;
 import hu.indicium.dev.ledenadministratie.auth.requests.UserInfoRequest;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 
 public class AuthUser {
@@ -26,6 +27,8 @@ public class AuthUser {
 
     private boolean emailVerified;
 
+    private Map<String, Object> appMetadata;
+
     public AuthUser() {
         // for modelmapper
     }
@@ -41,6 +44,7 @@ public class AuthUser {
         this.updatedAt = userInfoRequest.getUpdatedAt();
         this.email = userInfoRequest.getEmail();
         this.emailVerified = userInfoRequest.isEmailVerified();
+        this.appMetadata = userInfoRequest.getAppMetadata();
     }
 
     public String getSub() {
@@ -123,6 +127,14 @@ public class AuthUser {
         this.emailVerified = emailVerified;
     }
 
+    public Map<String, Object> getAppMetadata() {
+        return appMetadata;
+    }
+
+    public void setAppMetadata(Map<String, Object> appMetadata) {
+        this.appMetadata = appMetadata;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,11 +149,12 @@ public class AuthUser {
                 Objects.equals(pictureUrl, authUser.pictureUrl) &&
                 Objects.equals(locale, authUser.locale) &&
                 Objects.equals(updatedAt, authUser.updatedAt) &&
-                Objects.equals(email, authUser.email);
+                Objects.equals(email, authUser.email) &&
+                Objects.equals(appMetadata, authUser.appMetadata);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sub, givenName, familyName, nickname, name, pictureUrl, locale, updatedAt, email, emailVerified);
+        return Objects.hash(sub, givenName, familyName, nickname, name, pictureUrl, locale, updatedAt, email, emailVerified, appMetadata);
     }
 }

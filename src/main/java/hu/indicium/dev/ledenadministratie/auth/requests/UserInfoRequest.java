@@ -3,6 +3,7 @@ package hu.indicium.dev.ledenadministratie.auth.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.Map;
 
 public class UserInfoRequest {
 
@@ -35,6 +36,9 @@ public class UserInfoRequest {
 
     @JsonProperty("email_verified")
     private boolean emailVerified;
+
+    @JsonProperty("app_metadata")
+    private Map<String, Object> appMetadata;
 
     public String getSub() {
         return sub;
@@ -114,5 +118,13 @@ public class UserInfoRequest {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public Map<String, Object> getAppMetadata() {
+        return appMetadata;
+    }
+
+    public void setAppMetadata(Map<String, Object> appMetadata) {
+        this.appMetadata = appMetadata;
     }
 }
