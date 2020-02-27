@@ -27,6 +27,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -124,9 +125,9 @@ class RegistrationControllerTest {
         RegistrationDTO registrationDTO = getRegistrationDTO();
         registrationDTO.setId(1L);
 
-        when(registrationService.getUnfinalizedRegistrations()).thenReturn(Collections.singletonList(registrationDTO));
+        when(registrationService.getRegistrationByFinalization(eq(false))).thenReturn(Collections.singletonList(registrationDTO));
 
-        mvc.perform(get("/registration/unfinalized")
+        mvc.perform(get("/registration?finalized=false")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -140,6 +141,32 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("$[0].studyType.id", is(1)))
                 .andExpect(jsonPath("$[0].toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
                 .andExpect(jsonPath("$[0].approved", is(false)))
+                .andExpect(jsonPath("$[0].comment").doesNotExist());
+    }
+
+    @Test
+    @DisplayName("Get finalized registrations")
+    void shouldReturnJsonArrayOfFinalizedRegistrations() throws Exception {
+        RegistrationDTO registrationDTO = getRegistrationDTO();
+        registrationDTO.setApproved(true);
+        registrationDTO.setId(1L);
+
+        when(registrationService.getRegistrationByFinalization(eq(true))).thenReturn(Collections.singletonList(registrationDTO));
+
+        mvc.perform(get("/registration?finalized=true")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .with(user("user")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(registrationDTO.getId().intValue())))
+                .andExpect(jsonPath("$[0].firstName", is(registrationDTO.getFirstName())))
+                .andExpect(jsonPath("$[0].middleName", is(registrationDTO.getMiddleName())))
+                .andExpect(jsonPath("$[0].lastName", is(registrationDTO.getLastName())))
+                .andExpect(jsonPath("$[0].email", is(registrationDTO.getEmail())))
+                .andExpect(jsonPath("$[0].studyType", notNullValue()))
+                .andExpect(jsonPath("$[0].studyType.id", is(1)))
+                .andExpect(jsonPath("$[0].toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
+                .andExpect(jsonPath("$[0].approved", is(true)))
                 .andExpect(jsonPath("$[0].comment").doesNotExist());
     }
 

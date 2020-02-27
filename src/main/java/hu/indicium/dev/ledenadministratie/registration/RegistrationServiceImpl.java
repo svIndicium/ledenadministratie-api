@@ -79,11 +79,18 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public List<RegistrationDTO> getUnfinalizedRegistrations() {
-        return registrationRepository.findAllByApprovedIsFalseAndCommentIsNull()
-                .stream()
-                .map(registrationMapper::toDTO)
-                .collect(Collectors.toList());
+    public List<RegistrationDTO> getRegistrationByFinalization(boolean finalized) {
+        if (finalized) {
+            return registrationRepository.findAllByApprovedIsTrueOrApprovedIsFalseAndCommentIsNotNull()
+                    .stream()
+                    .map(registrationMapper::toDTO)
+                    .collect(Collectors.toList());
+        } else {
+            return registrationRepository.findAllByApprovedIsFalseAndCommentIsNull()
+                    .stream()
+                    .map(registrationMapper::toDTO)
+                    .collect(Collectors.toList());
+        }
     }
 
     private Registration getRegistrationById(Long id) {

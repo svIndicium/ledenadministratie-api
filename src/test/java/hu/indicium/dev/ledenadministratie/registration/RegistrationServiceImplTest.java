@@ -277,7 +277,19 @@ class RegistrationServiceImplTest {
         when(registrationRepository.findAllByApprovedIsFalseAndCommentIsNull()).thenReturn(Arrays.asList(registration, registration));
         when(registrationMapper.toDTO(eq(registration))).thenReturn(registrationDTO);
 
-        List<RegistrationDTO> returnedRegistrations = registrationService.getUnfinalizedRegistrations();
+        List<RegistrationDTO> returnedRegistrations = registrationService.getRegistrationByFinalization(false);
+
+        assertThat(returnedRegistrations).hasSize(2);
+        assertThat(returnedRegistrations).contains(registrationDTO);
+    }
+
+    @Test
+    @DisplayName("Get finalized registrations")
+    void shouldReturnListOfFinalizedRegistrations() {
+        when(registrationRepository.findAllByApprovedIsTrueOrApprovedIsFalseAndCommentIsNotNull()).thenReturn(Arrays.asList(registration, registration));
+        when(registrationMapper.toDTO(eq(registration))).thenReturn(registrationDTO);
+
+        List<RegistrationDTO> returnedRegistrations = registrationService.getRegistrationByFinalization(true);
 
         assertThat(returnedRegistrations).hasSize(2);
         assertThat(returnedRegistrations).contains(registrationDTO);

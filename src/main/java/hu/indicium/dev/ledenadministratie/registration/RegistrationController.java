@@ -23,7 +23,6 @@ public class RegistrationController {
         this.registrationRequestMapper = new RegistrationRequestMapper();
     }
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RegistrationDTO register(@RequestBody @Valid CreateRegistrationRequest createRegistrationRequest) {
@@ -32,13 +31,13 @@ public class RegistrationController {
     }
 
     @GetMapping
-    public List<RegistrationDTO> getRegistrations() {
+    public List<RegistrationDTO> getRegistrations(@RequestParam(name = "finalized", required = false, defaultValue = "") String getFinalizedRegistrations) {
+        if (getFinalizedRegistrations.equals("true")) {
+            return registrationService.getRegistrationByFinalization(true);
+        } else if (getFinalizedRegistrations.equals("false")) {
+            return registrationService.getRegistrationByFinalization(false);
+        }
         return registrationService.getRegistrations();
-    }
-
-    @GetMapping("/unfinalized")
-    public List<RegistrationDTO> getUnfinalizedRegistrations() {
-        return registrationService.getUnfinalizedRegistrations();
     }
 
     @PostMapping("/{registrationId}/finalize")

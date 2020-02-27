@@ -12,5 +12,5 @@ public interface RegistrationService {
 
     List<RegistrationDTO> getRegistrations();
 
-    List<RegistrationDTO> getUnfinalizedRegistrations();
+    List<RegistrationDTO> getRegistrationByFinalization(boolean finalized);
 }

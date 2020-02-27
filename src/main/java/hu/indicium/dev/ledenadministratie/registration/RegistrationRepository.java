@@ -7,5 +7,7 @@ import java.util.List;
 
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
+    List<Registration> findAllByApprovedIsTrueOrApprovedIsFalseAndCommentIsNotNull();
+
     List<Registration> findAllByApprovedIsFalseAndCommentIsNull();
 }
