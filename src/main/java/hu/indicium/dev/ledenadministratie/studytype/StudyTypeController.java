@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/studytype")
+@RequestMapping("/studytype")
 public class StudyTypeController {
 
     private final StudyTypeService studyTypeService;

@@ -6,4 +6,8 @@ public interface MailListService {
     void addUserToMailingList(MailEntryDTO mailEntryDTO);
 
     void updateMailingListMember(MailEntryDTO oldEmail, MailEntryDTO newEmail);
+
+    void addUserToNewsLetter(MailEntryDTO mailEntryDTO);
+
+    void removeUserFromNewsLetter(MailEntryDTO mailEntryDTO);
 }

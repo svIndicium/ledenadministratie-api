@@ -66,7 +66,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -99,7 +99,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -130,7 +130,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -154,7 +154,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -178,7 +178,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -202,7 +202,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -226,7 +226,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -250,7 +250,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -274,7 +274,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -298,7 +298,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -322,7 +322,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -346,7 +346,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -370,7 +370,7 @@ class UserControllerTest {
 
         given(userService.createUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(post("/api/user")
+        mvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -393,7 +393,7 @@ class UserControllerTest {
 
         given(userService.updateUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(put("/api/user/" + userDTO.getId())
+        mvc.perform(put("/user/" + userDTO.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -417,7 +417,7 @@ class UserControllerTest {
 
         given(userService.updateUser(any(UserDTO.class))).willReturn(updatedUserDTO);
 
-        mvc.perform(put("/api/user/1")
+        mvc.perform(put("/user/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -443,7 +443,7 @@ class UserControllerTest {
 
         given(userService.getUserById(eq(1L))).willReturn(userDTO);
 
-        mvc.perform(get("/api/user/1")
+        mvc.perform(get("/user/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -469,7 +469,7 @@ class UserControllerTest {
 
         given(userService.getUsers()).willReturn(Arrays.asList(userDTO, userDTO1));
 
-        mvc.perform(get("/api/user")
+        mvc.perform(get("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())

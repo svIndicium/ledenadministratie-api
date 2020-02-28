@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "mailchimp.member-list-id",
+      "type": "java.lang.String",
+      "description": "Description for mailchimp.member-list-id."
+    },
+    {
+      "name": "mailchimp.newsletter-list-id",
+      "type": "java.lang.String",
+      "description": "Description for mailchimp.newsletter-list-id."
+    }
+  ]
+}

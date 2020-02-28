@@ -1,0 +1,1 @@
+create sequence registration_seq;

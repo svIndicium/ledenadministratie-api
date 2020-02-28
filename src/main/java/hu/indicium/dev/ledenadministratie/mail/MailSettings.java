@@ -13,7 +13,9 @@ public class MailSettings {
 
     private String region;
 
-    private String listId;
+    private String memberListId;
+
+    private String newsletterListId;
 
     public String getUsername() {
         return username;
@@ -39,11 +41,19 @@ public class MailSettings {
         this.region = region;
     }
 
-    public String getListId() {
-        return listId;
+    public String getMemberListId() {
+        return memberListId;
     }
 
-    public void setListId(String listId) {
-        this.listId = listId;
+    public void setMemberListId(String memberListId) {
+        this.memberListId = memberListId;
+    }
+
+    public String getNewsletterListId() {
+        return newsletterListId;
+    }
+
+    public void setNewsletterListId(String newsletterListId) {
+        this.newsletterListId = newsletterListId;
     }
 }

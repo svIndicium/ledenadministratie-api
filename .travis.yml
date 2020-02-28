@@ -21,15 +21,15 @@ before_script:
 
 script:
   - ./gradlew build jacocoTestReport sonarqube
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "stable"; elif [ "$TRAVIS_BRANCH" == "dev" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "stable"; elif [ "$TRAVIS_BRANCH" == "dev" ]; then echo "latest"; else echo $TRAVIS_BRANCH | tr "/" -; fi`
 
 deploy:
   skip_cleanup: true
   provider: script
   script:
     echo "$DOCKER_PASS" | docker login docker.pkg.github.com -u "$DOCKER_USER" --password-stdin;
-    docker build -t docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG .;
-    docker push docker.pkg.github.com/svindicium/ledenadministratie/ledenadministratie:$TAG;
+    docker build -t docker.pkg.github.com/svindicium/ledenadministratie-api/ledenadministratie-api:$TAG .;
+    docker push docker.pkg.github.com/svindicium/ledenadministratie-api/ledenadministratie-api:$TAG;
   on:
     all_branches: true
 
