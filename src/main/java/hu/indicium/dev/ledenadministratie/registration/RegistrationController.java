@@ -45,4 +45,9 @@ public class RegistrationController {
         FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(registrationId, finishRegistrationRequest.getComment(), finishRegistrationRequest.isApproved());
         return registrationService.finalizeRegistration(finishRegistrationDTO);
     }
+
+    @GetMapping("/{registrationId}")
+    public RegistrationDTO getRegistration(@PathVariable Long registrationId) {
+        return registrationService.getRegistration(registrationId);
+    }
 }
