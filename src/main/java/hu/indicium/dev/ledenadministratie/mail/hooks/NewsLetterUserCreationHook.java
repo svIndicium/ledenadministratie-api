@@ -16,8 +16,12 @@ public class NewsLetterUserCreationHook implements CreationHook<UserDTO> {
 
     @Override
     public void execute(UserDTO oldUser, UserDTO newUser) {
-        if (newUser.isToReceiveNewsletter()) {
-            mailListService.addUserToNewsLetter(new MailEntryDTO(newUser.getFirstName(), Util.getFullLastName(newUser.getMiddleName(), newUser.getLastName()), newUser.getEmail(), newUser.isToReceiveNewsletter()));
+        try {
+            if (newUser.isToReceiveNewsletter()) {
+                mailListService.addUserToNewsLetter(new MailEntryDTO(newUser.getFirstName(), Util.getFullLastName(newUser.getMiddleName(), newUser.getLastName()), newUser.getEmail(), newUser.isToReceiveNewsletter()));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }

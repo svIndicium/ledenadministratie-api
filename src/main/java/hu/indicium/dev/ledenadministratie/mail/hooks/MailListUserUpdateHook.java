@@ -16,8 +16,12 @@ public class MailListUserUpdateHook implements UpdateHook<UserDTO> {
 
     @Override
     public void execute(UserDTO oldEntity, UserDTO newEntity) {
-        if (!oldEntity.getFirstName().equals(newEntity.getFirstName()) || !Util.getFullLastName(oldEntity.getMiddleName(), oldEntity.getLastName()).equals(Util.getFullLastName(newEntity.getMiddleName(), newEntity.getLastName())) || !oldEntity.getEmail().equals(newEntity.getEmail()) || oldEntity.isToReceiveNewsletter() != newEntity.isToReceiveNewsletter()) {
-            mailListService.updateMailingListMember(new MailEntryDTO(oldEntity.getFirstName(), Util.getFullLastName(oldEntity.getMiddleName(), oldEntity.getLastName()), oldEntity.getEmail(), oldEntity.isToReceiveNewsletter()), new MailEntryDTO(newEntity.getFirstName(), Util.getFullLastName(newEntity.getMiddleName(), newEntity.getLastName()), newEntity.getEmail(), newEntity.isToReceiveNewsletter()));
+        try {
+            if (!oldEntity.getFirstName().equals(newEntity.getFirstName()) || !Util.getFullLastName(oldEntity.getMiddleName(), oldEntity.getLastName()).equals(Util.getFullLastName(newEntity.getMiddleName(), newEntity.getLastName())) || !oldEntity.getEmail().equals(newEntity.getEmail()) || oldEntity.isToReceiveNewsletter() != newEntity.isToReceiveNewsletter()) {
+                mailListService.updateMailingListMember(new MailEntryDTO(oldEntity.getFirstName(), Util.getFullLastName(oldEntity.getMiddleName(), oldEntity.getLastName()), oldEntity.getEmail(), oldEntity.isToReceiveNewsletter()), new MailEntryDTO(newEntity.getFirstName(), Util.getFullLastName(newEntity.getMiddleName(), newEntity.getLastName()), newEntity.getEmail(), newEntity.isToReceiveNewsletter()));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }
