@@ -28,12 +28,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthUserDTO getAuthUser() {
-        String token = SecurityContextHolder.getContext().getAuthentication().toString();
+        String token = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
         httpHeaders.setBearerAuth(token);
         HttpEntity<UserInfoRequest> userInfoRequestHttpEntity = new HttpEntity<>(httpHeaders);
-        ResponseEntity<UserInfoRequest> userInfoRequestResponseEntity = restTemplate.exchange(authSettings.getIssuer() + "/userinfo", HttpMethod.GET, userInfoRequestHttpEntity, UserInfoRequest.class);
+        ResponseEntity<UserInfoRequest> userInfoRequestResponseEntity = restTemplate.exchange(authSettings.getIssuer() + "userinfo", HttpMethod.GET, userInfoRequestHttpEntity, UserInfoRequest.class);
         UserInfoRequest userInfoRequest = userInfoRequestResponseEntity.getBody();
         if (userInfoRequest == null) {
             throw new EntityNotFoundException("User could not identify itself");
