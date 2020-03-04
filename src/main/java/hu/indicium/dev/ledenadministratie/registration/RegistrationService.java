@@ -13,4 +13,6 @@ public interface RegistrationService {
     List<RegistrationDTO> getRegistrations();
 
     List<RegistrationDTO> getRegistrationByFinalization(boolean finalized);
+
+    RegistrationDTO getRegistration(Long registrationId);
 }

@@ -93,6 +93,11 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
     }
 
+    public RegistrationDTO getRegistration(Long registrationId) {
+        Registration registration = this.getRegistrationById(registrationId);
+        return registrationMapper.toDTO(registration);
+    }
+
     private Registration getRegistrationById(Long id) {
         return registrationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Entity with ID " + id + " not found!"));
