@@ -51,7 +51,7 @@ class AuthServiceImplTest {
         ArgumentCaptor<HttpEntity> httpEntityArgumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
         when(authSettings.getApiAudience()).thenReturn("https://lit.indicium.hu");
-        when(authSettings.getIssuer()).thenReturn("https://indicium.eu.auth0.com");
+        when(authSettings.getIssuer()).thenReturn("https://indicium.eu.auth0.com/");
 
         UserInfoRequest userInfoRequest = getUserInfoRequest();
 
@@ -80,7 +80,7 @@ class AuthServiceImplTest {
         ArgumentCaptor<HttpEntity> httpEntityArgumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
 
         when(authSettings.getApiAudience()).thenReturn("https://lit.indicium.hu");
-        when(authSettings.getIssuer()).thenReturn("https://indicium.eu.auth0.com");
+        when(authSettings.getIssuer()).thenReturn("https://indicium.eu.auth0.com/");
 
         UserInfoRequest userInfoRequest = getUserInfoRequest();
 
