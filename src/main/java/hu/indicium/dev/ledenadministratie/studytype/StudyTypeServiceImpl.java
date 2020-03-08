@@ -2,6 +2,7 @@ package hu.indicium.dev.ledenadministratie.studytype;
 
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import hu.indicium.dev.ledenadministratie.util.Validator;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -38,6 +39,7 @@ public class StudyTypeServiceImpl implements StudyTypeService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('create:studyType')")
     public StudyTypeDTO createStudyType(StudyTypeDTO studyTypeDTO) {
         StudyType studyType = studyTypeMapper.toEntity(studyTypeDTO);
         studyTypeValidator.validate(studyType);
