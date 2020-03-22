@@ -1,9 +1,11 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.mail.Mail;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -22,8 +24,8 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @OneToMany(mappedBy = "user")
+    private Set<Mail> email;
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
@@ -74,11 +76,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
+    public Set<Mail> getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Set<Mail> email) {
         this.email = email;
     }
 

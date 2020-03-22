@@ -12,5 +12,9 @@ public interface UserService {
     UserDTO getUserById(Long userId);
 
     List<UserDTO> getUsers();
+
+    UserDTO addMailAddressToUser(Long userId, String address, boolean receivesNewsletter);
+
+    void requestNewMailVerification(Long userId, Long mailId);
 }
 
