@@ -1,22 +1,9 @@
 package hu.indicium.dev.ledenadministratie.mail;
 
-import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
-import hu.indicium.dev.ledenadministratie.user.dto.MailDTO;
+import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 
 public interface MailService {
-    MailDTO addMailAddress(MailEntryDTO mailEntryDTO);
+    MailAbstract sendVerificationMail(MailAbstract mailAbstract, MailVerificationDTO mailVerificationDTO);
 
-    void addUserToMailingList(MailEntryDTO mailEntryDTO);
-
-    void updateMailingListMember(MailEntryDTO oldEmail, MailEntryDTO newEmail);
-
-    void addUserToNewsLetter(MailEntryDTO mailEntryDTO);
-
-    void removeUserFromNewsLetter(MailEntryDTO mailEntryDTO);
-
-    void sendVerificationMail(MailEntryDTO mailEntryDTO);
-
-    void requestMailVerification(Long mailId);
-
-    void verifyMail(String token);
+    void verifyMail(String mail, String token);
 }

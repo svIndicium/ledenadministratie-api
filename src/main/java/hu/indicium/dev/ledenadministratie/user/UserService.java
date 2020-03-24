@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface UserService {
 
     List<UserDTO> getUsers();
 
-    UserDTO addMailAddressToUser(Long userId, String address, boolean receivesNewsletter);
+    UserDTO addMailAddressToUser(Long userId, MailAddressDTO mailAddressDTO);
 
     void requestNewMailVerification(Long userId, Long mailId);
 }

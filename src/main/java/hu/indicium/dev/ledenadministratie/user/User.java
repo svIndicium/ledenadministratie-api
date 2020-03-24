@@ -1,11 +1,11 @@
 package hu.indicium.dev.ledenadministratie.user;
 
-import hu.indicium.dev.ledenadministratie.mail.Mail;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -24,17 +24,14 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Mail> email;
-
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     @Column(nullable = false)
     private Date dateOfBirth;
 
-    @Column(nullable = false)
-    private boolean isToReceiveNewsletter;
+    @OneToMany(mappedBy = "user")
+    private List<MailAddress> mailAddresses = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "study_type_id", nullable = false)
@@ -76,14 +73,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Set<Mail> getEmail() {
-        return email;
-    }
-
-    public void setEmail(Set<Mail> email) {
-        this.email = email;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -100,19 +89,23 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public List<MailAddress> getMailAddresses() {
+        return mailAddresses;
+    }
+
+    public void setMailAddresses(List<MailAddress> mailAddresses) {
+        this.mailAddresses = mailAddresses;
+    }
+
+    public void addMailAddress(MailAddress mailAddress) {
+        this.mailAddresses.add(mailAddress);
+    }
+
     public StudyType getStudyType() {
         return studyType;
     }
 
     public void setStudyType(StudyType studyType) {
         this.studyType = studyType;
-    }
-
-    public boolean isToReceiveNewsletter() {
-        return isToReceiveNewsletter;
-    }
-
-    public void setToReceiveNewsletter(boolean toReceiveNewsletter) {
-        isToReceiveNewsletter = toReceiveNewsletter;
     }
 }

@@ -1,89 +1,48 @@
 package hu.indicium.dev.ledenadministratie.mail;
 
-import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
-import hu.indicium.dev.ledenadministratie.registration.Registration;
-import hu.indicium.dev.ledenadministratie.user.User;
-import hu.indicium.dev.ledenadministratie.user.dto.MailDTO;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 
 @Service
 public class MailServiceImpl implements MailService {
-
-    private final MailRepository mailRepository;
-
-    private final MailMapper mailMapper;
-
     private final TransactionalMailService transactionalMailService;
 
-    public MailServiceImpl(MailRepository mailRepository, MailMapper mailMapper, TransactionalMailService transactionalMailService) {
-        this.mailRepository = mailRepository;
-        this.mailMapper = mailMapper;
+    private final MailAbstractComponent mailAbstractComponent;
+
+    public MailServiceImpl(TransactionalMailService transactionalMailService, MailAbstractComponent mailAbstractComponent) {
         this.transactionalMailService = transactionalMailService;
+        this.mailAbstractComponent = mailAbstractComponent;
     }
 
     @Override
-    public MailDTO addMailAddress(MailEntryDTO mailEntryDTO) {
-        isValidEmailAddress(mailEntryDTO.getEmail());
-        if (mailRepository.existsByAddressAndVerifiedIsTrue(mailEntryDTO.getEmail().toLowerCase())) {
-            throw new IllegalArgumentException("Email already in use");
+    public MailAbstract sendVerificationMail(MailAbstract mailAbstract, MailVerificationDTO mailVerificationDTO) {
+        if (mailAbstract.getVerifiedAt() != null) {
+            throw new IllegalStateException("Address is already verified");
         }
-        Mail mail = new Mail(mailEntryDTO.getEmail().toLowerCase(), mailEntryDTO.isToReceiveNewsletter());
-        mail = mailRepository.save(mail);
-        return mailMapper.toDTO(mail);
-    }
-
-    @Override
-    public void addUserToMailingList(MailEntryDTO mailEntryDTO) {
-        this.mailListService.addUserToNewsLetter(mailEntryDTO);
-    }
-
-    @Override
-    public void updateMailingListMember(MailEntryDTO oldEmail, MailEntryDTO newEmail) {
-        this.mailListService.updateMailingListMember(oldEmail, newEmail);
-    }
-
-    @Override
-    public void addUserToNewsLetter(MailEntryDTO mailEntryDTO) {
-        this.mailListService.addUserToNewsLetter(mailEntryDTO);
-    }
-
-    @Override
-    public void removeUserFromNewsLetter(MailEntryDTO mailEntryDTO) {
-        this.mailListService.removeUserFromNewsLetter(mailEntryDTO);
-    }
-
-    @Override
-    public void requestMailVerification(Long mailId) {
-        if (mailRepository.existsByIdAndVerifiedIsTrue(mailId)) {
-            throw new IllegalArgumentException("Email already verified");
-        }
-        Mail mail = mailRepository.findById(mailId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Email with id %d not found", mailId)));
-        mail.setVerificationToken(this.generateVerificationToken());
-        mail.setVerificationRequestedAt(new Date());
-        mailRepository.save(mail);
-        MailVerificationDTO mailVerificationDTO = new MailVerificationDTO();
-        if (mail.getUser() != null) {
-            User user = mail.getUser();
-            mailVerificationDTO.setFirstName(user.getFirstName());
-            mailVerificationDTO.setLastName(Util.getFullLastName(user.getMiddleName(), user.getLastName()));
-        } else {
-            Registration registration = mail.getRegistration();
-            mailVerificationDTO.setFirstName(registration.getFirstName());
-            mailVerificationDTO.setLastName(Util.getFullLastName(registration.getMiddleName(), registration.getLastName()));
-        }
-        mailVerificationDTO.setToken(mail.getVerificationToken());
+        isValidEmailAddress(mailAbstract.getMailAddress());
+        mailAbstract.setVerificationRequestedAt(new Date());
+        mailAbstract.setVerificationToken(generateVerificationToken());
+        mailVerificationDTO.setMailAddress(mailAbstract.getMailAddress());
+        mailVerificationDTO.setToken(mailAbstract.getVerificationToken());
         transactionalMailService.sendVerificationMail(mailVerificationDTO);
+        return mailAbstract;
     }
 
     @Override
-    public void verifyMail(String token) {
-        this.transactionalMailService.verifyMail(token);
+    public void verifyMail(String mailAddress, String token) {
+        MailAbstractRepository<? extends MailAbstract, Long> repository = mailAbstractComponent.getRepositoryFromToken(token);
+        MailAbstract mailAbstract = repository.findByVerificationToken(token)
+                .orElseThrow(() -> new IllegalStateException("Could not validate mail address"));
+        if (mailAbstract.getVerifiedAt() != null) {
+            throw new IllegalStateException("Could not validate mail address");
+        }
+        if (!mailAbstract.getMailAddress().equals(mailAddress)) {
+            throw new IllegalStateException("Could not validate mail address");
+        }
+        mailAbstract.setVerifiedAt(new Date());
     }
 
     void isValidEmailAddress(String emailAddress) {
@@ -91,7 +50,7 @@ public class MailServiceImpl implements MailService {
 
     private String generateVerificationToken() {
         String token = Util.randomAlphaNumeric(10).toUpperCase();
-        if (mailRepository.countByVerificationToken(token) != 0) {
+        if (mailAbstractComponent.countByVerificationToken(token) != 0) {
             return generateVerificationToken();
         }
         return token;

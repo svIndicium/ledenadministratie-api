@@ -7,6 +7,16 @@ public class MailVerificationDTO {
 
     private String token;
 
+    private String mailAddress;
+
+    public MailVerificationDTO() {
+    }
+
+    public MailVerificationDTO(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -29,5 +39,13 @@ public class MailVerificationDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getMailAddress() {
+        return mailAddress;
+    }
+
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 }

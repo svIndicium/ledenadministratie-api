@@ -2,7 +2,7 @@ package hu.indicium.dev.ledenadministratie.user.dto;
 
 import java.util.Date;
 
-public class MailDTO {
+public class MailAddressDTO {
     private Long id;
 
     private String address;

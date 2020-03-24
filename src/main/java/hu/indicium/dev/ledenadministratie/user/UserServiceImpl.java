@@ -2,12 +2,12 @@ package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
 import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
-import hu.indicium.dev.ledenadministratie.mail.Mail;
-import hu.indicium.dev.ledenadministratie.mail.MailRepository;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
-import hu.indicium.dev.ledenadministratie.user.dto.MailDTO;
+import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
+import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,19 +33,19 @@ public class UserServiceImpl implements UserService {
 
     private final UpdateHook<UserDTO> updateHook;
 
-    private final MailRepository mailRepository;
-
     private final MailService mailService;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook, MailRepository mailRepository, MailService mailService) {
+    private final MailAddressRepository mailAddressRepository;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook, MailService mailService, MailAddressRepository mailAddressRepository) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.userMapper = userMapper;
         this.modelMapper = modelMapper;
         this.creationHook = creationHook;
         this.updateHook = updateHook;
-        this.mailRepository = mailRepository;
         this.mailService = mailService;
+        this.mailAddressRepository = mailAddressRepository;
     }
 
     @Override
@@ -91,27 +91,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO addMailAddressToUser(Long userId, MailDTO mailDTO) {
+    @PreAuthorize("hasPermission('write:user')")
+    public void requestNewMailVerification(Long userId, Long mailId) {
         User user = findUserById(userId);
+        MailAddress mailAddress = null;
+        for (MailAddress address : user.getMailAddresses()) {
+            if (address.getId().equals(mailId)) {
+                mailAddress = address;
+                break;
+            }
+        }
+        if (mailAddress == null) {
+            throw new EntityNotFoundException(String.format("Could not find mail address with id %d", mailId));
+        }
+        if (mailAddress.getVerifiedAt() != null) {
+            throw new IllegalStateException("Email address already verified");
+        }
+        sendVerificationMail(mailAddress, user);
     }
 
     @Override
-    public void requestNewMailVerification(Long userId, Long mailId) {
-        User user = findUserById(userId);
-        for (Mail mail : user.getEmail()) {
-            if (mail.getId().equals(mailId)) {
-                mailService.requestMailVerification(mailId);
-            }
-        }
-    }
-
-    private User addMailAddressToUser(User user, MailDTO mailDTO) {
-        if (mailRepository.existsByAddressAndVerifiedIsTrue(mailDTO.getAddress())) {
+    @PreAuthorize("hasPermission('write:user')")
+    public UserDTO addMailAddressToUser(Long userId, MailAddressDTO mailAddressDTO) {
+        if (mailAddressRepository.existsByMailAddressAndVerifiedAtIsNotNull(mailAddressDTO.getAddress())) {
             throw new IllegalArgumentException("Email address already in use");
         }
-        Mail mail = new Mail(mailDTO.getAddress(), mailDTO.isReceivesNewsletter());
-        mail = mailRepository.save(mail);
+        if (mailAddressRepository.existsByMailAddressAndUserId(mailAddressDTO.getAddress(), userId)) {
+            throw new IllegalArgumentException("Email address already added");
+        }
+        User user = findUserById(userId);
+        MailAddress mailAddress = new MailAddress(mailAddressDTO.getAddress(), mailAddressDTO.isReceivesNewsletter());
+        sendVerificationMail(mailAddress, user);
+        return userMapper.toDTO(user);
+    }
 
+    private void sendVerificationMail(MailAddress mailAddress, User user) {
+        MailVerificationDTO mailVerificationDTO = new MailVerificationDTO(user.getFirstName(), Util.getFullLastName(user.getMiddleName(), user.getLastName()));
+        mailAddress = (MailAddress) mailService.sendVerificationMail(mailAddress, mailVerificationDTO);
+        user.addMailAddress(mailAddress);
+        userRepository.save(user);
     }
 
     private User saveUser(User user) {
