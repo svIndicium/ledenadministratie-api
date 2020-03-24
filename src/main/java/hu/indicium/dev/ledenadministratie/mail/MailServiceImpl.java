@@ -33,7 +33,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void verifyMail(String mailAddress, String token) {
-        MailAbstractRepository<? extends MailAbstract, Long> repository = mailAbstractComponent.getRepositoryFromToken(token);
+        MailAbstractRepository<? extends MailAbstract> repository = mailAbstractComponent.getRepositoryFromToken(token);
         MailAbstract mailAbstract = repository.findByVerificationToken(token)
                 .orElseThrow(() -> new IllegalStateException("Could not validate mail address"));
         if (mailAbstract.getVerifiedAt() != null) {

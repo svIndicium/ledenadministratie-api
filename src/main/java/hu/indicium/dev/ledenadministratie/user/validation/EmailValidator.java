@@ -11,11 +11,8 @@ public class EmailValidator implements Validator<User> {
 
     @Override
     public void validate(User user) {
-        if (user.getEmail().isBlank()) {
+        if (user.getMailAddresses().get(0).getMailAddress().isBlank()) {
             throw new IllegalArgumentException(EMPTY_EMAIL_ERROR_MESSAGE);
-        }
-        if (!user.getEmail().contains("@")) {
-            throw new IllegalArgumentException(EMAIL_INCORRECT);
         }
     }
 }

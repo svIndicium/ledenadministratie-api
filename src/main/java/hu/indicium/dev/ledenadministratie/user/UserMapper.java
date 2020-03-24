@@ -25,11 +25,10 @@ public class UserMapper implements Mapper<User, UserDTO> {
         dto.setFirstName(user.getFirstName());
         dto.setMiddleName(user.getMiddleName());
         dto.setLastName(user.getLastName());
-        dto.setEmail(user.getEmail());
+        dto.setEmail(user.getMailAddresses().get(0).getMailAddress());
         dto.setDateOfBirth(user.getDateOfBirth());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setStudyType(studyTypeMapper.toDTO(user.getStudyType()));
-        dto.setToReceiveNewsletter(user.isToReceiveNewsletter());
         return dto;
     }
 
@@ -40,11 +39,9 @@ public class UserMapper implements Mapper<User, UserDTO> {
         user.setFirstName(userDTO.getFirstName());
         user.setMiddleName(userDTO.getMiddleName());
         user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
         user.setDateOfBirth(userDTO.getDateOfBirth());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setStudyType(studyTypeMapper.toEntity(studyTypeService.getStudyTypeById(userDTO.getStudyType().getId())));
-        user.setToReceiveNewsletter(userDTO.isToReceiveNewsletter());
         return user;
     }
 }

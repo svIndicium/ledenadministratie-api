@@ -8,23 +8,23 @@ import java.util.Optional;
 
 @Component
 public class MailAbstractComponent {
-    private final List<MailAbstractRepository<? extends MailAbstract, Long>> repositories;
+    private final List<MailAbstractRepository<? extends MailAbstract>> repositories;
 
-    public MailAbstractComponent(List<MailAbstractRepository<? extends MailAbstract, Long>> repositories) {
+    public MailAbstractComponent(List<MailAbstractRepository<? extends MailAbstract>> repositories) {
         this.repositories = repositories;
     }
 
     public int countByVerificationToken(String token) {
         int count = 0;
-        for (MailAbstractRepository<? extends MailAbstract, Long> repository : repositories) {
+        for (MailAbstractRepository<? extends MailAbstract> repository : repositories) {
             count += repository.countByVerificationToken(token);
         }
         return count;
     }
 
-    public MailAbstractRepository<? extends MailAbstract, Long> getRepositoryFromToken(String token) {
-        List<MailAbstractRepository<? extends MailAbstract, Long>> mailAbstractRepositories = new ArrayList<>();
-        for (MailAbstractRepository<? extends MailAbstract, Long> repository : repositories) {
+    public MailAbstractRepository<? extends MailAbstract> getRepositoryFromToken(String token) {
+        List<MailAbstractRepository<? extends MailAbstract>> mailAbstractRepositories = new ArrayList<>();
+        for (MailAbstractRepository<? extends MailAbstract> repository : repositories) {
             Optional<? extends MailAbstract> mailAbstract = repository.findByVerificationToken(token);
             if (mailAbstract.isPresent()) {
                 mailAbstractRepositories.add(repository);
