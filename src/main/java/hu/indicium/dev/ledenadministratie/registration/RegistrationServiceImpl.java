@@ -52,7 +52,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         Registration registration = registrationMapper.toEntity(registrationDTO);
         registration.setFinalizedAt(null);
         registration.setFinalizedBy(null);
-        registration.setVerifiedAt(null);
         registration.setApproved(false);
         registration.setComment(null);
         registration.setId(null);

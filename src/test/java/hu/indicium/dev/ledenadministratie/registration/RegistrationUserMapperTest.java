@@ -43,7 +43,7 @@ class RegistrationUserMapperTest {
         assertThat(userDTO.getFirstName()).isEqualTo(registrationDTO.getFirstName());
         assertThat(userDTO.getMiddleName()).isEqualTo(registrationDTO.getMiddleName());
         assertThat(userDTO.getLastName()).isEqualTo(registrationDTO.getLastName());
-        assertThat(userDTO.getEmail()).isEqualTo(registrationDTO.getEmail());
+        assertThat(userDTO.getEmail()).isEqualTo(registrationDTO.getMailAddress());
         assertThat(userDTO.getPhoneNumber()).isEqualTo(registrationDTO.getPhoneNumber());
         assertThat(userDTO.isToReceiveNewsletter()).isEqualTo(registrationDTO.isToReceiveNewsletter());
         assertThat(userDTO.getDateOfBirth()).isEqualTo(registrationDTO.getDateOfBirth());
@@ -66,7 +66,7 @@ class RegistrationUserMapperTest {
         assertThat(registrationDTO.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(registrationDTO.getMiddleName()).isEqualTo(userDTO.getMiddleName());
         assertThat(registrationDTO.getLastName()).isEqualTo(userDTO.getLastName());
-        assertThat(registrationDTO.getEmail()).isEqualTo(userDTO.getEmail());
+        assertThat(registrationDTO.getMailAddress()).isEqualTo(userDTO.getEmail());
         assertThat(registrationDTO.getPhoneNumber()).isEqualTo(userDTO.getPhoneNumber());
         assertThat(registrationDTO.isToReceiveNewsletter()).isEqualTo(userDTO.isToReceiveNewsletter());
         assertThat(registrationDTO.getDateOfBirth()).isEqualTo(userDTO.getDateOfBirth());
@@ -108,7 +108,7 @@ class RegistrationUserMapperTest {
         registrationDTO.setFirstName("John");
         registrationDTO.setMiddleName("Nicholas");
         registrationDTO.setLastName("Doe");
-        registrationDTO.setEmail("John@doe.com");
+        registrationDTO.setMailAddress("John@doe.com");
         registrationDTO.setDateOfBirth(new Date());
         registrationDTO.setPhoneNumber("+31612345678");
         registrationDTO.setToReceiveNewsletter(true);

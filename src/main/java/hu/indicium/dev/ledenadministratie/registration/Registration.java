@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.registration;
 
 
-import hu.indicium.dev.ledenadministratie.mail.MailAbstract;
+import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "registrations")
-public class Registration extends MailAbstract {
+public class Registration implements MailObject {
     @Id
     @SequenceGenerator(name = "registration_id_generator", sequenceName = "registration_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "registration_id_generator")
@@ -56,6 +56,21 @@ public class Registration extends MailAbstract {
 
     @Column()
     private String comment;
+
+    @Column(nullable = false)
+    private String mailAddress;
+
+    @Column()
+    private String verificationToken;
+
+    @Column()
+    private Date verificationRequestedAt;
+
+    @Column()
+    private Date verifiedAt;
+
+    @Column()
+    private boolean receivesNewsletter;
 
     public Registration() {
         //  Public no-args constructor for Hibernate
@@ -171,6 +186,56 @@ public class Registration extends MailAbstract {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public String getMailAddress() {
+        return mailAddress;
+    }
+
+    @Override
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
+    }
+
+    @Override
+    public Date getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    @Override
+    public void verify() {
+        this.verifiedAt = new Date();
+    }
+
+    @Override
+    public Date getVerificationRequestedAt() {
+        return verificationRequestedAt;
+    }
+
+    @Override
+    public void setVerificationRequestedAt(Date verificationRequestedAt) {
+        this.verificationRequestedAt = verificationRequestedAt;
+    }
+
+    @Override
+    public boolean receivesNewsletter() {
+        return receivesNewsletter;
+    }
+
+    @Override
+    public void setReceivesNewsletter(boolean receivesNewsletter) {
+        this.receivesNewsletter = receivesNewsletter;
+    }
+
+    @Override
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    @Override
+    public void setVerificationToken(String token) {
+        this.verificationToken = token;
     }
 }
 

@@ -1,6 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
-import hu.indicium.dev.ledenadministratie.mail.MailAbstract;
+import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,11 +8,26 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class MailAddress extends MailAbstract {
+public class MailAddress implements MailObject {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(nullable = false)
+    private String mailAddress;
+
+    @Column()
+    private String verificationToken;
+
+    @Column()
+    private Date verificationRequestedAt;
+
+    @Column()
+    private Date verifiedAt;
+
+    @Column()
+    private boolean receivesNewsletter;
 
     @CreationTimestamp
     private Date createdAt;
@@ -40,20 +55,62 @@ public class MailAddress extends MailAbstract {
         this.id = id;
     }
 
+    @Override
+    public String getMailAddress() {
+        return mailAddress;
+    }
+
+    @Override
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
+    }
+
+    @Override
+    public Date getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    @Override
+    public void verify() {
+        this.verifiedAt = new Date();
+    }
+
+    @Override
+    public Date getVerificationRequestedAt() {
+        return verificationRequestedAt;
+    }
+
+    @Override
+    public void setVerificationRequestedAt(Date verificationRequestedAt) {
+        this.verificationRequestedAt = verificationRequestedAt;
+    }
+
+    @Override
+    public boolean receivesNewsletter() {
+        return receivesNewsletter;
+    }
+
+    @Override
+    public void setReceivesNewsletter(boolean receivesNewsletter) {
+        this.receivesNewsletter = receivesNewsletter;
+    }
+
+    @Override
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    @Override
+    public void setVerificationToken(String token) {
+        this.verificationToken = token;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public User getUser() {

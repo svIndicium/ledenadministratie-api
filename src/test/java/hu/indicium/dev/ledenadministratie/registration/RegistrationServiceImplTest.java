@@ -2,6 +2,7 @@ package hu.indicium.dev.ledenadministratie.registration;
 
 import hu.indicium.dev.ledenadministratie.auth.AuthService;
 import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
+import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
@@ -80,7 +81,7 @@ class RegistrationServiceImplTest {
         registration = new Registration();
         registration.setFirstName("John");
         registration.setLastName("Doe");
-        registration.setEmail("john@doe.com");
+        registration.setMailAddress("john@doe.com");
         registration.setStudyType(studyType);
         registration.setPhoneNumber("+31612345678");
         registration.setToReceiveNewsletter(true);
@@ -90,7 +91,7 @@ class RegistrationServiceImplTest {
         registrationDTO = new RegistrationDTO();
         registrationDTO.setFirstName(registration.getFirstName());
         registrationDTO.setLastName(registration.getLastName());
-        registrationDTO.setEmail(registration.getEmail());
+        registrationDTO.setMailAddress(registration.getMailAddress());
         registrationDTO.setPhoneNumber(registration.getPhoneNumber());
         registrationDTO.setToReceiveNewsletter(registration.isToReceiveNewsletter());
         registrationDTO.setDateOfBirth(registration.getDateOfBirth());
@@ -120,7 +121,7 @@ class RegistrationServiceImplTest {
         assertThat(savedRegistration.getFirstName()).isEqualTo(registrationDTO.getFirstName());
         assertThat(savedRegistration.getMiddleName()).isEqualTo(registrationDTO.getMiddleName());
         assertThat(savedRegistration.getLastName()).isEqualTo(registrationDTO.getLastName());
-        assertThat(savedRegistration.getEmail()).isEqualTo(registrationDTO.getEmail());
+        assertThat(savedRegistration.getMailAddress()).isEqualTo(registrationDTO.getMailAddress());
         assertThat(savedRegistration.getPhoneNumber()).isEqualTo(registrationDTO.getPhoneNumber());
         assertThat(savedRegistration.getDateOfBirth()).isEqualTo(registrationDTO.getDateOfBirth());
         assertThat(savedRegistration.isToReceiveNewsletter()).isEqualTo(registrationDTO.isToReceiveNewsletter());
@@ -174,7 +175,7 @@ class RegistrationServiceImplTest {
         userDTO.setFirstName(registrationDTO.getFirstName());
         userDTO.setMiddleName(registrationDTO.getMiddleName());
         userDTO.setLastName(registrationDTO.getLastName());
-        userDTO.setEmail(registrationDTO.getEmail());
+        userDTO.setEmail(registrationDTO.getMailAddress());
         userDTO.setPhoneNumber(registrationDTO.getPhoneNumber());
         userDTO.setDateOfBirth(registrationDTO.getDateOfBirth());
         userDTO.setStudyType(studyTypeDTO);
@@ -195,7 +196,7 @@ class RegistrationServiceImplTest {
         assertThat(savedRegistration.getFirstName()).isEqualTo(registrationDTO.getFirstName());
         assertThat(savedRegistration.getMiddleName()).isEqualTo(registrationDTO.getMiddleName());
         assertThat(savedRegistration.getLastName()).isEqualTo(registrationDTO.getLastName());
-        assertThat(savedRegistration.getEmail()).isEqualTo(registrationDTO.getEmail());
+        assertThat(savedRegistration.getMailAddress()).isEqualTo(registrationDTO.getMailAddress());
         assertThat(savedRegistration.getPhoneNumber()).isEqualTo(registrationDTO.getPhoneNumber());
         assertThat(savedRegistration.getDateOfBirth()).isEqualTo(registrationDTO.getDateOfBirth());
         assertThat(savedRegistration.isToReceiveNewsletter()).isEqualTo(registrationDTO.isToReceiveNewsletter());
@@ -230,7 +231,7 @@ class RegistrationServiceImplTest {
         assertThat(savedRegistration.getFirstName()).isEqualTo(registrationDTO.getFirstName());
         assertThat(savedRegistration.getMiddleName()).isEqualTo(registrationDTO.getMiddleName());
         assertThat(savedRegistration.getLastName()).isEqualTo(registrationDTO.getLastName());
-        assertThat(savedRegistration.getEmail()).isEqualTo(registrationDTO.getEmail());
+        assertThat(savedRegistration.getMailAddress()).isEqualTo(registrationDTO.getMailAddress());
         assertThat(savedRegistration.getPhoneNumber()).isEqualTo(registrationDTO.getPhoneNumber());
         assertThat(savedRegistration.getDateOfBirth()).isEqualTo(registrationDTO.getDateOfBirth());
         assertThat(savedRegistration.isToReceiveNewsletter()).isEqualTo(registrationDTO.isToReceiveNewsletter());
@@ -316,9 +317,12 @@ class RegistrationServiceImplTest {
         @Autowired
         private RegistrationUserMapper registrationUserMapper;
 
+        @Autowired
+        private MailService mailService;
+
         @Bean
         public RegistrationService registrationService() {
-            return new RegistrationServiceImpl(registrationRepository, registrationMapper, userService, registrationValidator, authService, registrationUserMapper);
+            return new RegistrationServiceImpl(registrationRepository, registrationMapper, userService, registrationValidator, authService, registrationUserMapper, mailService);
         }
     }
 }

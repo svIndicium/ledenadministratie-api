@@ -16,7 +16,7 @@ public class RegistrationDTO {
 
     private String lastName;
 
-    private String email;
+    private String mailAddress;
 
     private String phoneNumber;
 
@@ -70,12 +70,12 @@ public class RegistrationDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMailAddress() {
+        return mailAddress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 
     public String getPhoneNumber() {

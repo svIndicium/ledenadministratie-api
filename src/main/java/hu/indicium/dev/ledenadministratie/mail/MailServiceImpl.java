@@ -10,45 +10,45 @@ import java.util.Date;
 public class MailServiceImpl implements MailService {
     private final TransactionalMailService transactionalMailService;
 
-    private final MailAbstractComponent mailAbstractComponent;
+    private final MailObjectComponent mailObjectComponent;
 
-    public MailServiceImpl(TransactionalMailService transactionalMailService, MailAbstractComponent mailAbstractComponent) {
+    public MailServiceImpl(TransactionalMailService transactionalMailService, MailObjectComponent mailObjectComponent) {
         this.transactionalMailService = transactionalMailService;
-        this.mailAbstractComponent = mailAbstractComponent;
+        this.mailObjectComponent = mailObjectComponent;
     }
 
     @Override
-    public MailAbstract sendVerificationMail(MailAbstract mailAbstract, MailVerificationDTO mailVerificationDTO) {
-        if (mailAbstract.getVerifiedAt() != null) {
+    public MailObject sendVerificationMail(MailObject mailObject, MailVerificationDTO mailVerificationDTO) {
+        if (mailObject.getVerifiedAt() != null) {
             throw new IllegalStateException("Address is already verified");
         }
-        isValidEmailAddress(mailAbstract.getMailAddress());
-        mailAbstract.setVerificationRequestedAt(new Date());
-        mailAbstract.setVerificationToken(generateVerificationToken());
-        mailVerificationDTO.setMailAddress(mailAbstract.getMailAddress());
-        mailVerificationDTO.setToken(mailAbstract.getVerificationToken());
+        isValidEmailAddress(mailObject.getMailAddress());
+        mailObject.setVerificationRequestedAt(new Date());
+        mailObject.setVerificationToken(generateVerificationToken());
+        mailVerificationDTO.setMailAddress(mailObject.getMailAddress());
+        mailVerificationDTO.setToken(mailObject.getVerificationToken());
         transactionalMailService.sendVerificationMail(mailVerificationDTO);
-        return mailAbstract;
+        return mailObject;
     }
 
     @Override
     public void verifyMail(String mailAddress, String token) {
-        MailAbstractRepository<? extends MailAbstract> repository = mailAbstractComponent.getRepositoryFromToken(token);
-        MailAbstract mailAbstract = repository.findByVerificationToken(token)
+        MailObjectRepository repository = mailObjectComponent.getRepositoryFromToken(token);
+        MailObject mailObject = repository.findByVerificationToken(token)
                 .orElseThrow(() -> new IllegalStateException("Could not validate mail address"));
-        if (mailAbstract.getVerifiedAt() != null) {
+        if (mailObject.getVerifiedAt() != null) {
             throw new IllegalStateException("Could not validate mail address");
         }
-        if (!mailAbstract.getMailAddress().equals(mailAddress)) {
+        if (!mailObject.getMailAddress().equals(mailAddress)) {
             throw new IllegalStateException("Could not validate mail address");
         }
-        mailAbstract.setVerifiedAt(new Date());
-        repository.save(mailAbstract);
+        mailObject.verify();
+        repository.save(mailObject);
     }
 
     @Override
     public boolean isMailAddressAlreadyVerified(String mailAddress) {
-        return mailAbstractComponent.isMailAddressAlreadyVerified(mailAddress.toLowerCase());
+        return mailObjectComponent.isMailAddressAlreadyVerified(mailAddress.toLowerCase());
     }
 
     void isValidEmailAddress(String emailAddress) {
@@ -56,7 +56,7 @@ public class MailServiceImpl implements MailService {
 
     private String generateVerificationToken() {
         String token = Util.randomAlphaNumeric(10).toUpperCase();
-        if (mailAbstractComponent.countByVerificationToken(token) != 0) {
+        if (mailObjectComponent.countByVerificationToken(token) != 0) {
             return generateVerificationToken();
         }
         return token;
