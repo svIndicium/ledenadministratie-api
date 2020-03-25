@@ -38,4 +38,13 @@ public class MailAbstractComponent {
         }
         return mailAbstractRepositories.get(0);
     }
+
+    public boolean isMailAddressAlreadyVerified(String mailAddress) {
+        for (MailAbstractRepository<? extends MailAbstract> repository : repositories) {
+            if (repository.existsByMailAddressAndVerifiedAtIsNotNull(mailAddress)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

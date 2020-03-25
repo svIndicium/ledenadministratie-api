@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.registration;
 
 
+import hu.indicium.dev.ledenadministratie.mail.MailAbstract;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "registrations")
-public class Registration {
+public class Registration extends MailAbstract {
     @Id
     @SequenceGenerator(name = "registration_id_generator", sequenceName = "registration_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "registration_id_generator")
@@ -24,9 +25,6 @@ public class Registration {
 
     @Column(nullable = false)
     private String lastName;
-
-    @Column(nullable = false, unique = true)
-    private String email;
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
@@ -93,14 +91,6 @@ public class Registration {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhoneNumber() {

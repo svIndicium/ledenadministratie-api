@@ -43,6 +43,12 @@ public class MailServiceImpl implements MailService {
             throw new IllegalStateException("Could not validate mail address");
         }
         mailAbstract.setVerifiedAt(new Date());
+        repository.save(mailAbstract);
+    }
+
+    @Override
+    public boolean isMailAddressAlreadyVerified(String mailAddress) {
+        return mailAbstractComponent.isMailAddressAlreadyVerified(mailAddress.toLowerCase());
     }
 
     void isValidEmailAddress(String emailAddress) {

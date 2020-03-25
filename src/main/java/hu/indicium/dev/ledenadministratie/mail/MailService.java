@@ -6,4 +6,6 @@ public interface MailService {
     MailAbstract sendVerificationMail(MailAbstract mailAbstract, MailVerificationDTO mailVerificationDTO);
 
     void verifyMail(String mail, String token);
+
+    boolean isMailAddressAlreadyVerified(String mailAddress);
 }

@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MailAddressRepository extends MailAbstractRepository<MailAddress> {
-    boolean existsByMailAddressAndVerifiedAtIsNotNull(String address);
-
     boolean existsByMailAddressAndUserId(String address, Long userId);
 
     boolean existsByIdAndVerifiedAtIsNotNull(Long mailId);

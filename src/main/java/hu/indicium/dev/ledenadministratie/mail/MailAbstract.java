@@ -1,13 +1,11 @@
 package hu.indicium.dev.ledenadministratie.mail;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
 @MappedSuperclass
 public abstract class MailAbstract {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(nullable = false)
     private String mailAddress;
@@ -25,14 +23,6 @@ public abstract class MailAbstract {
     private boolean receivesNewsletter;
 
     public MailAbstract() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getMailAddress() {

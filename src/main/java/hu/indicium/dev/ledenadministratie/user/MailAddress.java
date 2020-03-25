@@ -4,13 +4,15 @@ import hu.indicium.dev.ledenadministratie.mail.MailAbstract;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class MailAddress extends MailAbstract {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @CreationTimestamp
     private Date createdAt;
@@ -28,6 +30,14 @@ public class MailAddress extends MailAbstract {
     public MailAddress(String address, boolean receivesNewsletter) {
         this.setMailAddress(address);
         this.setReceivesNewsletter(receivesNewsletter);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Date getCreatedAt() {

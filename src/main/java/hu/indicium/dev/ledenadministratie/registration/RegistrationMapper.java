@@ -25,7 +25,7 @@ public class RegistrationMapper implements Mapper<Registration, RegistrationDTO>
         dto.setFirstName(registration.getFirstName());
         dto.setMiddleName(registration.getMiddleName());
         dto.setLastName(registration.getLastName());
-        dto.setEmail(registration.getEmail());
+        dto.setEmail(registration.getMailAddress().toLowerCase());
         dto.setDateOfBirth(registration.getDateOfBirth());
         dto.setPhoneNumber(registration.getPhoneNumber());
         dto.setStudyType(studyTypeMapper.toDTO(registration.getStudyType()));
@@ -46,7 +46,7 @@ public class RegistrationMapper implements Mapper<Registration, RegistrationDTO>
         registration.setFirstName(registrationDTO.getFirstName());
         registration.setMiddleName(registrationDTO.getMiddleName());
         registration.setLastName(registrationDTO.getLastName());
-        registration.setEmail(registrationDTO.getEmail());
+        registration.setMailAddress(registrationDTO.getEmail().toLowerCase());
         registration.setDateOfBirth(registrationDTO.getDateOfBirth());
         registration.setPhoneNumber(registrationDTO.getPhoneNumber());
         registration.setStudyType(studyTypeMapper.toEntity(studyTypeService.getStudyTypeById(registrationDTO.getStudyType().getId())));
