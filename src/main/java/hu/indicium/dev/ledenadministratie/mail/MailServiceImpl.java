@@ -19,10 +19,13 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public MailObject sendVerificationMail(MailObject mailObject, MailVerificationDTO mailVerificationDTO) {
+        isValidEmailAddress(mailObject.getMailAddress());
+        if (this.isMailAddressAlreadyVerified(mailObject.getMailAddress())) {
+            throw new IllegalArgumentException("Address is already in use");
+        }
         if (mailObject.getVerifiedAt() != null) {
             throw new IllegalStateException("Address is already verified");
         }
-        isValidEmailAddress(mailObject.getMailAddress());
         mailObject.setVerificationRequestedAt(new Date());
         mailObject.setVerificationToken(generateVerificationToken());
         mailVerificationDTO.setMailAddress(mailObject.getMailAddress());
