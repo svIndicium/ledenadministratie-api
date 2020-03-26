@@ -4,6 +4,9 @@ import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
 import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
@@ -37,7 +40,9 @@ public class UserServiceImpl implements UserService {
 
     private final MailAddressRepository mailAddressRepository;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook, MailService mailService, MailAddressRepository mailAddressRepository) {
+    private final StudyTypeService studyTypeService;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook, MailService mailService, MailAddressRepository mailAddressRepository, StudyTypeService studyTypeService) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.userMapper = userMapper;
@@ -46,14 +51,25 @@ public class UserServiceImpl implements UserService {
         this.updateHook = updateHook;
         this.mailService = mailService;
         this.mailAddressRepository = mailAddressRepository;
+        this.studyTypeService = studyTypeService;
     }
 
     @Override
     @Transactional
     @PreAuthorize("hasPermission('create:user')")
-    public UserDTO createUser(UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
+    public UserDTO createUser(RegistrationDTO registrationDTO) {
+        User user = new User();
+        user.setFirstName(registrationDTO.getFirstName());
+        user.setMiddleName(registrationDTO.getMiddleName());
+        user.setLastName(registrationDTO.getLastName());
+        user.setDateOfBirth(registrationDTO.getDateOfBirth());
+        user.setPhoneNumber(registrationDTO.getPhoneNumber());
+        user.setStudyType(new StudyType(registrationDTO.getStudyType().getId()));
+        MailAddress mailAddress = new MailAddress(registrationDTO.getMailAddress(), registrationDTO.getVerificationRequestedAt(), registrationDTO.getVerifiedAt(), registrationDTO.isToReceiveNewsletter());
+        user.addMailAddress(mailAddress);
         user = this.saveUser(user);
+        mailAddress.setUser(user);
+        mailAddressRepository.save(mailAddress);
         UserDTO newUserDTO = userMapper.toDTO(user);
         creationHook.execute(null, newUserDTO);
         return userMapper.toDTO(user);

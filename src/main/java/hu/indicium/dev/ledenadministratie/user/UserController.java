@@ -1,7 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.user.requests.CreateUserRequest;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,15 +26,15 @@ public class UserController {
         userRequestMapper = new UserRequestMapper();
     }
 
-    @ApiOperation(value = "Create a new user", response = UserDTO.class)
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(
-            @ApiParam(value = "User data to store", required = true) @RequestBody @Valid CreateUserRequest createUserRequest
-    ) {
-        UserDTO userDTO = userRequestMapper.toDTO(createUserRequest);
-        return userService.createUser(userDTO);
-    }
+//    @ApiOperation(value = "Create a new user", response = UserDTO.class)
+//    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public UserDTO createUser(
+//            @ApiParam(value = "User data to store", required = true) @RequestBody @Valid CreateUserRequest createUserRequest
+//    ) {
+//        UserDTO userDTO = userRequestMapper.toDTO(createUserRequest);
+//        return userService.createUser(userDTO);
+//    }
 
     @ApiOperation(value = "Update a user", response = UserDTO.class)
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

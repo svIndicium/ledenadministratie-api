@@ -1,12 +1,13 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
-    UserDTO createUser(UserDTO userDTO);
+    UserDTO createUser(RegistrationDTO registrationDTO);
 
     UserDTO updateUser(UserDTO userDTO);
 

@@ -38,6 +38,10 @@ public class RegistrationDTO {
 
     private String comment;
 
+    private Date verificationRequestedAt;
+
+    private Date verifiedAt;
+
     public Long getId() {
         return id;
     }
@@ -156,5 +160,21 @@ public class RegistrationDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Date getVerificationRequestedAt() {
+        return verificationRequestedAt;
+    }
+
+    public void setVerificationRequestedAt(Date verificationRequestedAt) {
+        this.verificationRequestedAt = verificationRequestedAt;
+    }
+
+    public Date getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    public void setVerifiedAt(Date verifiedAt) {
+        this.verifiedAt = verifiedAt;
     }
 }

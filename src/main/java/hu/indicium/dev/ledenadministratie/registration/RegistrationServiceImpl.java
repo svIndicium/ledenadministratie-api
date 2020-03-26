@@ -7,7 +7,6 @@ import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.user.UserService;
-import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
@@ -32,17 +31,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final AuthService authService;
 
-    private final RegistrationUserMapper registrationUserMapper;
-
     private final MailService mailService;
 
-    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Mapper<Registration, RegistrationDTO> registrationMapper, UserService userService, Validator<Registration> registrationValidator, AuthService authService, RegistrationUserMapper registrationUserMapper, MailService mailService) {
+    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Mapper<Registration, RegistrationDTO> registrationMapper, UserService userService, Validator<Registration> registrationValidator, AuthService authService, MailService mailService) {
         this.registrationRepository = registrationRepository;
         this.registrationMapper = registrationMapper;
         this.userService = userService;
         this.registrationValidator = registrationValidator;
         this.authService = authService;
-        this.registrationUserMapper = registrationUserMapper;
         this.mailService = mailService;
     }
 
@@ -66,6 +62,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Transactional
     public RegistrationDTO finalizeRegistration(FinishRegistrationDTO finishRegistration) {
         Registration registration = getRegistrationById(finishRegistration.getRegistrationId());
+        if (registration.getVerifiedAt() == null) {
+            throw new IllegalStateException("Emailaddress must be confirmed before finalizing");
+        }
         AuthUserDTO authUserDTO = authService.getAuthUser();
         registration.setFinalizedBy(authUserDTO.getName());
         registration.setApproved(finishRegistration.isApproved());
@@ -74,8 +73,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         registration = this.saveRegistration(registration);
         RegistrationDTO registrationDTO = registrationMapper.toDTO(registration);
         if (registration.isApproved()) {
-            UserDTO userDTO = registrationUserMapper.toDTO(registrationDTO);
-            userService.createUser(userDTO);
+            userService.createUser(registrationDTO);
         }
         return registrationDTO;
     }
