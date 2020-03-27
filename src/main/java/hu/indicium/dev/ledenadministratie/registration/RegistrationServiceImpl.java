@@ -51,7 +51,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         registration.setApproved(false);
         registration.setComment(null);
         registration.setId(null);
-        registration = saveRegistration(registration);
         MailVerificationDTO mailVerificationDTO = new MailVerificationDTO(registration.getFirstName(), Util.getFullLastName(registration.getMiddleName(), registration.getLastName()));
         mailService.sendVerificationMail(registration, mailVerificationDTO);
         registration = saveRegistration(registration);

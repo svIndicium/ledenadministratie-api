@@ -66,7 +66,7 @@ class RegistrationMapperTest {
         assertThat(registrationDTO.getFirstName()).isEqualTo(registration.getFirstName());
         assertThat(registrationDTO.getMiddleName()).isEqualTo(registration.getMiddleName());
         assertThat(registrationDTO.getLastName()).isEqualTo(registration.getLastName());
-        assertThat(registrationDTO.getMailAddress()).isEqualTo(registration.getMailAddress());
+        assertThat(registrationDTO.getMailAddress()).isEqualTo(registration.getMailAddress().toLowerCase());
         assertThat(registrationDTO.getPhoneNumber()).isEqualTo(registration.getPhoneNumber());
         assertThat(registrationDTO.isToReceiveNewsletter()).isEqualTo(registration.isToReceiveNewsletter());
         assertThat(registrationDTO.getDateOfBirth()).isEqualTo(registration.getDateOfBirth());
@@ -112,7 +112,7 @@ class RegistrationMapperTest {
         assertThat(registrationDTO.getFirstName()).isEqualTo(registration.getFirstName());
         assertThat(registrationDTO.getMiddleName()).isEqualTo(registration.getMiddleName());
         assertThat(registrationDTO.getLastName()).isEqualTo(registration.getLastName());
-        assertThat(registrationDTO.getMailAddress()).isEqualTo(registration.getMailAddress());
+        assertThat(registrationDTO.getMailAddress()).isEqualTo(registration.getMailAddress().toLowerCase());
         assertThat(registrationDTO.getPhoneNumber()).isEqualTo(registration.getPhoneNumber());
         assertThat(registrationDTO.isToReceiveNewsletter()).isEqualTo(registration.isToReceiveNewsletter());
         assertThat(registrationDTO.getDateOfBirth()).isEqualTo(registration.getDateOfBirth());
@@ -159,7 +159,7 @@ class RegistrationMapperTest {
         assertThat(registration.getFirstName()).isEqualTo(registrationDTO.getFirstName());
         assertThat(registration.getMiddleName()).isEqualTo(registrationDTO.getMiddleName());
         assertThat(registration.getLastName()).isEqualTo(registrationDTO.getLastName());
-        assertThat(registration.getMailAddress()).isEqualTo(registrationDTO.getMailAddress());
+        assertThat(registration.getMailAddress()).isEqualTo(registrationDTO.getMailAddress().toLowerCase());
         assertThat(registration.getPhoneNumber()).isEqualTo(registrationDTO.getPhoneNumber());
         assertThat(registration.isToReceiveNewsletter()).isEqualTo(registrationDTO.isToReceiveNewsletter());
         assertThat(registration.getDateOfBirth()).isEqualTo(registrationDTO.getDateOfBirth());

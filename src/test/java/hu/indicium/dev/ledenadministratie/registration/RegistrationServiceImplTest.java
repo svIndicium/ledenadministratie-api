@@ -53,9 +53,6 @@ class RegistrationServiceImplTest {
     @MockBean
     private AuthService authService;
 
-    @MockBean
-    private RegistrationUserMapper registrationUserMapper;
-
     @Autowired
     private RegistrationService registrationService;
 
@@ -163,6 +160,8 @@ class RegistrationServiceImplTest {
     void shouldCreateUser_whenFinalizeRegistration() {
         ArgumentCaptor<Registration> registrationArgument = ArgumentCaptor.forClass(Registration.class);
 
+        registration.verify();
+
         when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
         when(registrationRepository.findById(any(Long.class))).thenReturn(Optional.of(registration));
         when(registrationMapper.toEntity(any(RegistrationDTO.class))).thenReturn(registration);
@@ -181,15 +180,13 @@ class RegistrationServiceImplTest {
         userDTO.setStudyType(studyTypeDTO);
         userDTO.setToReceiveNewsletter(registrationDTO.isToReceiveNewsletter());
 
-        when(registrationUserMapper.toDTO(any(RegistrationDTO.class))).thenReturn(userDTO);
-
-        when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
+        when(userService.createUser(any(RegistrationDTO.class))).thenReturn(userDTO);
 
         RegistrationDTO returnedRegistration = registrationService.finalizeRegistration(finishRegistrationDTO);
 
         verify(registrationRepository, times(1)).save(registrationArgument.capture());
         verify(registrationValidator, atLeastOnce()).validate(any(Registration.class));
-        verify(userService, times(1)).createUser(any(UserDTO.class));
+        verify(userService, times(1)).createUser(any(RegistrationDTO.class));
 
         Registration savedRegistration = registrationArgument.getValue();
 
@@ -211,6 +208,7 @@ class RegistrationServiceImplTest {
     @DisplayName("Finalize registration by declining")
     void shouldNotCreateUser_whenFinalizeRegistration_ifUserIsDeclined() {
         ArgumentCaptor<Registration> registrationArgument = ArgumentCaptor.forClass(Registration.class);
+        registration.verify();
 
         when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
         when(registrationRepository.findById(any(Long.class))).thenReturn(Optional.of(registration));
@@ -224,7 +222,7 @@ class RegistrationServiceImplTest {
 
         verify(registrationRepository, times(1)).save(registrationArgument.capture());
         verify(registrationValidator, atLeastOnce()).validate(any(Registration.class));
-        verify(userService, never()).createUser(any(UserDTO.class));
+        verify(userService, never()).createUser(any(RegistrationDTO.class));
 
         Registration savedRegistration = registrationArgument.getValue();
 
@@ -257,7 +255,7 @@ class RegistrationServiceImplTest {
         }
 
         verify(registrationRepository, times(0)).save(any(Registration.class));
-        verify(userService, never()).createUser(any(UserDTO.class));
+        verify(userService, never()).createUser(any(RegistrationDTO.class));
     }
 
     @Test
@@ -315,14 +313,11 @@ class RegistrationServiceImplTest {
         private AuthService authService;
 
         @Autowired
-        private RegistrationUserMapper registrationUserMapper;
-
-        @Autowired
         private MailService mailService;
 
         @Bean
         public RegistrationService registrationService() {
-            return new RegistrationServiceImpl(registrationRepository, registrationMapper, userService, registrationValidator, authService, registrationUserMapper, mailService);
+            return new RegistrationServiceImpl(registrationRepository, registrationMapper, userService, registrationValidator, authService, mailService);
         }
     }
 }
