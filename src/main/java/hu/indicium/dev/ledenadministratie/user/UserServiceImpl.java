@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
         user.addMailAddress(mailAddress);
         user = this.saveUser(user);
         mailAddress.setUser(user);
+        mailAddress.setId(0L);
         mailAddressRepository.save(mailAddress);
         UserDTO newUserDTO = userMapper.toDTO(user);
         creationHook.execute(null, newUserDTO);

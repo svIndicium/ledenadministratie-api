@@ -31,6 +31,7 @@ public class User {
     private Date dateOfBirth;
 
     @OneToMany(mappedBy = "user")
+    @OrderColumn(name = "mail_id")
     private List<MailAddress> mailAddresses = new ArrayList<>();
 
     @ManyToOne

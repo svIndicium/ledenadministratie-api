@@ -5,16 +5,23 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
+@IdClass(MailAddress.MailAddressPrimaryKey.class)
 public class MailAddress implements MailObject {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "mail_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Id
+    private Long userId;
+
+    @Column(nullable = false, updatable = false)
     private String mailAddress;
 
     @Column()
@@ -36,7 +43,7 @@ public class MailAddress implements MailObject {
     private Date updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @MapsId("user_id")
     private User user;
 
     public MailAddress() {
@@ -127,5 +134,37 @@ public class MailAddress implements MailObject {
 
     public void setUser(User user) {
         this.user = user;
+        this.userId = user.getId();
+    }
+
+
+    public static class MailAddressPrimaryKey implements Serializable {
+        @Column(name = "user_id", nullable = false, updatable = false)
+        protected Long userId;
+
+        @Column(name = "mail_id")
+        protected Long id;
+
+        public MailAddressPrimaryKey() {
+        }
+
+        public MailAddressPrimaryKey(Long userId, Long id) {
+            this.userId = userId;
+            this.id = id;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            MailAddressPrimaryKey that = (MailAddressPrimaryKey) o;
+            return Objects.equals(userId, that.userId) &&
+                    Objects.equals(id, that.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(userId, id);
+        }
     }
 }
