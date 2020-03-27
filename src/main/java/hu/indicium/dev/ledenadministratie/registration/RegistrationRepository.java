@@ -13,9 +13,9 @@ public interface RegistrationRepository extends JpaRepository<Registration, Long
 
     List<Registration> findAllByApprovedIsFalseAndCommentIsNull();
 
-    int countByVerificationToken(String token);
+    int countByVerificationTokenAndVerificationTokenIsNotNull(String token);
 
-    Optional<MailObject> findByVerificationToken(String token);
+    Optional<MailObject> findByVerificationTokenAndVerificationTokenIsNotNull(String token);
 
     boolean existsByMailAddressAndVerifiedAtIsNotNull(String mailAddress);
 }

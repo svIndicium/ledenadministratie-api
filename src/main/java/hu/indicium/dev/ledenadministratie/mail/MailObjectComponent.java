@@ -17,7 +17,7 @@ public class MailObjectComponent {
     public int countByVerificationToken(String token) {
         int count = 0;
         for (MailObjectRepository repository : repositories) {
-            count += repository.countByVerificationToken(token);
+            count += repository.countByVerificationTokenAndVerificationTokenIsNotNull(token);
         }
         return count;
     }
@@ -25,7 +25,7 @@ public class MailObjectComponent {
     public MailObjectRepository getRepositoryFromToken(String token) {
         List<MailObjectRepository> mailObjectRepositories = new ArrayList<>();
         for (MailObjectRepository repository : repositories) {
-            Optional<MailObject> mailObject = repository.findByVerificationToken(token);
+            Optional<MailObject> mailObject = repository.findByVerificationTokenAndVerificationTokenIsNotNull(token);
             if (mailObject.isPresent()) {
                 mailObjectRepositories.add(repository);
             }

@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         user.setDateOfBirth(registrationDTO.getDateOfBirth());
         user.setPhoneNumber(registrationDTO.getPhoneNumber());
         user.setStudyType(new StudyType(registrationDTO.getStudyType().getId()));
-        MailAddress mailAddress = new MailAddress(registrationDTO.getMailAddress(), registrationDTO.getVerificationRequestedAt(), registrationDTO.getVerifiedAt(), registrationDTO.isToReceiveNewsletter());
+        MailAddress mailAddress = new MailAddress(registrationDTO.getMailAddress(), registrationDTO.getVerificationToken(), registrationDTO.getVerificationRequestedAt(), registrationDTO.getVerifiedAt(), registrationDTO.isToReceiveNewsletter());
         user.addMailAddress(mailAddress);
         user = this.saveUser(user);
         mailAddress.setUser(user);

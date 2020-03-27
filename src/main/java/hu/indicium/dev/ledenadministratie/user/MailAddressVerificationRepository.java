@@ -16,13 +16,13 @@ public class MailAddressVerificationRepository implements MailObjectRepository {
     }
 
     @Override
-    public int countByVerificationToken(String token) {
-        return mailAddressRepository.countByVerificationToken(token);
+    public int countByVerificationTokenAndVerificationTokenIsNotNull(String token) {
+        return mailAddressRepository.countByVerificationTokenAndVerificationTokenIsNotNull(token);
     }
 
     @Override
-    public Optional<MailObject> findByVerificationToken(String token) {
-        return mailAddressRepository.findByVerificationToken(token);
+    public Optional<MailObject> findByVerificationTokenAndVerificationTokenIsNotNull(String token) {
+        return mailAddressRepository.findByVerificationTokenAndVerificationTokenIsNotNull(token);
     }
 
     @Override

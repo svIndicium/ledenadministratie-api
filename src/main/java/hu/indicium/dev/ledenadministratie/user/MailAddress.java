@@ -47,8 +47,9 @@ public class MailAddress implements MailObject {
         this.setReceivesNewsletter(receivesNewsletter);
     }
 
-    public MailAddress(String mailAddress, Date verificationRequestedAt, Date verifiedAt, boolean receivesNewsletter) {
+    public MailAddress(String mailAddress, String verificationToken, Date verificationRequestedAt, Date verifiedAt, boolean receivesNewsletter) {
         this.mailAddress = mailAddress;
+        this.verificationToken = verificationToken;
         this.verificationRequestedAt = verificationRequestedAt;
         this.verifiedAt = verifiedAt;
         this.receivesNewsletter = receivesNewsletter;

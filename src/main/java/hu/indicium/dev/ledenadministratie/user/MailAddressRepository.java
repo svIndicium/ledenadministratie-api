@@ -14,7 +14,7 @@ public interface MailAddressRepository extends JpaRepository<MailAddress, Long> 
 
     boolean existsByMailAddressAndVerifiedAtIsNotNull(String mailAddress);
 
-    int countByVerificationToken(String verificationToken);
+    int countByVerificationTokenAndVerificationTokenIsNotNull(String verificationToken);
 
-    Optional<MailObject> findByVerificationToken(String token);
+    Optional<MailObject> findByVerificationTokenAndVerificationTokenIsNotNull(String token);
 }

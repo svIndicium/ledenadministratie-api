@@ -16,13 +16,13 @@ public class RegistrationVerificationRepository implements MailObjectRepository 
     }
 
     @Override
-    public int countByVerificationToken(String token) {
-        return registrationRepository.countByVerificationToken(token);
+    public int countByVerificationTokenAndVerificationTokenIsNotNull(String token) {
+        return registrationRepository.countByVerificationTokenAndVerificationTokenIsNotNull(token);
     }
 
     @Override
-    public Optional<MailObject> findByVerificationToken(String token) {
-        return registrationRepository.findByVerificationToken(token);
+    public Optional<MailObject> findByVerificationTokenAndVerificationTokenIsNotNull(String token) {
+        return registrationRepository.findByVerificationTokenAndVerificationTokenIsNotNull(token);
     }
 
     @Override

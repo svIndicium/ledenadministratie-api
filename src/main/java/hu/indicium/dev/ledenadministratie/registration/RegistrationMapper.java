@@ -38,6 +38,7 @@ public class RegistrationMapper implements Mapper<Registration, RegistrationDTO>
         dto.setFinalizedBy(registration.getFinalizedBy());
         dto.setVerifiedAt(registration.getVerifiedAt());
         dto.setVerificationRequestedAt(registration.getVerificationRequestedAt());
+        dto.setVerificationToken(registration.getVerificationToken());
         return dto;
     }
 

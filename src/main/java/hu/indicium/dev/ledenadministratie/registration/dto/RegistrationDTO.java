@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.registration.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 
@@ -41,6 +42,9 @@ public class RegistrationDTO {
     private Date verificationRequestedAt;
 
     private Date verifiedAt;
+
+    @JsonIgnore
+    private String verificationToken;
 
     public Long getId() {
         return id;
@@ -176,5 +180,13 @@ public class RegistrationDTO {
 
     public void setVerifiedAt(Date verifiedAt) {
         this.verifiedAt = verifiedAt;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 }
