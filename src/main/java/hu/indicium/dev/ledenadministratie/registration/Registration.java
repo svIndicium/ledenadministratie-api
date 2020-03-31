@@ -69,9 +69,6 @@ public class Registration implements MailObject {
     @Column()
     private Date verifiedAt;
 
-    @Column()
-    private boolean receivesNewsletter;
-
     public Registration() {
         //  Public no-args constructor for Hibernate
     }
@@ -220,12 +217,12 @@ public class Registration implements MailObject {
 
     @Override
     public boolean receivesNewsletter() {
-        return receivesNewsletter;
+        return isToReceiveNewsletter;
     }
 
     @Override
     public void setReceivesNewsletter(boolean receivesNewsletter) {
-        this.receivesNewsletter = receivesNewsletter;
+        this.isToReceiveNewsletter = receivesNewsletter;
     }
 
     @Override
