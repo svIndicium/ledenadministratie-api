@@ -25,7 +25,6 @@ public class UserMapper implements Mapper<User, UserDTO> {
         dto.setFirstName(user.getFirstName());
         dto.setMiddleName(user.getMiddleName());
         dto.setLastName(user.getLastName());
-        dto.setEmail(user.getMailAddresses().get(0).getMailAddress());
         dto.setDateOfBirth(user.getDateOfBirth());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setStudyType(studyTypeMapper.toDTO(user.getStudyType()));

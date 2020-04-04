@@ -17,6 +17,8 @@ public class MailAddressDTO {
 
     private boolean receivesNewsletter;
 
+    private Date verificationRequestedAt;
+
     public Long getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class MailAddressDTO {
 
     public void setReceivesNewsletter(boolean receivesNewsletter) {
         this.receivesNewsletter = receivesNewsletter;
+    }
+
+    public Date getVerificationRequestedAt() {
+        return verificationRequestedAt;
+    }
+
+    public void setVerificationRequestedAt(Date verificationRequestedAt) {
+        this.verificationRequestedAt = verificationRequestedAt;
     }
 }

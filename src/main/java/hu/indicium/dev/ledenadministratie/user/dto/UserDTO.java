@@ -16,15 +16,11 @@ public class UserDTO {
 
     private String lastName;
 
-    private String email;
-
     private String phoneNumber;
 
     private Date dateOfBirth;
 
     private StudyTypeDTO studyType;
-
-    private boolean isToReceiveNewsletter;
 
     public Long getId() {
         return id;
@@ -58,14 +54,6 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -88,13 +76,5 @@ public class UserDTO {
 
     public void setStudyType(StudyTypeDTO studyType) {
         this.studyType = studyType;
-    }
-
-    public boolean isToReceiveNewsletter() {
-        return isToReceiveNewsletter;
-    }
-
-    public void setToReceiveNewsletter(boolean isToReceiveNewsletter) {
-        this.isToReceiveNewsletter = isToReceiveNewsletter;
     }
 }

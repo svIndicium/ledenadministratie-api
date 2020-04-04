@@ -18,5 +18,7 @@ public interface UserService {
     UserDTO addMailAddressToUser(Long userId, MailAddressDTO mailAddressDTO);
 
     void requestNewMailVerification(Long userId, Long mailId);
+
+    List<MailAddressDTO> getMailAddressesByUserId(Long userId);
 }
 

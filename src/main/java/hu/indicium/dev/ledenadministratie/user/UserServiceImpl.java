@@ -20,6 +20,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -125,6 +126,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Email address already verified");
         }
         sendVerificationMail(mailAddress, user);
+    }
+
+    @Override
+    @PreAuthorize("hasPermission('read:user') || hasPermission('admin:user')")
+    public List<MailAddressDTO> getMailAddressesByUserId(Long userId) {
+        return mailAddressRepository.findAllByUserId(userId).stream()
+                .map(MailMapper::map)
+                .collect(Collectors.toList());
     }
 
     @Override

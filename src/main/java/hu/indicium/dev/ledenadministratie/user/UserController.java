@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
 import io.swagger.annotations.Api;
@@ -62,5 +63,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<UserDTO> getUsers() {
         return userService.getUsers();
+    }
+
+    @GetMapping(value = "/{userId}/mailaddresses", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<MailAddressDTO> getMailAddressesById(@PathVariable("userId") Long userId) {
+        return userService.getMailAddressesByUserId(userId);
     }
 }
