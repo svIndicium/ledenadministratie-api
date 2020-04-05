@@ -20,4 +20,6 @@ public interface MailAddressRepository extends JpaRepository<MailAddress, Long> 
     Optional<MailObject> findByVerificationTokenAndVerificationTokenIsNotNull(String token);
 
     List<MailAddress> findAllByUserId(Long userId);
+
+    Long findUserIdByMailAddress(String mailAddress);
 }

@@ -10,4 +10,6 @@ public interface MailObjectRepository {
     boolean existsByMailAddressAndVerifiedAtIsNotNull(String mailAddress);
 
     MailObject save(MailObject mailObject);
+
+    void onVerify(MailObject mailObject);
 }

@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.mail;
 
+import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,12 @@ public class MailServiceImpl implements MailService {
 
     private final MailObjectComponent mailObjectComponent;
 
-    public MailServiceImpl(TransactionalMailService transactionalMailService, MailObjectComponent mailObjectComponent) {
+    private final MailListService mailListService;
+
+    public MailServiceImpl(TransactionalMailService transactionalMailService, MailObjectComponent mailObjectComponent, MailListService mailListService) {
         this.transactionalMailService = transactionalMailService;
         this.mailObjectComponent = mailObjectComponent;
+        this.mailListService = mailListService;
     }
 
     @Override
@@ -46,12 +50,23 @@ public class MailServiceImpl implements MailService {
             throw new IllegalStateException("Could not validate mail address");
         }
         mailObject.verify();
-        repository.save(mailObject);
+        mailObject = repository.save(mailObject);
+        repository.onVerify(mailObject);
     }
 
     @Override
     public boolean isMailAddressAlreadyVerified(String mailAddress) {
         return mailObjectComponent.isMailAddressAlreadyVerified(mailAddress.toLowerCase());
+    }
+
+    @Override
+    public void addMailAddressToMailingList(MailEntryDTO mailEntryDTO) {
+        this.mailListService.addUserToMailingList(mailEntryDTO);
+    }
+
+    @Override
+    public void addMailAddressToNewsletter(MailEntryDTO mailEntryDTO) {
+        this.mailListService.addUserToNewsLetter(mailEntryDTO);
     }
 
     void isValidEmailAddress(String emailAddress) {

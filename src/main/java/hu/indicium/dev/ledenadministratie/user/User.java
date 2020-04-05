@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.util.Util;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -72,6 +73,10 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullLastName() {
+        return Util.getFullLastName(middleName, lastName);
     }
 
     public String getPhoneNumber() {

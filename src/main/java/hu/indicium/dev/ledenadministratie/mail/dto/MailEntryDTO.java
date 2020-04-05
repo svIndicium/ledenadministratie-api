@@ -8,13 +8,10 @@ public class MailEntryDTO {
 
     private String email;
 
-    private boolean isToReceiveNewsletter;
-
-    public MailEntryDTO(String firstName, String lastName, String email, boolean isToReceiveNewsletter) {
+    public MailEntryDTO(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.isToReceiveNewsletter = isToReceiveNewsletter;
     }
 
     public String getFirstName() {
@@ -39,13 +36,5 @@ public class MailEntryDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isToReceiveNewsletter() {
-        return isToReceiveNewsletter;
-    }
-
-    public void setToReceiveNewsletter(boolean toReceiveNewsletter) {
-        isToReceiveNewsletter = toReceiveNewsletter;
     }
 }

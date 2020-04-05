@@ -3,16 +3,19 @@ package hu.indicium.dev.ledenadministratie.user;
 import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
 import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
+import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
+import hu.indicium.dev.ledenadministratie.user.events.MailAddressVerified;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationListener;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, ApplicationListener<MailAddressVerified> {
 
     private final UserRepository userRepository;
 
@@ -151,6 +154,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDTO(user);
     }
 
+    private User getUserByMailAddress(String mailAddress) {
+        Long userId = this.mailAddressRepository.findUserIdByMailAddress(mailAddress);
+        return this.findUserById(userId);
+    }
+
     private void sendVerificationMail(MailAddress mailAddress, User user) {
         MailVerificationDTO mailVerificationDTO = new MailVerificationDTO(user.getFirstName(), Util.getFullLastName(user.getMiddleName(), user.getLastName()));
         mailAddress = (MailAddress) mailService.sendVerificationMail(mailAddress, mailVerificationDTO);
@@ -166,5 +174,16 @@ public class UserServiceImpl implements UserService {
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found!"));
+    }
+
+    @Override
+    public void onApplicationEvent(MailAddressVerified event) {
+        MailAddressDTO mailAddressDTO = event.getMailAddressDTO();
+        User user = getUserByMailAddress(mailAddressDTO.getAddress());
+        MailEntryDTO mailEntryDTO = new MailEntryDTO(user.getFirstName(), user.getFullLastName(), mailAddressDTO.getAddress());
+        mailService.addMailAddressToMailingList(mailEntryDTO);
+        if (mailAddressDTO.isReceivesNewsletter()) {
+            mailService.addMailAddressToNewsletter(mailEntryDTO);
+        }
     }
 }
