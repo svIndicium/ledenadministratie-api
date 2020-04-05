@@ -73,7 +73,6 @@ public class UserController {
 
     @GetMapping("/{userId}/mailaddresses/{mailAddressId}/requestverification")
     public MailAddressDTO requestNewEmailVerification(@PathVariable Long userId, @PathVariable Long mailAddressId) {
-        System.out.println("lek");
         return userService.requestNewMailVerification(userId, mailAddressId);
     }
 }
