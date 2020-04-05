@@ -6,10 +6,12 @@ import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.registration.events.NewRegistrationAdded;
 import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -33,13 +35,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final MailService mailService;
 
-    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Mapper<Registration, RegistrationDTO> registrationMapper, UserService userService, Validator<Registration> registrationValidator, AuthService authService, MailService mailService) {
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Mapper<Registration, RegistrationDTO> registrationMapper, UserService userService, Validator<Registration> registrationValidator, AuthService authService, MailService mailService, ApplicationEventPublisher applicationEventPublisher) {
         this.registrationRepository = registrationRepository;
         this.registrationMapper = registrationMapper;
         this.userService = userService;
         this.registrationValidator = registrationValidator;
         this.authService = authService;
         this.mailService = mailService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -54,7 +59,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         MailVerificationDTO mailVerificationDTO = new MailVerificationDTO(registration.getFirstName(), Util.getFullLastName(registration.getMiddleName(), registration.getLastName()));
         mailService.sendVerificationMail(registration, mailVerificationDTO);
         registration = saveRegistration(registration);
-        return registrationMapper.toDTO(registration);
+        RegistrationDTO newRegistration = registrationMapper.toDTO(registration);
+        applicationEventPublisher.publishEvent(new NewRegistrationAdded(this, registrationDTO));
+        return newRegistration;
     }
 
     @Override
