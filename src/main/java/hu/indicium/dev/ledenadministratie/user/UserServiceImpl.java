@@ -112,23 +112,16 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
-    @PreAuthorize("hasPermission('write:user')")
-    public void requestNewMailVerification(Long userId, Long mailId) {
+    @PreAuthorize("hasPermission('write:user') || hasPermission('admin:user')")
+    public MailAddressDTO requestNewMailVerification(Long userId, Long mailId) {
         User user = findUserById(userId);
-        MailAddress mailAddress = null;
-        for (MailAddress address : user.getMailAddresses()) {
-            if (address.getId().equals(mailId)) {
-                mailAddress = address;
-                break;
-            }
-        }
-        if (mailAddress == null) {
-            throw new EntityNotFoundException(String.format("Could not find mail address with id %d", mailId));
-        }
+        MailAddress mailAddress = getMailAddressByUserIdAndMailId(userId, mailId);
         if (mailAddress.getVerifiedAt() != null) {
             throw new IllegalStateException("Email address already verified");
         }
-        sendVerificationMail(mailAddress, user);
+        mailAddress = sendVerificationMail(mailAddress, user);
+        mailAddress = mailAddressRepository.save(mailAddress);
+        return MailMapper.map(mailAddress);
     }
 
     @Override
@@ -150,20 +143,20 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         }
         User user = findUserById(userId);
         MailAddress mailAddress = new MailAddress(mailAddressDTO.getAddress(), mailAddressDTO.isReceivesNewsletter());
-        sendVerificationMail(mailAddress, user);
+        mailAddress = sendVerificationMail(mailAddress, user);
+        user.addMailAddress(mailAddress);
+        userRepository.save(user);
         return userMapper.toDTO(user);
     }
 
-    private User getUserByMailAddress(String mailAddress) {
-        Long userId = this.mailAddressRepository.findUserIdByMailAddress(mailAddress);
-        return this.findUserById(userId);
+    private User getUserByMailAddress(String address) {
+        MailAddress mailAddress = this.mailAddressRepository.findByMailAddressAndVerifiedAtIsNotNull(address);
+        return mailAddress.getUser();
     }
 
-    private void sendVerificationMail(MailAddress mailAddress, User user) {
+    private MailAddress sendVerificationMail(MailAddress mailAddress, User user) {
         MailVerificationDTO mailVerificationDTO = new MailVerificationDTO(user.getFirstName(), Util.getFullLastName(user.getMiddleName(), user.getLastName()));
-        mailAddress = (MailAddress) mailService.sendVerificationMail(mailAddress, mailVerificationDTO);
-        user.addMailAddress(mailAddress);
-        userRepository.save(user);
+        return (MailAddress) mailService.sendVerificationMail(mailAddress, mailVerificationDTO);
     }
 
     private User saveUser(User user) {
@@ -174,6 +167,11 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     private User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found!"));
+    }
+
+    private MailAddress getMailAddressByUserIdAndMailId(Long userId, Long mailId) {
+        return mailAddressRepository.findByUserIdAndId(userId, mailId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Mail address with id %d not found for user with id %d", mailId, userId)));
     }
 
     @Override

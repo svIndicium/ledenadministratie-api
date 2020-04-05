@@ -70,4 +70,10 @@ public class UserController {
     public List<MailAddressDTO> getMailAddressesById(@PathVariable("userId") Long userId) {
         return userService.getMailAddressesByUserId(userId);
     }
+
+    @GetMapping("/{userId}/mailaddresses/{mailAddressId}/requestverification")
+    public MailAddressDTO requestNewEmailVerification(@PathVariable Long userId, @PathVariable Long mailAddressId) {
+        System.out.println("lek");
+        return userService.requestNewMailVerification(userId, mailAddressId);
+    }
 }
