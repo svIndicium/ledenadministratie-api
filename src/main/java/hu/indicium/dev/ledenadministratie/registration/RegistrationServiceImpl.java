@@ -11,7 +11,6 @@ import hu.indicium.dev.ledenadministratie.registration.events.RegistrationFinali
 import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
-import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -30,19 +29,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final UserService userService;
 
-    private final Validator<Registration> registrationValidator;
-
     private final AuthService authService;
 
     private final MailService mailService;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Mapper<Registration, RegistrationDTO> registrationMapper, UserService userService, Validator<Registration> registrationValidator, AuthService authService, MailService mailService, ApplicationEventPublisher applicationEventPublisher) {
+    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Mapper<Registration, RegistrationDTO> registrationMapper, UserService userService, AuthService authService, MailService mailService, ApplicationEventPublisher applicationEventPublisher) {
         this.registrationRepository = registrationRepository;
         this.registrationMapper = registrationMapper;
         this.userService = userService;
-        this.registrationValidator = registrationValidator;
         this.authService = authService;
         this.mailService = mailService;
         this.applicationEventPublisher = applicationEventPublisher;
@@ -120,7 +116,13 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private Registration saveRegistration(Registration registration) {
-        registrationValidator.validate(registration);
+        if (registration.getFinalizedAt() != null) {
+            if (!registration.isApproved()) {
+                if (registration.getComment() == null || registration.getComment().isBlank()) {
+                    throw new IllegalArgumentException("Comment is empty");
+                }
+            }
+        }
         return registrationRepository.save(registration);
     }
 }
