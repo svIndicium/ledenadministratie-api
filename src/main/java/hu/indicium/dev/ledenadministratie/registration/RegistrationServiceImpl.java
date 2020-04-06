@@ -7,6 +7,7 @@ import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.events.NewRegistrationAdded;
+import hu.indicium.dev.ledenadministratie.registration.events.RegistrationFinalized;
 import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
@@ -78,6 +79,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         registration.setFinalizedAt(new Date());
         registration = this.saveRegistration(registration);
         RegistrationDTO registrationDTO = registrationMapper.toDTO(registration);
+        applicationEventPublisher.publishEvent(new RegistrationFinalized(this, registration.getId()));
         if (registration.isApproved()) {
             userService.createUser(registrationDTO);
         }
