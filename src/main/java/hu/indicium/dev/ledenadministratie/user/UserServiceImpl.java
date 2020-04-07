@@ -11,10 +11,12 @@ import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.events.MailAddressVerified;
+import hu.indicium.dev.ledenadministratie.user.events.UserCreated;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,9 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
 
     private final StudyTypeService studyTypeService;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook, MailService mailService, MailAddressRepository mailAddressRepository, StudyTypeService studyTypeService) {
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook, MailService mailService, MailAddressRepository mailAddressRepository, StudyTypeService studyTypeService, ApplicationEventPublisher applicationEventPublisher) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.userMapper = userMapper;
@@ -56,6 +60,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         this.mailService = mailService;
         this.mailAddressRepository = mailAddressRepository;
         this.studyTypeService = studyTypeService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -75,6 +80,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         mailAddress.setUser(user);
         mailAddress.setId(0L);
         mailAddressRepository.save(mailAddress);
+        applicationEventPublisher.publishEvent(new UserCreated(this, user.getId()));
         UserDTO newUserDTO = userMapper.toDTO(user);
         creationHook.execute(null, newUserDTO);
         return userMapper.toDTO(user);
@@ -176,11 +182,11 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
 
     @Override
     public void onApplicationEvent(MailAddressVerified event) {
-        MailAddressDTO mailAddressDTO = event.getMailAddressDTO();
-        User user = getUserByMailAddress(mailAddressDTO.getAddress());
-        MailEntryDTO mailEntryDTO = new MailEntryDTO(user.getFirstName(), user.getFullLastName(), mailAddressDTO.getAddress());
+        MailAddress mailAddress = getMailAddressByUserIdAndMailId(event.getUserId(), event.getMailAddressId());
+        User user = mailAddress.getUser();
+        MailEntryDTO mailEntryDTO = new MailEntryDTO(user.getFirstName(), user.getFullLastName(), mailAddress.getMailAddress());
         mailService.addMailAddressToMailingList(mailEntryDTO);
-        if (mailAddressDTO.isReceivesNewsletter()) {
+        if (mailAddress.receivesNewsletter()) {
             mailService.addMailAddressToNewsletter(mailEntryDTO);
         }
     }
