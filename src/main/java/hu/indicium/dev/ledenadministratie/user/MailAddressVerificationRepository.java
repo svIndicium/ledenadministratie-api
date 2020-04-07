@@ -42,7 +42,8 @@ public class MailAddressVerificationRepository implements MailObjectRepository {
 
     @Override
     public void onVerify(MailObject mailObject) {
-        MailAddressVerified mailAddressVerified = new MailAddressVerified(this, MailMapper.map((MailAddress) mailObject));
+        MailAddress mailAddress = (MailAddress) mailObject;
+        MailAddressVerified mailAddressVerified = new MailAddressVerified(this, mailAddress.getUser().getId(), mailAddress.getId());
         applicationEventPublisher.publishEvent(mailAddressVerified);
     }
 }
