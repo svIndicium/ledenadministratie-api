@@ -11,6 +11,8 @@ import hu.indicium.dev.ledenadministratie.registration.events.RegistrationFinali
 import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
+import hu.indicium.dev.ledenadministratie.util.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final RegistrationRepository registrationRepository;
 
-    private final Mapper<Registration, RegistrationDTO> registrationMapper;
 
     private final UserService userService;
 
@@ -35,19 +36,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public RegistrationServiceImpl(RegistrationRepository registrationRepository, Mapper<Registration, RegistrationDTO> registrationMapper, UserService userService, AuthService authService, MailService mailService, ApplicationEventPublisher applicationEventPublisher) {
+    private final Validator<Registration> registrationValidator;
+
+    public RegistrationServiceImpl(RegistrationRepository registrationRepository, UserService userService, AuthService authService, MailService mailService, ApplicationEventPublisher applicationEventPublisher, Validator<Registration> registrationValidator) {
         this.registrationRepository = registrationRepository;
-        this.registrationMapper = registrationMapper;
         this.userService = userService;
         this.authService = authService;
         this.mailService = mailService;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.registrationValidator = registrationValidator;
     }
 
     @Override
     @Transactional
     public RegistrationDTO register(RegistrationDTO registrationDTO) {
-        Registration registration = registrationMapper.toEntity(registrationDTO);
+        Registration registration = RegistrationMapper.map(registrationDTO);
         registration.setFinalizedAt(null);
         registration.setFinalizedBy(null);
         registration.setApproved(false);
@@ -56,9 +59,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         MailVerificationDTO mailVerificationDTO = new MailVerificationDTO(registration.getFirstName(), Util.getFullLastName(registration.getMiddleName(), registration.getLastName()));
         mailService.sendVerificationMail(registration, mailVerificationDTO);
         registration = saveRegistration(registration);
-        RegistrationDTO newRegistration = registrationMapper.toDTO(registration);
-        applicationEventPublisher.publishEvent(new NewRegistrationAdded(this, registrationDTO));
-        return newRegistration;
+        applicationEventPublisher.publishEvent(new NewRegistrationAdded(this, registration.getId()));
+        return RegistrationMapper.map(registration);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         registration.setComment(finishRegistration.getComment());
         registration.setFinalizedAt(new Date());
         registration = this.saveRegistration(registration);
-        RegistrationDTO registrationDTO = registrationMapper.toDTO(registration);
+        RegistrationDTO registrationDTO = RegistrationMapper.map(registration);
         applicationEventPublisher.publishEvent(new RegistrationFinalized(this, registration.getId()));
         if (registration.isApproved()) {
             userService.createUser(registrationDTO);
@@ -86,7 +88,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public List<RegistrationDTO> getRegistrations() {
         return registrationRepository.findAll()
                 .stream()
-                .map(registrationMapper::toDTO)
+                .map(RegistrationMapper::map)
                 .collect(Collectors.toList());
     }
 
@@ -95,19 +97,19 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (finalized) {
             return registrationRepository.findAllByApprovedIsTrueOrApprovedIsFalseAndCommentIsNotNull()
                     .stream()
-                    .map(registrationMapper::toDTO)
+                    .map(RegistrationMapper::map)
                     .collect(Collectors.toList());
         } else {
             return registrationRepository.findAllByApprovedIsFalseAndCommentIsNull()
                     .stream()
-                    .map(registrationMapper::toDTO)
+                    .map(RegistrationMapper::map)
                     .collect(Collectors.toList());
         }
     }
 
     public RegistrationDTO getRegistration(Long registrationId) {
         Registration registration = this.getRegistrationById(registrationId);
-        return registrationMapper.toDTO(registration);
+        return RegistrationMapper.map(registration);
     }
 
     private Registration getRegistrationById(Long id) {
@@ -116,13 +118,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private Registration saveRegistration(Registration registration) {
-        if (registration.getFinalizedAt() != null) {
-            if (!registration.isApproved()) {
-                if (registration.getComment() == null || registration.getComment().isBlank()) {
-                    throw new IllegalArgumentException("Comment is empty");
-                }
-            }
-        }
+        registrationValidator.validate(registration);
         return registrationRepository.save(registration);
     }
 }

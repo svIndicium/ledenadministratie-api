@@ -13,9 +13,7 @@ public class RegistrationRequestMapper {
     public RegistrationDTO toDTO(CreateRegistrationRequest createRegistrationRequest) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         RegistrationDTO registrationDTO = modelMapper.map(createRegistrationRequest, RegistrationDTO.class);
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyTypeDTO.setId(createRegistrationRequest.getStudyTypeId());
-        registrationDTO.setStudyType(studyTypeDTO);
+        registrationDTO.setStudyTypeId(createRegistrationRequest.getStudyTypeId());
         return registrationDTO;
     }
 }

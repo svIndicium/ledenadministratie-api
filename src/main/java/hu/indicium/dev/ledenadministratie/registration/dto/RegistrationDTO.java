@@ -23,7 +23,7 @@ public class RegistrationDTO {
 
     private Date dateOfBirth;
 
-    private StudyTypeDTO studyType;
+    private Long studyTypeId;
 
     private boolean isToReceiveNewsletter;
 
@@ -102,12 +102,12 @@ public class RegistrationDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public StudyTypeDTO getStudyType() {
-        return studyType;
+    public Long getStudyTypeId() {
+        return studyTypeId;
     }
 
-    public void setStudyType(StudyTypeDTO studyType) {
-        this.studyType = studyType;
+    public void setStudyTypeId(Long studyTypeId) {
+        this.studyTypeId = studyTypeId;
     }
 
     public boolean isToReceiveNewsletter() {

@@ -13,4 +13,13 @@ public class MailMapper {
         mailAddressDTO.setVerificationRequestedAt(mailAddress.getVerificationRequestedAt());
         return mailAddressDTO;
     }
+
+    public static MailAddress map(MailAddressDTO mailAddressDTO) {
+        MailAddress mailAddress = new MailAddress();
+        mailAddress.setId(mailAddressDTO.getId());
+        mailAddress.setMailAddress(mailAddressDTO.getAddress());
+        mailAddress.setReceivesNewsletter(mailAddressDTO.isReceivesNewsletter());
+        mailAddress.setVerificationRequestedAt(mailAddressDTO.getVerificationRequestedAt());
+        return mailAddress;
+    }
 }

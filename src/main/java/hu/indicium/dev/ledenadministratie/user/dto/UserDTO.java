@@ -20,7 +20,7 @@ public class UserDTO {
 
     private Date dateOfBirth;
 
-    private StudyTypeDTO studyType;
+    private Long studyTypeId;
 
     public Long getId() {
         return id;
@@ -70,11 +70,11 @@ public class UserDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public StudyTypeDTO getStudyType() {
-        return studyType;
+    public Long getStudyTypeId() {
+        return studyTypeId;
     }
 
-    public void setStudyType(StudyTypeDTO studyType) {
-        this.studyType = studyType;
+    public void setStudyTypeId(Long studyTypeId) {
+        this.studyTypeId = studyTypeId;
     }
 }

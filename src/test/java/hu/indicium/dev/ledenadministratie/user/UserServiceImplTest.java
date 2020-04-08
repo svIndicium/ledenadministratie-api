@@ -1,250 +1,255 @@
-//package hu.indicium.dev.ledenadministratie.user;
-//
-//import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
-//import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
-//import hu.indicium.dev.ledenadministratie.studytype.StudyType;
-//import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
-//import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-//import hu.indicium.dev.ledenadministratie.util.Mapper;
-//import hu.indicium.dev.ledenadministratie.util.Validator;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Tag;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.modelmapper.ModelMapper;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.context.TestConfiguration;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.test.context.junit.jupiter.SpringExtension;
-//
-//import javax.persistence.EntityNotFoundException;
-//import java.util.Arrays;
-//import java.util.Date;
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.junit.jupiter.api.Assertions.fail;
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.ArgumentMatchers.eq;
-//import static org.mockito.Mockito.*;
-//
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(classes = {UserServiceImpl.class, ModelMapper.class})
-//@DisplayName("User Service")
-//@Tag("Services")
-//class UserServiceImplTest {
-//    @MockBean
-//    private UserRepository userRepository;
-//
-//    @MockBean
-//    private Mapper<User, UserDTO> userMapper;
-//
-//    @MockBean
-//    private Validator<User> userValidator;
-//
-//    @Autowired
-//    private ModelMapper modelMapper;
-//
-//    @MockBean
-//    private CreationHook<UserDTO> creationHook;
-//
-//    @MockBean
-//    private UpdateHook<UserDTO> updateHook;
-//
-//    @Autowired
-//    private UserService userService;
-//
-//    @Test
-//    @DisplayName("Create user")
-//    void createUser() {
-//        UserDTO userDTO = getUserDTO();
-//        User user = getUser();
-//
-//        when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
-//        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
-//        when(userRepository.save(any(User.class))).thenReturn(user);
-//
-//        UserDTO returnedUserDTO = userService.createUser(userDTO);
-//
-//        verify(userRepository).save(eq(user));
-//        verify(userValidator, atLeastOnce()).validate(any(User.class));
-//        verify(creationHook, times(1)).execute(null, userDTO);
-//        verify(updateHook, never()).execute(any(UserDTO.class), any(UserDTO.class));
-//
-//        assertThat(returnedUserDTO).isNotNull();
-//    }
-//
-//    @Test
-//    @DisplayName("Create invalid user should not be persisted")
-//    void creatingUserFails_shouldNotBePersisted() {
-//        UserDTO userDTO = getUserDTO();
-//        User user = getUser();
-//
-//        when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
-//        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
-//        when(userRepository.save(any(User.class))).thenReturn(user);
-//        doThrow(new IllegalArgumentException("User not legitimate")).when(userValidator).validate(any(User.class));
-//
-//        UserDTO returnedUserDTO = null;
-//
-//        try {
-//            returnedUserDTO = userService.createUser(userDTO);
-//            fail();
-//        } catch (Exception e) {
-//            assertThat(true).isTrue();
-//        }
-//
-//
-//        verify(userValidator, atLeastOnce()).validate(any(User.class));
-//        verify(userRepository, never()).save(eq(user));
-//        verify(creationHook, never()).execute(any(UserDTO.class), any(UserDTO.class));
-//        verify(updateHook, never()).execute(any(UserDTO.class), any(UserDTO.class));
-//
-//        assertThat(returnedUserDTO).isNull();
-//    }
-//
-//    @Test
-//    @DisplayName("Get user by id")
-//    void getUserById() {
-//        UserDTO userDTO = getUserDTO();
-//        User user = getUser();
-//
-//        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
-//        when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
-//
-//        UserDTO receivedUser = userService.getUserById(1L);
-//
-//        assertThat(receivedUser).isEqualTo(userDTO);
-//    }
-//
-//    @Test
-//    @DisplayName("Get all users")
-//    void getAllUsers() {
-//        UserDTO userDTO = getUserDTO();
-//        User user = getUser();
-//        UserDTO userDTO2 = getUserDTO();
-//        userDTO2.setFirstName("Harry");
-//        User user2 = getUser();
-//        user2.setFirstName("Harry");
-//
-//        when(userMapper.toDTO(refEq(user))).thenReturn(userDTO);
-//        when(userMapper.toDTO(refEq(user2))).thenReturn(userDTO2);
-//
-//        when(userRepository.findAll()).thenReturn(Arrays.asList(user, user2));
-//
-//        List<UserDTO> users = userService.getUsers();
-//
-//        assertThat(users).hasSize(2);
-//        assertThat(users.get(0)).isEqualToComparingFieldByField(userDTO);
-//        assertThat(users.get(1)).isEqualToComparingFieldByField(userDTO2);
-//    }
-//
-//    @Test
-//    @DisplayName("Throw exception when getting non-existing user")
-//    void shouldThrowException_whenGetNonExistingUserById() {
-//        when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-//
-//        try {
-//            UserDTO receivedUser = userService.getUserById(1L);
-//            fail();
-//        } catch (Exception ex) {
-//            assertThat(ex.getClass()).isEqualTo(EntityNotFoundException.class);
-//            assertThat(ex.getMessage()).isEqualTo("User 1 not found!");
-//        }
-//    }
-//
-//    @Test
-//    @DisplayName("Update user")
-//    void shouldUpdateUserAndRunHook_whenUpdateUser() {
-//        User user = getUser();
-//        UserDTO userDTO = getUserDTO();
-//        userDTO.setId(1L);
-//
-//        User updatedUser = getUser();
-//        updatedUser.setFirstName("kek");
-//        UserDTO updatedUserDTO = getUserDTO();
-//        updatedUserDTO.setFirstName("kek");
-//        updatedUserDTO.setId(1L);
-//
-//        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
-//        when(userMapper.toDTO(refEq(user))).thenReturn(userDTO);
-//        when(userMapper.toDTO(refEq(updatedUser))).thenReturn(updatedUserDTO);
-//        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
-//
-//        UserDTO newUserDTO = userService.updateUser(updatedUserDTO);
-//
-//        verify(updateHook).execute(refEq(userDTO), refEq(updatedUserDTO));
-//        verify(userRepository, times(1)).save(any(User.class));
-//        verify(userValidator, times(1)).validate(any(User.class));
-//    }
-//
-//    private StudyType getStudyType() {
-//        StudyType studyType = new StudyType("Software Development");
-//        studyType.setId(1L);
-//        return studyType;
-//    }
-//
-//    private User getUser() {
-//        User user = new User();
-//        user.setFirstName("John");
-//        user.setMiddleName("Daniel");
-//        user.setLastName("Doe");
-//        user.setEmail("John@doe.com");
-//        user.setStudyType(getStudyType());
-//        user.setToReceiveNewsletter(true);
-//        user.setDateOfBirth(new Date());
-//        return user;
-//    }
-//
-//    private StudyTypeDTO getStudyTypeDTO() {
-//        StudyType studyType = getStudyType();
-//        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-//        studyTypeDTO.setId(studyType.getId());
-//        studyTypeDTO.setName(studyType.getName());
-//        return studyTypeDTO;
-//    }
-//
-//    private UserDTO getUserDTO() {
-//        User user = getUser();
-//        StudyTypeDTO studyTypeDTO = getStudyTypeDTO();
-//        UserDTO userDTO = new UserDTO();
-//        userDTO.setFirstName(user.getFirstName());
-//        userDTO.setMiddleName(user.getMiddleName());
-//        userDTO.setLastName(user.getLastName());
-//        userDTO.setEmail(user.getEmail());
-//        userDTO.setStudyType(studyTypeDTO);
-//        userDTO.setToReceiveNewsletter(user.isToReceiveNewsletter());
-//        userDTO.setDateOfBirth(user.getDateOfBirth());
-//        return userDTO;
-//    }
-//
-//    @TestConfiguration
-//    static class UserServiceTestContextConfiguration {
-//
-//        @Autowired
-//        private UserRepository userRepository;
-//
-//        @Autowired
-//        private Mapper<User, UserDTO> userMapper;
-//
-//        @Autowired
-//        private Validator<User> userValidator;
-//
-//        @Autowired
-//        private ModelMapper modelMapper;
-//
-//        @Autowired
-//        private CreationHook<UserDTO> creationHook;
-//
-//        @Autowired
-//        private UpdateHook<UserDTO> updateHook;
-//
-//        @Bean
-//        public UserService userService() {
-//            return new UserServiceImpl(userRepository, userValidator, userMapper, modelMapper, creationHook, updateHook);
-//        }
-//    }
-//}
+package hu.indicium.dev.ledenadministratie.user;
+
+import hu.indicium.dev.ledenadministratie.mail.MailService;
+import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
+import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
+import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
+import hu.indicium.dev.ledenadministratie.user.events.UserCreated;
+import hu.indicium.dev.ledenadministratie.util.Validator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = {UserServiceImpl.class, ModelMapper.class})
+@DisplayName("User Service")
+@Tag("Services")
+class UserServiceImplTest {
+    @MockBean
+    private UserRepository userRepository;
+
+    @MockBean
+    private Validator<User> userValidator;
+
+    @MockBean
+    private MailService mailService;
+
+    @MockBean
+    private MailAddressRepository mailAddressRepository;
+
+    @MockBean
+    private StudyTypeService studyTypeService;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private UserService userService;
+
+    private User user;
+
+    private UserDTO userDTO;
+
+    private MailAddress mailAddress;
+
+    private MailAddressDTO mailAddressDTO;
+
+    private StudyType studyType;
+
+    private RegistrationDTO registrationDTO;
+
+
+    @BeforeEach
+    void setUp() {
+        user = new User();
+        user.setId(1L);
+        user.setFirstName("John");
+        user.setMiddleName("Daniel");
+        user.setLastName("Doe");
+        user.setPhoneNumber("+31612345678");
+        user.setDateOfBirth(new Date());
+
+        mailAddress = new MailAddress();
+        mailAddress.setId(0L);
+        mailAddress.setMailAddress("john@doe.com");
+        mailAddress.setReceivesNewsletter(true);
+        mailAddress.setVerificationToken("ASBD");
+        mailAddress.setVerificationRequestedAt(new Date());
+        mailAddress.setUser(user);
+
+        user.addMailAddress(mailAddress);
+
+        studyType = new StudyType();
+        studyType.setId(1L);
+        studyType.setName("Software Development");
+
+        user.setStudyType(studyType);
+
+        userDTO = new UserDTO();
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setMiddleName(user.getMiddleName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setDateOfBirth(user.getDateOfBirth());
+        userDTO.setStudyTypeId(user.getStudyType().getId());
+
+        mailAddressDTO = new MailAddressDTO();
+        mailAddressDTO.setId(mailAddress.getId());
+        mailAddressDTO.setAddress(mailAddress.getMailAddress());
+        mailAddressDTO.setReceivesNewsletter(mailAddress.receivesNewsletter());
+        mailAddressDTO.setVerifiedAt(mailAddress.getVerifiedAt());
+        mailAddressDTO.setVerified(mailAddress.getVerifiedAt() != null);
+
+        registrationDTO = new RegistrationDTO();
+        registrationDTO.setId(1L);
+        registrationDTO.setFirstName(user.getFirstName());
+        registrationDTO.setMiddleName(user.getMiddleName());
+        registrationDTO.setLastName(user.getLastName());
+        registrationDTO.setPhoneNumber(user.getPhoneNumber());
+        registrationDTO.setDateOfBirth(user.getDateOfBirth());
+        registrationDTO.setMailAddress(mailAddress.getMailAddress());
+        registrationDTO.setVerificationToken(mailAddress.getVerificationToken());
+        registrationDTO.setToReceiveNewsletter(mailAddress.receivesNewsletter());
+        registrationDTO.setVerificationRequestedAt(mailAddress.getVerificationRequestedAt());
+        registrationDTO.setStudyTypeId(studyType.getId());
+    }
+
+    @Test
+    @DisplayName("Create user")
+    void createUser() {
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+
+        when(userRepository.save(userArgumentCaptor.capture())).thenReturn(user);
+
+        UserDTO returnedUserDTO = userService.createUser(registrationDTO);
+
+        verify(userValidator, atLeastOnce()).validate(any(User.class));
+
+        assertThat(returnedUserDTO).isNotNull();
+
+        User savedUser = userArgumentCaptor.getValue();
+
+        assertThat(savedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType");
+    }
+
+    @Test
+    @DisplayName("Create invalid user should not be persisted")
+    void creatingUserFails_shouldNotBePersisted() {
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        doThrow(new IllegalArgumentException("User not legitimate")).when(userValidator).validate(any(User.class));
+
+        UserDTO returnedUserDTO = null;
+
+        try {
+            returnedUserDTO = userService.createUser(registrationDTO);
+            fail();
+        } catch (Exception e) {
+            assertThat(true).isTrue();
+        }
+
+
+        verify(userValidator, atLeastOnce()).validate(any(User.class));
+        verify(userRepository, never()).save(eq(user));
+
+        assertThat(returnedUserDTO).isNull();
+    }
+
+    @Test
+    @DisplayName("Get user by id")
+    void getUserById() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+
+        UserDTO receivedUser = userService.getUserById(1L);
+
+        assertThat(receivedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType", "studyTypeId");
+    }
+
+    @Test
+    @DisplayName("Get all users")
+    void getAllUsers() {
+        User user1 = new User();
+        user1.setId(1L);
+        user1.setFirstName("John");
+        user1.setMiddleName("Daniel");
+        user1.setLastName("Doe");
+        user1.setPhoneNumber("+31612345678");
+        user1.setDateOfBirth(new Date());
+        user1.setStudyType(new StudyType(1L));
+
+        UserDTO userDTO1 = new UserDTO();
+        userDTO1.setFirstName(user1.getFirstName());
+        userDTO1.setMiddleName(user1.getMiddleName());
+        userDTO1.setLastName(user1.getLastName());
+        userDTO1.setPhoneNumber(user1.getPhoneNumber());
+        userDTO1.setDateOfBirth(user1.getDateOfBirth());
+        userDTO1.setStudyTypeId(user1.getStudyType().getId());
+
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user, user1));
+
+        List<UserDTO> users = userService.getUsers();
+
+        assertThat(users).hasSize(2);
+        assertThat(users.get(0)).isEqualToIgnoringGivenFields(userDTO, "id");
+        assertThat(users.get(1)).isEqualToIgnoringGivenFields(userDTO1, "id");
+    }
+
+    @Test
+    @DisplayName("Throw exception when getting non-existing user")
+    void shouldThrowException_whenGetNonExistingUserById() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        try {
+            userService.getUserById(1L);
+            fail();
+        } catch (Exception ex) {
+            assertThat(ex.getClass()).isEqualTo(EntityNotFoundException.class);
+            assertThat(ex.getMessage()).isEqualTo("User 1 not found!");
+        }
+    }
+
+    @TestConfiguration
+    static class UserServiceTestContextConfiguration {
+
+        @Autowired
+        private UserRepository userRepository;
+
+        @Autowired
+        private Validator<User> userValidator;
+
+        @Autowired
+        private ModelMapper modelMapper;
+
+        @Autowired
+        private MailService mailService;
+
+        @Autowired
+        private MailAddressRepository mailAddressRepository;
+
+        @Autowired
+        private StudyTypeService studyTypeService;
+
+        @Autowired
+        private ApplicationEventPublisher applicationEventPublisher;
+
+        @Bean
+        public UserService userService() {
+            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, studyTypeService, applicationEventPublisher);
+        }
+    }
+}

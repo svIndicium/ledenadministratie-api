@@ -34,13 +34,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
 
     private final Validator<User> userValidator;
 
-    private final Mapper<User, UserDTO> userMapper;
-
     private final ModelMapper modelMapper;
-
-    private final CreationHook<UserDTO> creationHook;
-
-    private final UpdateHook<UserDTO> updateHook;
 
     private final MailService mailService;
 
@@ -50,13 +44,10 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, Mapper<User, UserDTO> userMapper, ModelMapper modelMapper, CreationHook<UserDTO> creationHook, UpdateHook<UserDTO> updateHook, MailService mailService, MailAddressRepository mailAddressRepository, StudyTypeService studyTypeService, ApplicationEventPublisher applicationEventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, ModelMapper modelMapper, MailService mailService, MailAddressRepository mailAddressRepository, StudyTypeService studyTypeService, ApplicationEventPublisher applicationEventPublisher) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
-        this.userMapper = userMapper;
         this.modelMapper = modelMapper;
-        this.creationHook = creationHook;
-        this.updateHook = updateHook;
         this.mailService = mailService;
         this.mailAddressRepository = mailAddressRepository;
         this.studyTypeService = studyTypeService;
@@ -73,7 +64,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         user.setLastName(registrationDTO.getLastName());
         user.setDateOfBirth(registrationDTO.getDateOfBirth());
         user.setPhoneNumber(registrationDTO.getPhoneNumber());
-        user.setStudyType(new StudyType(registrationDTO.getStudyType().getId()));
+        user.setStudyType(new StudyType(registrationDTO.getStudyTypeId()));
         MailAddress mailAddress = new MailAddress(registrationDTO.getMailAddress(), registrationDTO.getVerificationToken(), registrationDTO.getVerificationRequestedAt(), registrationDTO.getVerifiedAt(), registrationDTO.isToReceiveNewsletter());
         user.addMailAddress(mailAddress);
         user = this.saveUser(user);
@@ -81,28 +72,23 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         mailAddress.setId(0L);
         mailAddressRepository.save(mailAddress);
         applicationEventPublisher.publishEvent(new UserCreated(this, user.getId()));
-        UserDTO newUserDTO = userMapper.toDTO(user);
-        creationHook.execute(null, newUserDTO);
-        return userMapper.toDTO(user);
+        return UserMapper.map(user);
     }
 
     @Override
     @PreAuthorize("hasPermission('write:user')")
     public UserDTO updateUser(UserDTO userDTO) {
         User user = findUserById(userDTO.getId());
-        UserDTO oldUser = userMapper.toDTO(user);
         modelMapper.map(userDTO, user);
         user = this.saveUser(user);
-        UserDTO updatedUser = userMapper.toDTO(user);
-        updateHook.execute(oldUser, updatedUser);
-        return userMapper.toDTO(user);
+        return UserMapper.map(user);
     }
 
     @Override
     @PreAuthorize("hasPermission('read:user') || hasPermission('admin:user')")
     public UserDTO getUserById(Long userId) {
         User user = findUserById(userId);
-        return userMapper.toDTO(user);
+        return UserMapper.map(user);
     }
 
     @Override
@@ -111,7 +97,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         List<User> users = userRepository.findAll();
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User user : users) {
-            UserDTO userDTO = userMapper.toDTO(user);
+            UserDTO userDTO = UserMapper.map(user);
             userDTOS.add(userDTO);
         }
         return userDTOS;
@@ -152,7 +138,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         mailAddress = sendVerificationMail(mailAddress, user);
         user.addMailAddress(mailAddress);
         userRepository.save(user);
-        return userMapper.toDTO(user);
+        return UserMapper.map(user);
     }
 
     private User getUserByMailAddress(String address) {

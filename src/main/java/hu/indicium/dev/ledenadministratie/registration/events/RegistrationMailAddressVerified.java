@@ -5,19 +5,19 @@ import org.springframework.context.ApplicationEvent;
 
 public class RegistrationMailAddressVerified extends ApplicationEvent {
 
-    private RegistrationDTO registrationDTO;
+    private Long registrationId;
 
     /**
      * Create a new ApplicationEvent.
      *
      * @param source the object on which the event initially occurred (never {@code null})
      */
-    public RegistrationMailAddressVerified(Object source, RegistrationDTO mailAddress) {
+    public RegistrationMailAddressVerified(Object source, Long registrationId) {
         super(source);
-        this.registrationDTO = mailAddress;
+        this.registrationId = registrationId;
     }
 
-    public RegistrationDTO getRegistrationDTO() {
-        return registrationDTO;
+    public Long getRegistrationId() {
+        return registrationId;
     }
 }

@@ -11,21 +11,10 @@ public class UserRequestMapper {
 
     private ModelMapper modelMapper = new ModelMapper();
 
-    public UserDTO toDTO(CreateUserRequest createUserRequest) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserDTO userDTO = modelMapper.map(createUserRequest, UserDTO.class);
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyTypeDTO.setId(createUserRequest.getStudyTypeId());
-        userDTO.setStudyType(studyTypeDTO);
-        return userDTO;
-    }
-
     public UserDTO toDTO(UpdateUserRequest updateUserRequest) {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDTO userDTO = modelMapper.map(updateUserRequest, UserDTO.class);
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyTypeDTO.setId(updateUserRequest.getStudyTypeId());
-        userDTO.setStudyType(studyTypeDTO);
+        userDTO.setStudyTypeId(updateUserRequest.getStudyTypeId());
         return userDTO;
     }
 }

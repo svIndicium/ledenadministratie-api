@@ -2,12 +2,17 @@ package hu.indicium.dev.ledenadministratie.registration;
 
 import hu.indicium.dev.ledenadministratie.auth.AuthService;
 import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
+import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.registration.events.NewRegistrationAdded;
+import hu.indicium.dev.ledenadministratie.registration.events.RegistrationFinalized;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
+import hu.indicium.dev.ledenadministratie.user.MailAddress;
 import hu.indicium.dev.ledenadministratie.user.UserService;
+import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Validator;
@@ -20,7 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
@@ -33,16 +40,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(classes = {RegistrationServiceImpl.class, MailObject.class})
 @ExtendWith(SpringExtension.class)
 @DisplayName("Registration Service")
 class RegistrationServiceImplTest {
 
     @MockBean
     private RegistrationRepository registrationRepository;
-
-    @MockBean
-    private Mapper<Registration, RegistrationDTO> registrationMapper;
 
     @MockBean
     private UserService userService;
@@ -52,6 +56,12 @@ class RegistrationServiceImplTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private MailService mailService;
+
+    @MockBean
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
     private RegistrationService registrationService;
@@ -76,6 +86,7 @@ class RegistrationServiceImplTest {
         studyTypeDTO.setName(studyType.getName());
 
         registration = new Registration();
+        registration.setId(1L);
         registration.setFirstName("John");
         registration.setLastName("Doe");
         registration.setMailAddress("john@doe.com");
@@ -86,6 +97,7 @@ class RegistrationServiceImplTest {
         registration.setApproved(false);
 
         registrationDTO = new RegistrationDTO();
+        registrationDTO.setId(registration.getId());
         registrationDTO.setFirstName(registration.getFirstName());
         registrationDTO.setLastName(registration.getLastName());
         registrationDTO.setMailAddress(registration.getMailAddress());
@@ -93,10 +105,10 @@ class RegistrationServiceImplTest {
         registrationDTO.setToReceiveNewsletter(registration.isToReceiveNewsletter());
         registrationDTO.setDateOfBirth(registration.getDateOfBirth());
         registrationDTO.setApproved(registration.isApproved());
+        registrationDTO.setStudyTypeId(registration.getStudyType().getId());
 
         authUserDTO = new AuthUserDTO();
         authUserDTO.setName("Alex");
-
     }
 
     @Test
@@ -104,9 +116,9 @@ class RegistrationServiceImplTest {
     void shouldCreateRegistration() {
         ArgumentCaptor<Registration> registrationArgument = ArgumentCaptor.forClass(Registration.class);
 
+        registration.setId(1L);
+
         when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
-        when(registrationMapper.toEntity(any(RegistrationDTO.class))).thenReturn(registration);
-        when(registrationMapper.toDTO(any(Registration.class))).thenReturn(registrationDTO);
 
         RegistrationDTO returnedRegistration = registrationService.register(registrationDTO);
 
@@ -137,8 +149,6 @@ class RegistrationServiceImplTest {
         registration.setFinalizedBy("Alex");
 
         when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
-        when(registrationMapper.toEntity(any(RegistrationDTO.class))).thenReturn(registration);
-        when(registrationMapper.toDTO(any(Registration.class))).thenReturn(registrationDTO);
 
         RegistrationDTO returnedRegistration = registrationService.register(registrationDTO);
 
@@ -152,7 +162,6 @@ class RegistrationServiceImplTest {
         assertThat(savedRegistration.getComment()).isNull();
         assertThat(savedRegistration.getFinalizedAt()).isNull();
         assertThat(savedRegistration.getFinalizedBy()).isNull();
-        assertThat(returnedRegistration).isEqualToComparingFieldByField(registrationDTO);
     }
 
     @Test
@@ -160,12 +169,12 @@ class RegistrationServiceImplTest {
     void shouldCreateUser_whenFinalizeRegistration() {
         ArgumentCaptor<Registration> registrationArgument = ArgumentCaptor.forClass(Registration.class);
 
+        registration.setId(1L);
+
         registration.verify();
 
         when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
         when(registrationRepository.findById(any(Long.class))).thenReturn(Optional.of(registration));
-        when(registrationMapper.toEntity(any(RegistrationDTO.class))).thenReturn(registration);
-        when(registrationMapper.toDTO(any(Registration.class))).thenReturn(registrationDTO);
         when(authService.getAuthUser()).thenReturn(authUserDTO);
 
         FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L, null, true);
@@ -174,11 +183,9 @@ class RegistrationServiceImplTest {
         userDTO.setFirstName(registrationDTO.getFirstName());
         userDTO.setMiddleName(registrationDTO.getMiddleName());
         userDTO.setLastName(registrationDTO.getLastName());
-        userDTO.setEmail(registrationDTO.getMailAddress());
         userDTO.setPhoneNumber(registrationDTO.getPhoneNumber());
         userDTO.setDateOfBirth(registrationDTO.getDateOfBirth());
-        userDTO.setStudyType(studyTypeDTO);
-        userDTO.setToReceiveNewsletter(registrationDTO.isToReceiveNewsletter());
+        userDTO.setStudyTypeId(studyTypeDTO.getId());
 
         when(userService.createUser(any(RegistrationDTO.class))).thenReturn(userDTO);
 
@@ -201,7 +208,6 @@ class RegistrationServiceImplTest {
         assertThat(savedRegistration.getComment()).isEqualTo(finishRegistrationDTO.getComment());
         assertThat(savedRegistration.getFinalizedAt()).isEqualToIgnoringMinutes(new Date());
         assertThat(savedRegistration.getFinalizedBy()).isEqualTo(authUserDTO.getName());
-        assertThat(returnedRegistration).isEqualToComparingFieldByField(registrationDTO);
     }
 
     @Test
@@ -212,8 +218,6 @@ class RegistrationServiceImplTest {
 
         when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
         when(registrationRepository.findById(any(Long.class))).thenReturn(Optional.of(registration));
-        when(registrationMapper.toEntity(any(RegistrationDTO.class))).thenReturn(registration);
-        when(registrationMapper.toDTO(any(Registration.class))).thenReturn(registrationDTO);
         when(authService.getAuthUser()).thenReturn(authUserDTO);
 
         FinishRegistrationDTO finishRegistrationDTO = new FinishRegistrationDTO(1L, "Troll", false);
@@ -237,7 +241,6 @@ class RegistrationServiceImplTest {
         assertThat(savedRegistration.getComment()).isEqualTo(finishRegistrationDTO.getComment());
         assertThat(savedRegistration.getFinalizedAt()).isEqualToIgnoringMinutes(new Date());
         assertThat(savedRegistration.getFinalizedBy()).isEqualTo(authUserDTO.getName());
-        assertThat(returnedRegistration).isEqualToComparingFieldByField(registrationDTO);
     }
 
     @Test
@@ -262,36 +265,30 @@ class RegistrationServiceImplTest {
     @DisplayName("Get registrations")
     void shouldReturnListOfRegistrations() {
         when(registrationRepository.findAll()).thenReturn(Arrays.asList(registration, registration));
-        when(registrationMapper.toDTO(eq(registration))).thenReturn(registrationDTO);
 
         List<RegistrationDTO> returnedRegistrations = registrationService.getRegistrations();
 
         assertThat(returnedRegistrations).hasSize(2);
-        assertThat(returnedRegistrations).contains(registrationDTO);
     }
 
     @Test
     @DisplayName("Get Unfinalized registrations")
     void shouldReturnListOfUnfinalizedRegistrations() {
         when(registrationRepository.findAllByApprovedIsFalseAndCommentIsNull()).thenReturn(Arrays.asList(registration, registration));
-        when(registrationMapper.toDTO(eq(registration))).thenReturn(registrationDTO);
 
         List<RegistrationDTO> returnedRegistrations = registrationService.getRegistrationByFinalization(false);
 
         assertThat(returnedRegistrations).hasSize(2);
-        assertThat(returnedRegistrations).contains(registrationDTO);
     }
 
     @Test
     @DisplayName("Get finalized registrations")
     void shouldReturnListOfFinalizedRegistrations() {
         when(registrationRepository.findAllByApprovedIsTrueOrApprovedIsFalseAndCommentIsNotNull()).thenReturn(Arrays.asList(registration, registration));
-        when(registrationMapper.toDTO(eq(registration))).thenReturn(registrationDTO);
 
         List<RegistrationDTO> returnedRegistrations = registrationService.getRegistrationByFinalization(true);
 
         assertThat(returnedRegistrations).hasSize(2);
-        assertThat(returnedRegistrations).contains(registrationDTO);
     }
 
 
@@ -299,9 +296,6 @@ class RegistrationServiceImplTest {
     static class RegistrationServiceTestContextConfiguration {
         @Autowired
         private RegistrationRepository registrationRepository;
-
-        @Autowired
-        private Mapper<Registration, RegistrationDTO> registrationMapper;
 
         @Autowired
         private UserService userService;
@@ -315,9 +309,12 @@ class RegistrationServiceImplTest {
         @Autowired
         private MailService mailService;
 
+        @Autowired
+        private ApplicationEventPublisher applicationEventPublisher;
+
         @Bean
         public RegistrationService registrationService() {
-            return new RegistrationServiceImpl(registrationRepository, registrationMapper, userService, registrationValidator, authService, mailService);
+            return new RegistrationServiceImpl(registrationRepository, userService, authService, mailService, applicationEventPublisher, registrationValidator);
         }
     }
 }

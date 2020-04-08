@@ -15,12 +15,9 @@ public class RegistrationVerificationRepository implements MailObjectRepository 
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private final RegistrationMapper registrationMapper;
-
-    public RegistrationVerificationRepository(RegistrationRepository registrationRepository, ApplicationEventPublisher applicationEventPublisher, RegistrationMapper registrationMapper) {
+    public RegistrationVerificationRepository(RegistrationRepository registrationRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.registrationRepository = registrationRepository;
         this.applicationEventPublisher = applicationEventPublisher;
-        this.registrationMapper = registrationMapper;
     }
 
     @Override
@@ -45,7 +42,7 @@ public class RegistrationVerificationRepository implements MailObjectRepository 
 
     @Override
     public void onVerify(MailObject mailObject) {
-        RegistrationMailAddressVerified registrationMailAddressVerified = new RegistrationMailAddressVerified(this, registrationMapper.toDTO((Registration) mailObject));
+        RegistrationMailAddressVerified registrationMailAddressVerified = new RegistrationMailAddressVerified(this, ((Registration) mailObject).getId());
         applicationEventPublisher.publishEvent(registrationMailAddressVerified);
     }
 }

@@ -1,25 +1,15 @@
 package hu.indicium.dev.ledenadministratie.registration;
 
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeMapper;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.util.Mapper;
 import org.springframework.stereotype.Component;
 
-@Component
-public class RegistrationMapper implements Mapper<Registration, RegistrationDTO> {
+public class RegistrationMapper {
 
-    private final StudyTypeService studyTypeService;
-
-    private final StudyTypeMapper studyTypeMapper;
-
-    public RegistrationMapper(StudyTypeService studyTypeService, StudyTypeMapper studyTypeMapper) {
-        this.studyTypeService = studyTypeService;
-        this.studyTypeMapper = studyTypeMapper;
-    }
-
-    @Override
-    public RegistrationDTO toDTO(Registration registration) {
+    public static RegistrationDTO map(Registration registration) {
         RegistrationDTO dto = new RegistrationDTO();
         dto.setId(registration.getId());
         dto.setFirstName(registration.getFirstName());
@@ -28,7 +18,7 @@ public class RegistrationMapper implements Mapper<Registration, RegistrationDTO>
         dto.setMailAddress(registration.getMailAddress().toLowerCase());
         dto.setDateOfBirth(registration.getDateOfBirth());
         dto.setPhoneNumber(registration.getPhoneNumber());
-        dto.setStudyType(studyTypeMapper.toDTO(registration.getStudyType()));
+        dto.setStudyTypeId(registration.getStudyType().getId());
         dto.setToReceiveNewsletter(registration.isToReceiveNewsletter());
         dto.setApproved(registration.isApproved());
         dto.setComment(registration.getComment());
@@ -42,8 +32,7 @@ public class RegistrationMapper implements Mapper<Registration, RegistrationDTO>
         return dto;
     }
 
-    @Override
-    public Registration toEntity(RegistrationDTO registrationDTO) {
+    public static Registration map(RegistrationDTO registrationDTO) {
         Registration registration = new Registration();
         registration.setId(registrationDTO.getId());
         registration.setFirstName(registrationDTO.getFirstName());
@@ -52,7 +41,7 @@ public class RegistrationMapper implements Mapper<Registration, RegistrationDTO>
         registration.setMailAddress(registrationDTO.getMailAddress().toLowerCase());
         registration.setDateOfBirth(registrationDTO.getDateOfBirth());
         registration.setPhoneNumber(registrationDTO.getPhoneNumber());
-        registration.setStudyType(studyTypeMapper.toEntity(studyTypeService.getStudyTypeById(registrationDTO.getStudyType().getId())));
+        registration.setStudyType(new StudyType(registrationDTO.getStudyTypeId()));
         registration.setToReceiveNewsletter(registrationDTO.isToReceiveNewsletter());
         registration.setApproved(registrationDTO.isApproved());
         registration.setComment(registrationDTO.getComment());
