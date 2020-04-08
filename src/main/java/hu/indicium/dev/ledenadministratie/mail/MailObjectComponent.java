@@ -33,7 +33,7 @@ public class MailObjectComponent {
         if (mailObjectRepositories.size() > 1) {
             throw new IllegalStateException("Two entries found");
         }
-        if (mailObjectRepositories.size() == 0) {
+        if (mailObjectRepositories.isEmpty()) {
             throw new IllegalStateException("Could not validate mail address");
         }
         return mailObjectRepositories.get(0);

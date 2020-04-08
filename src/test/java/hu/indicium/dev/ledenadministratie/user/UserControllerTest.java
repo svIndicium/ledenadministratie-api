@@ -1,14 +1,10 @@
 package hu.indicium.dev.ledenadministratie.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sendgrid.helpers.mail.Mail;
-import hu.indicium.dev.ledenadministratie.registration.Registration;
-import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.user.requests.CreateUserRequest;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -26,17 +22,16 @@ import java.util.Arrays;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

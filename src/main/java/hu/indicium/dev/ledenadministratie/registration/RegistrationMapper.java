@@ -5,6 +5,9 @@ import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 
 public class RegistrationMapper {
 
+    private RegistrationMapper() {
+    }
+
     public static RegistrationDTO map(Registration registration) {
         RegistrationDTO dto = new RegistrationDTO();
         dto.setId(registration.getId());

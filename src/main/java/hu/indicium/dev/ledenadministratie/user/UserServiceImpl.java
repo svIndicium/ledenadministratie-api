@@ -5,7 +5,6 @@ import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
-import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.events.MailAddressVerified;
@@ -37,17 +36,14 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
 
     private final MailAddressRepository mailAddressRepository;
 
-    private final StudyTypeService studyTypeService;
-
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, ModelMapper modelMapper, MailService mailService, MailAddressRepository mailAddressRepository, StudyTypeService studyTypeService, ApplicationEventPublisher applicationEventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, ModelMapper modelMapper, MailService mailService, MailAddressRepository mailAddressRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.modelMapper = modelMapper;
         this.mailService = mailService;
         this.mailAddressRepository = mailAddressRepository;
-        this.studyTypeService = studyTypeService;
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
@@ -136,11 +132,6 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         user.addMailAddress(mailAddress);
         userRepository.save(user);
         return UserMapper.map(user);
-    }
-
-    private User getUserByMailAddress(String address) {
-        MailAddress mailAddress = this.mailAddressRepository.findByMailAddressAndVerifiedAtIsNotNull(address);
-        return mailAddress.getUser();
     }
 
     private MailAddress sendVerificationMail(MailAddress mailAddress, User user) {

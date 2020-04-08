@@ -8,11 +8,9 @@ public class CommentValidator implements Validator<Registration> {
 
     @Override
     public void validate(Registration registration) {
-        if (registration.getFinalizedAt() != null) {
-            if (!registration.isApproved()) {
-                if (registration.getComment() == null || registration.getComment().isBlank()) {
-                    throw new IllegalArgumentException(ERROR_MESSAGE);
-                }
+        if (registration.getFinalizedAt() != null && !registration.isApproved()) {
+            if (registration.getComment() == null || registration.getComment().isBlank()) {
+                throw new IllegalArgumentException(ERROR_MESSAGE);
             }
         }
     }

@@ -3,6 +3,9 @@ package hu.indicium.dev.ledenadministratie.user;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 
 public class MailMapper {
+    private MailMapper() {
+    }
+
     public static MailAddressDTO map(MailAddress mailAddress) {
         MailAddressDTO mailAddressDTO = new MailAddressDTO();
         mailAddressDTO.setAddress(mailAddress.getMailAddress());

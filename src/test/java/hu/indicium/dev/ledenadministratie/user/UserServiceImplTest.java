@@ -6,7 +6,6 @@ import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.user.events.UserCreated;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -242,14 +240,11 @@ class UserServiceImplTest {
         private MailAddressRepository mailAddressRepository;
 
         @Autowired
-        private StudyTypeService studyTypeService;
-
-        @Autowired
         private ApplicationEventPublisher applicationEventPublisher;
 
         @Bean
         public UserService userService() {
-            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, studyTypeService, applicationEventPublisher);
+            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, applicationEventPublisher);
         }
     }
 }
