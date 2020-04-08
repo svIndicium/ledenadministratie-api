@@ -13,6 +13,9 @@ sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
+    jcenter {
+        url "http://oss.jfrog.org/artifactory/oss-snapshot-local/"
+    }
 }
 
 dependencies {
@@ -27,9 +30,9 @@ dependencies {
     implementation 'com.auth0:auth0-spring-security-api:1.2.3'
     implementation 'com.sendgrid:sendgrid-java:4.4.5'
     implementation 'org.modelmapper:modelmapper:2.3.2'
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    implementation 'io.springfox:springfox-bean-validators:2.9.2'
+    implementation 'io.springfox:springfox-swagger2:3.0.0-SNAPSHOT'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT'
+    implementation 'io.springfox:springfox-bean-validators:3.0.0-SNAPSHOT'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
