@@ -25,7 +25,7 @@ class CommentValidatorTest {
         registration.setId(1L);
         registration.setFirstName("John");
         registration.setLastName("Doe");
-        registration.setEmail("John@doe.com");
+        registration.setMailAddress("John@doe.com");
         registration.setPhoneNumber("+31612345678");
         registration.setDateOfBirth(new Date());
         registration.setStudyType(new StudyType("SD"));

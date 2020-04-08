@@ -21,23 +21,23 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     }
 
     @Override
-    public void setFilterObject(Object filterObject) {
-        this.filterObject = filterObject;
-    }
-
-    @Override
     public Object getFilterObject() {
         return this.filterObject;
     }
 
     @Override
-    public void setReturnObject(Object returnObject) {
-        this.returnObject = returnObject;
+    public void setFilterObject(Object filterObject) {
+        this.filterObject = filterObject;
     }
 
     @Override
     public Object getReturnObject() {
         return this.returnObject;
+    }
+
+    @Override
+    public void setReturnObject(Object returnObject) {
+        this.returnObject = returnObject;
     }
 
     @Override

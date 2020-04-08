@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.user.requests.CreateUserRequest;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,16 +25,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
         userRequestMapper = new UserRequestMapper();
-    }
-
-    @ApiOperation(value = "Create a new user", response = UserDTO.class)
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(
-            @ApiParam(value = "User data to store", required = true) @RequestBody @Valid CreateUserRequest createUserRequest
-    ) {
-        UserDTO userDTO = userRequestMapper.toDTO(createUserRequest);
-        return userService.createUser(userDTO);
     }
 
     @ApiOperation(value = "Update a user", response = UserDTO.class)
@@ -63,5 +53,16 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<UserDTO> getUsers() {
         return userService.getUsers();
+    }
+
+    @GetMapping(value = "/{userId}/mailaddresses", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<MailAddressDTO> getMailAddressesById(@PathVariable("userId") Long userId) {
+        return userService.getMailAddressesByUserId(userId);
+    }
+
+    @GetMapping("/{userId}/mailaddresses/{mailAddressId}/requestverification")
+    public MailAddressDTO requestNewEmailVerification(@PathVariable Long userId, @PathVariable Long mailAddressId) {
+        return userService.requestNewMailVerification(userId, mailAddressId);
     }
 }

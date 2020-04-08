@@ -17,7 +17,7 @@ public class CreateRegistrationRequest {
 
     @Email
     @NotNull
-    private String email;
+    private String mailAddress;
 
     @NotEmpty
     @NotNull
@@ -57,12 +57,12 @@ public class CreateRegistrationRequest {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMailAddress() {
+        return mailAddress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 
     public String getPhoneNumber() {

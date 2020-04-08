@@ -1,9 +1,12 @@
 package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.util.Util;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,16 +26,14 @@ public class User {
     private String lastName;
 
     @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     @Column(nullable = false)
     private Date dateOfBirth;
 
-    @Column(nullable = false)
-    private boolean isToReceiveNewsletter;
+    @OneToMany(mappedBy = "user")
+    @OrderColumn(name = "mail_id")
+    private List<MailAddress> mailAddresses = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "study_type_id", nullable = false)
@@ -74,12 +75,8 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public String getFullLastName() {
+        return Util.getFullLastName(middleName, lastName);
     }
 
     public String getPhoneNumber() {
@@ -98,19 +95,23 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public List<MailAddress> getMailAddresses() {
+        return mailAddresses;
+    }
+
+    public void setMailAddresses(List<MailAddress> mailAddresses) {
+        this.mailAddresses = mailAddresses;
+    }
+
+    public void addMailAddress(MailAddress mailAddress) {
+        this.mailAddresses.add(mailAddress);
+    }
+
     public StudyType getStudyType() {
         return studyType;
     }
 
     public void setStudyType(StudyType studyType) {
         this.studyType = studyType;
-    }
-
-    public boolean isToReceiveNewsletter() {
-        return isToReceiveNewsletter;
-    }
-
-    public void setToReceiveNewsletter(boolean toReceiveNewsletter) {
-        isToReceiveNewsletter = toReceiveNewsletter;
     }
 }
