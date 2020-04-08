@@ -77,9 +77,8 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("$.firstName", is(registrationDTO.getFirstName())))
                 .andExpect(jsonPath("$.middleName", is(registrationDTO.getMiddleName())))
                 .andExpect(jsonPath("$.lastName", is(registrationDTO.getLastName())))
-                .andExpect(jsonPath("$.email", is(registrationDTO.getEmail())))
-                .andExpect(jsonPath("$.studyType", notNullValue()))
-                .andExpect(jsonPath("$.studyType.id", is(1)))
+                .andExpect(jsonPath("$.mailAddress", is(registrationDTO.getMailAddress())))
+                .andExpect(jsonPath("$.studyTypeId", is(registrationDTO.getStudyTypeId().intValue())))
                 .andExpect(jsonPath("$.toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())));
 
         RegistrationDTO capturedRegistrationDTO = registrationDTOArgumentCaptor.getValue();
@@ -87,7 +86,7 @@ class RegistrationControllerTest {
         assertThat(capturedRegistrationDTO.getFirstName()).isEqualTo(registrationDTO.getFirstName());
         assertThat(capturedRegistrationDTO.getMiddleName()).isEqualTo(registrationDTO.getMiddleName());
         assertThat(capturedRegistrationDTO.getLastName()).isEqualTo(registrationDTO.getLastName());
-        assertThat(capturedRegistrationDTO.getEmail()).isEqualTo(registrationDTO.getEmail());
+        assertThat(capturedRegistrationDTO.getMailAddress()).isEqualTo(registrationDTO.getMailAddress());
         assertThat(capturedRegistrationDTO.getPhoneNumber()).isEqualTo(registrationDTO.getPhoneNumber());
         assertThat(capturedRegistrationDTO.isToReceiveNewsletter()).isEqualTo(registrationDTO.isToReceiveNewsletter());
         assertThat(capturedRegistrationDTO.isApproved()).isFalse();
@@ -113,9 +112,8 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("$[0].firstName", is(registrationDTO.getFirstName())))
                 .andExpect(jsonPath("$[0].middleName", is(registrationDTO.getMiddleName())))
                 .andExpect(jsonPath("$[0].lastName", is(registrationDTO.getLastName())))
-                .andExpect(jsonPath("$[0].email", is(registrationDTO.getEmail())))
-                .andExpect(jsonPath("$[0].studyType", notNullValue()))
-                .andExpect(jsonPath("$[0].studyType.id", is(1)))
+                .andExpect(jsonPath("$[0].mailAddress", is(registrationDTO.getMailAddress())))
+                .andExpect(jsonPath("$[0].studyTypeId", is(registrationDTO.getStudyTypeId().intValue())))
                 .andExpect(jsonPath("$[0].toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())));
     }
 
@@ -136,9 +134,8 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("$[0].firstName", is(registrationDTO.getFirstName())))
                 .andExpect(jsonPath("$[0].middleName", is(registrationDTO.getMiddleName())))
                 .andExpect(jsonPath("$[0].lastName", is(registrationDTO.getLastName())))
-                .andExpect(jsonPath("$[0].email", is(registrationDTO.getEmail())))
-                .andExpect(jsonPath("$[0].studyType", notNullValue()))
-                .andExpect(jsonPath("$[0].studyType.id", is(1)))
+                .andExpect(jsonPath("$[0].mailAddress", is(registrationDTO.getMailAddress())))
+                .andExpect(jsonPath("$[0].studyTypeId", is(registrationDTO.getStudyTypeId().intValue())))
                 .andExpect(jsonPath("$[0].toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
                 .andExpect(jsonPath("$[0].approved", is(false)))
                 .andExpect(jsonPath("$[0].comment").doesNotExist());
@@ -162,9 +159,8 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("$[0].firstName", is(registrationDTO.getFirstName())))
                 .andExpect(jsonPath("$[0].middleName", is(registrationDTO.getMiddleName())))
                 .andExpect(jsonPath("$[0].lastName", is(registrationDTO.getLastName())))
-                .andExpect(jsonPath("$[0].email", is(registrationDTO.getEmail())))
-                .andExpect(jsonPath("$[0].studyType", notNullValue()))
-                .andExpect(jsonPath("$[0].studyType.id", is(1)))
+                .andExpect(jsonPath("$[0].mailAddress", is(registrationDTO.getMailAddress())))
+                .andExpect(jsonPath("$[0].studyTypeId", is(registrationDTO.getStudyTypeId().intValue())))
                 .andExpect(jsonPath("$[0].toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
                 .andExpect(jsonPath("$[0].approved", is(true)))
                 .andExpect(jsonPath("$[0].comment").doesNotExist());
@@ -197,9 +193,8 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("$.firstName", is(registrationDTO.getFirstName())))
                 .andExpect(jsonPath("$.middleName", is(registrationDTO.getMiddleName())))
                 .andExpect(jsonPath("$.lastName", is(registrationDTO.getLastName())))
-                .andExpect(jsonPath("$.email", is(registrationDTO.getEmail())))
-                .andExpect(jsonPath("$.studyType", notNullValue()))
-                .andExpect(jsonPath("$.studyType.id", is(1)))
+                .andExpect(jsonPath("$.mailAddress", is(registrationDTO.getMailAddress())))
+                .andExpect(jsonPath("$.studyTypeId", is(registrationDTO.getStudyTypeId().intValue())))
                 .andExpect(jsonPath("$.toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
                 .andExpect(jsonPath("$.comment").doesNotExist())
                 .andExpect(jsonPath("$.approved", is(true)));
@@ -237,9 +232,8 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("$.firstName", is(registrationDTO.getFirstName())))
                 .andExpect(jsonPath("$.middleName", is(registrationDTO.getMiddleName())))
                 .andExpect(jsonPath("$.lastName", is(registrationDTO.getLastName())))
-                .andExpect(jsonPath("$.email", is(registrationDTO.getEmail())))
-                .andExpect(jsonPath("$.studyType", notNullValue()))
-                .andExpect(jsonPath("$.studyType.id", is(1)))
+                .andExpect(jsonPath("$.mailAddress", is(registrationDTO.getMailAddress())))
+                .andExpect(jsonPath("$.studyTypeId", is(registrationDTO.getStudyTypeId().intValue())))
                 .andExpect(jsonPath("$.toReceiveNewsletter", is(registrationDTO.isToReceiveNewsletter())))
                 .andExpect(jsonPath("$.comment", is(finishRegistrationDTO.getComment())))
                 .andExpect(jsonPath("$.approved", is(false)));
@@ -270,7 +264,7 @@ class RegistrationControllerTest {
         registration.setFirstName("John");
         registration.setMiddleName("Daniel");
         registration.setLastName("Doe");
-        registration.setEmail("John@doe.com");
+        registration.setMailAddress("John@doe.com");
         registration.setPhoneNumber("0612345678");
         registration.setStudyType(getStudyType());
         registration.setToReceiveNewsletter(true);
@@ -285,9 +279,9 @@ class RegistrationControllerTest {
         registrationDTO.setFirstName(registration.getFirstName());
         registrationDTO.setMiddleName(registration.getMiddleName());
         registrationDTO.setLastName(registration.getLastName());
-        registrationDTO.setEmail(registration.getEmail());
+        registrationDTO.setMailAddress(registration.getMailAddress());
         registrationDTO.setPhoneNumber(registration.getPhoneNumber());
-        registrationDTO.setStudyType(studyTypeDTO);
+        registrationDTO.setStudyTypeId(registration.getStudyType().getId());
         registrationDTO.setToReceiveNewsletter(registration.isToReceiveNewsletter());
         registrationDTO.setDateOfBirth(registration.getDateOfBirth());
         return registrationDTO;
@@ -298,11 +292,11 @@ class RegistrationControllerTest {
         createRegistrationRequest.setFirstName(registrationDTO.getFirstName());
         createRegistrationRequest.setMiddleName(registrationDTO.getMiddleName());
         createRegistrationRequest.setLastName(registrationDTO.getLastName());
-        createRegistrationRequest.setStudyTypeId(registrationDTO.getStudyType().getId());
+        createRegistrationRequest.setStudyTypeId(registrationDTO.getStudyTypeId());
         createRegistrationRequest.setDateOfBirth(registrationDTO.getDateOfBirth());
         createRegistrationRequest.setPhoneNumber(registrationDTO.getPhoneNumber());
         createRegistrationRequest.setToReceiveNewsletter(registrationDTO.isToReceiveNewsletter());
-        createRegistrationRequest.setEmail(registrationDTO.getEmail());
+        createRegistrationRequest.setMailAddress(registrationDTO.getMailAddress());
         return createRegistrationRequest;
     }
 

@@ -1,17 +1,20 @@
 package hu.indicium.dev.ledenadministratie.mail.dto;
 
-public class MailEntryDTO {
-
+public class MailVerificationDTO {
     private String firstName;
 
     private String lastName;
 
-    private String email;
+    private String token;
 
-    public MailEntryDTO(String firstName, String lastName, String email) {
+    private String mailAddress;
+
+    public MailVerificationDTO() {
+    }
+
+    public MailVerificationDTO(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
     }
 
     public String getFirstName() {
@@ -30,11 +33,19 @@ public class MailEntryDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getToken() {
+        return token;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getMailAddress() {
+        return mailAddress;
+    }
+
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 }

@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.registration.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 
 import java.util.Date;
 
@@ -16,13 +16,13 @@ public class RegistrationDTO {
 
     private String lastName;
 
-    private String email;
+    private String mailAddress;
 
     private String phoneNumber;
 
     private Date dateOfBirth;
 
-    private StudyTypeDTO studyType;
+    private Long studyTypeId;
 
     private boolean isToReceiveNewsletter;
 
@@ -37,6 +37,13 @@ public class RegistrationDTO {
     private boolean approved;
 
     private String comment;
+
+    private Date verificationRequestedAt;
+
+    private Date verifiedAt;
+
+    @JsonIgnore
+    private String verificationToken;
 
     public Long getId() {
         return id;
@@ -70,12 +77,12 @@ public class RegistrationDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMailAddress() {
+        return mailAddress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 
     public String getPhoneNumber() {
@@ -94,12 +101,12 @@ public class RegistrationDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public StudyTypeDTO getStudyType() {
-        return studyType;
+    public Long getStudyTypeId() {
+        return studyTypeId;
     }
 
-    public void setStudyType(StudyTypeDTO studyType) {
-        this.studyType = studyType;
+    public void setStudyTypeId(Long studyTypeId) {
+        this.studyTypeId = studyTypeId;
     }
 
     public boolean isToReceiveNewsletter() {
@@ -156,5 +163,29 @@ public class RegistrationDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Date getVerificationRequestedAt() {
+        return verificationRequestedAt;
+    }
+
+    public void setVerificationRequestedAt(Date verificationRequestedAt) {
+        this.verificationRequestedAt = verificationRequestedAt;
+    }
+
+    public Date getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    public void setVerifiedAt(Date verifiedAt) {
+        this.verifiedAt = verifiedAt;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 }

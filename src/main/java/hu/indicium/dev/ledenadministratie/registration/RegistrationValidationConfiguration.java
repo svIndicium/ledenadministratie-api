@@ -1,7 +1,6 @@
-package hu.indicium.dev.ledenadministratie.registration.validation;
+package hu.indicium.dev.ledenadministratie.registration;
 
-import hu.indicium.dev.ledenadministratie.registration.Registration;
-import hu.indicium.dev.ledenadministratie.util.Validator;
+import hu.indicium.dev.ledenadministratie.registration.validation.CommentValidator;
 import hu.indicium.dev.ledenadministratie.util.ValidatorGroup;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,9 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 
 @Configuration
-public class RegistrationValidatorConfiguration {
+public class RegistrationValidationConfiguration {
+
     @Bean
-    Validator<Registration> registrationValidator() {
+    ValidatorGroup<Registration> registrationValidatorGroup() {
         return new ValidatorGroup<>(Arrays.asList(new CommentValidator()));
     }
 }

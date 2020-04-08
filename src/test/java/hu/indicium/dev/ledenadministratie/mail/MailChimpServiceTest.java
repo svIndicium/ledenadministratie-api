@@ -50,7 +50,7 @@ class MailChimpServiceTest {
         when(mailSettings.getUsername()).thenReturn("testUserName");
         when(mailSettings.getRegion()).thenReturn("eu");
 
-        MailEntryDTO mailEntryDTO = new MailEntryDTO("John", "Doe", "john@doe.com", true);
+        MailEntryDTO mailEntryDTO = new MailEntryDTO("John", "Doe", "john@doe.com");
 
         when(restTemplate.postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), httpEntityArgumentCaptor.capture(), eq(String.class)))
                 .thenReturn(ResponseEntity.of(Optional.of("worked!")));
@@ -61,43 +61,10 @@ class MailChimpServiceTest {
         AddMailingListMemberRequest addMailingListMemberRequest = (AddMailingListMemberRequest) httpEntity.getBody();
         assertThat(addMailingListMemberRequest).isNotNull();
         assertThat(addMailingListMemberRequest.getEmailAddress()).isEqualTo(mailEntryDTO.getEmail());
-        assertThat(addMailingListMemberRequest.getTags()).contains("new");
-        assertThat(addMailingListMemberRequest.getTags()).contains("nieuwsbrief");
         assertThat(addMailingListMemberRequest.getStatus()).isEqualTo("subscribed");
         assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("FNAME");
         assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("LNAME");
 
-
-        verify(restTemplate, times(1)).postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), any(), any());
-    }
-
-    @Test
-    @DisplayName("Add user to mailing list but not to newsletter")
-    void shouldDoAPostRequestToMailChimpWithNoNewsletter_whenAddTheUserToTheMailingList() {
-
-        ArgumentCaptor<HttpEntity> httpEntityArgumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
-
-        when(mailSettings.getMemberListId()).thenReturn("test");
-        when(mailSettings.getApiKey()).thenReturn("testApiKey");
-        when(mailSettings.getUsername()).thenReturn("testUserName");
-        when(mailSettings.getRegion()).thenReturn("eu");
-
-        MailEntryDTO mailEntryDTO = new MailEntryDTO("John", "Doe", "john@doe.com", false);
-
-        when(restTemplate.postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), httpEntityArgumentCaptor.capture(), eq(String.class)))
-                .thenReturn(ResponseEntity.of(Optional.of("worked!")));
-
-        mailListService.addUserToMailingList(mailEntryDTO);
-
-        HttpEntity httpEntity = httpEntityArgumentCaptor.getValue();
-        AddMailingListMemberRequest addMailingListMemberRequest = (AddMailingListMemberRequest) httpEntity.getBody();
-        assertThat(addMailingListMemberRequest).isNotNull();
-        assertThat(addMailingListMemberRequest.getEmailAddress()).isEqualTo(mailEntryDTO.getEmail());
-        assertThat(addMailingListMemberRequest.getTags()).contains("new");
-        assertThat(addMailingListMemberRequest.getTags()).doesNotContain("nieuwsbrief");
-        assertThat(addMailingListMemberRequest.getStatus()).isEqualTo("subscribed");
-        assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("FNAME");
-        assertThat(addMailingListMemberRequest.getMergeFields()).containsKeys("LNAME");
 
         verify(restTemplate, times(1)).postForEntity(eq("https://eu.api.mailchimp.com/3.0/lists/test/members"), any(), any());
     }
@@ -111,8 +78,8 @@ class MailChimpServiceTest {
         when(mailSettings.getUsername()).thenReturn("testUserName");
         when(mailSettings.getRegion()).thenReturn("eu");
 
-        MailEntryDTO newMailEntry = new MailEntryDTO("John", "Doe", "john@doe.com", true);
-        MailEntryDTO oldMailEntry = new MailEntryDTO("Johan", "Dough", "johan@dough.com", true);
+        MailEntryDTO newMailEntry = new MailEntryDTO("John", "Doe", "john@doe.com");
+        MailEntryDTO oldMailEntry = new MailEntryDTO("Johan", "Dough", "johan@dough.com");
 
         MD5 md5crypt = new MD5();
         String md5 = md5crypt.hash(oldMailEntry.getEmail());
