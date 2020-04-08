@@ -1,11 +1,7 @@
 package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
-import hu.indicium.dev.ledenadministratie.studytype.StudyTypeMapper;
-import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.util.Mapper;
-import org.springframework.stereotype.Component;
 
 public class UserMapper {
     public static UserDTO map(User user) {

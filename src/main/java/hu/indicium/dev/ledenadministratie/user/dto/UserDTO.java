@@ -1,7 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 
 import java.util.Date;
 

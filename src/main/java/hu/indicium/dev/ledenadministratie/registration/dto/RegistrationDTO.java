@@ -2,7 +2,6 @@ package hu.indicium.dev.ledenadministratie.registration.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 
 import java.util.Date;
 

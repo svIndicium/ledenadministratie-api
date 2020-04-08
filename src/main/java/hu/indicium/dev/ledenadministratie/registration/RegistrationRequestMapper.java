@@ -2,7 +2,6 @@ package hu.indicium.dev.ledenadministratie.registration;
 
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.requests.CreateRegistrationRequest;
-import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 

@@ -4,7 +4,6 @@ import hu.indicium.dev.ledenadministratie.registration.validation.CommentValidat
 import hu.indicium.dev.ledenadministratie.util.ValidatorGroup;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 

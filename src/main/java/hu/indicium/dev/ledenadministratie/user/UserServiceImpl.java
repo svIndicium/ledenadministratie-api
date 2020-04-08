@@ -1,7 +1,5 @@
 package hu.indicium.dev.ledenadministratie.user;
 
-import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
-import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
@@ -12,7 +10,6 @@ import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.events.MailAddressVerified;
 import hu.indicium.dev.ledenadministratie.user.events.UserCreated;
-import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.modelmapper.ModelMapper;

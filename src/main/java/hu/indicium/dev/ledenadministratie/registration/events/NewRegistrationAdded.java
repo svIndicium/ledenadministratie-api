@@ -1,6 +1,5 @@
 package hu.indicium.dev.ledenadministratie.registration.events;
 
-import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import org.springframework.context.ApplicationEvent;
 
 public class NewRegistrationAdded extends ApplicationEvent {

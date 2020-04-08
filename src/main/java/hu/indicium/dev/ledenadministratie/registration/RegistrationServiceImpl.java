@@ -9,10 +9,8 @@ import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.events.NewRegistrationAdded;
 import hu.indicium.dev.ledenadministratie.registration.events.RegistrationFinalized;
 import hu.indicium.dev.ledenadministratie.user.UserService;
-import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 

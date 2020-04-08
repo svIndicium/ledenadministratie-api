@@ -1,8 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
-import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.user.requests.CreateUserRequest;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

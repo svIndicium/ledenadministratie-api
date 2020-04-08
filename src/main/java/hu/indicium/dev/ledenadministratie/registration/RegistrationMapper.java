@@ -2,10 +2,6 @@ package hu.indicium.dev.ledenadministratie.registration;
 
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
-import hu.indicium.dev.ledenadministratie.studytype.StudyTypeMapper;
-import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
-import hu.indicium.dev.ledenadministratie.util.Mapper;
-import org.springframework.stereotype.Component;
 
 public class RegistrationMapper {
 
