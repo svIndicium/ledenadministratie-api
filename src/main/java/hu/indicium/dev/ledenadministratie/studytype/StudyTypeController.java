@@ -25,6 +25,12 @@ public class StudyTypeController {
         return studyTypeService.getAllStudyTypes();
     }
 
+    @GetMapping("/{studyTypeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public StudyTypeDTO getStudyTypeById(@PathVariable Long studyTypeId) {
+        return studyTypeService.getStudyTypeById(studyTypeId);
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public StudyTypeDTO createStudyType(@RequestBody @Valid CreateStudyTypeRequest createStudyTypeRequest) {
