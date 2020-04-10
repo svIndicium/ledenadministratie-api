@@ -14,6 +14,7 @@ public class MailMapper {
         mailAddressDTO.setVerified(mailAddress.getVerifiedAt() != null);
         mailAddressDTO.setVerifiedAt(mailAddress.getVerifiedAt());
         mailAddressDTO.setVerificationRequestedAt(mailAddress.getVerificationRequestedAt());
+        mailAddressDTO.setReceivesNewsletter(mailAddress.receivesNewsletter());
         return mailAddressDTO;
     }
 

@@ -1,6 +1,8 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
+import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
@@ -23,10 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -113,6 +112,7 @@ class UserServiceImplTest {
         mailAddressDTO.setReceivesNewsletter(mailAddress.receivesNewsletter());
         mailAddressDTO.setVerifiedAt(mailAddress.getVerifiedAt());
         mailAddressDTO.setVerified(mailAddress.getVerifiedAt() != null);
+        mailAddressDTO.setVerificationRequestedAt(mailAddress.getVerificationRequestedAt());
 
         registrationDTO = new RegistrationDTO();
         registrationDTO.setId(1L);
@@ -219,6 +219,79 @@ class UserServiceImplTest {
             assertThat(ex.getClass()).isEqualTo(EntityNotFoundException.class);
             assertThat(ex.getMessage()).isEqualTo("User 1 not found!");
         }
+    }
+
+    @Test
+    @DisplayName("Request new email verification")
+    void shouldCallMailServiceCorrectly_whenRequestMailVerification() {
+        ArgumentCaptor<MailObject> mailObjectArgumentCaptor = ArgumentCaptor.forClass(MailObject.class);
+        ArgumentCaptor<MailVerificationDTO> mailVerificationDTOArgumentCaptor = ArgumentCaptor.forClass(MailVerificationDTO.class);
+
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
+        when(mailAddressRepository.findByUserIdAndId(eq(1L), eq(0L))).thenReturn(Optional.of(mailAddress));
+        when(mailAddressRepository.save(any(MailAddress.class))).thenReturn(mailAddress);
+        when(mailService.sendVerificationMail(mailObjectArgumentCaptor.capture(), mailVerificationDTOArgumentCaptor.capture())).thenReturn(mailAddress);
+
+        MailAddressDTO mailAddressDTO = userService.requestNewMailVerification(1L, 0L);
+
+        assertThat(mailAddressDTO.getAddress()).isEqualTo(mailAddress.getMailAddress());
+
+        MailObject capturedMailObject = mailObjectArgumentCaptor.getValue();
+
+        assertThat(capturedMailObject.getMailAddress()).isEqualTo(mailAddress.getMailAddress());
+
+        MailVerificationDTO capturedMailVerification = mailVerificationDTOArgumentCaptor.getValue();
+
+        assertThat(capturedMailVerification.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(capturedMailVerification.getLastName()).isEqualTo(user.getFullLastName());
+    }
+
+    @Test
+    @DisplayName("Throw exception when ask for verication mail for already verified mailaddress")
+    void shouldThrowException_whenRequestMailVerification_withAlreadyVerifiedMail() {
+        mailAddress.verify();
+
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
+        when(mailAddressRepository.findByUserIdAndId(eq(1L), eq(0L))).thenReturn(Optional.of(mailAddress));
+
+        try {
+            userService.requestNewMailVerification(1L, 0L);
+            fail("Should throw exception because the email is already verified");
+        } catch (Exception e) {
+            assertThat(true).isTrue();
+        }
+
+        verify(userRepository, never()).save(any(User.class));
+        verify(mailAddressRepository, never()).save(any(MailAddress.class));
+    }
+
+    @Test
+    @DisplayName("Throw exception when ask for verication mail for already verified mailaddress")
+    void shouldThrowException_whenGetInvalidMail() {
+
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
+        when(mailAddressRepository.findByUserIdAndId(eq(1L), eq(0L))).thenReturn(Optional.empty());
+
+        try {
+            userService.requestNewMailVerification(1L, 0L);
+            fail("Should throw exception because the email does not exist");
+        } catch (Exception e) {
+            assertThat(true).isTrue();
+        }
+
+        verify(userRepository, never()).save(any(User.class));
+        verify(mailAddressRepository, never()).save(any(MailAddress.class));
+    }
+
+    @Test
+    @DisplayName("Get mail addresses by user id")
+    void getMailAddressesByUserId() {
+        when(mailAddressRepository.findAllByUserId(eq(1L))).thenReturn(Collections.singletonList(mailAddress));
+
+        List<MailAddressDTO> mailAddresses = userService.getMailAddressesByUserId(1L);
+
+        assertThat(mailAddresses).hasSize(1);
+        assertThat(mailAddresses.get(0)).isEqualToComparingFieldByField(mailAddressDTO);
     }
 
     @TestConfiguration
