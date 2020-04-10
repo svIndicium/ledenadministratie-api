@@ -7,6 +7,7 @@ import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotFoundExce
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotSetException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('read:settings')")
     @PostFilter("hasPermission('read:' + filterObject.permission)")
     public List<SettingDTO> getAllSettings() {
         return settingRepository.findAll()

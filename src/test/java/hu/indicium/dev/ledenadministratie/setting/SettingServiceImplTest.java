@@ -144,7 +144,7 @@ class SettingServiceImplTest {
 
     @Test
     @DisplayName("Get settings")
-    @WithMockToken(scope = "read:key")
+    @WithMockToken(scope = {"read:key", "read:settings"})
     void shouldReturnListOfSettings_whenGetAllSettings() {
         Setting setting1 = new Setting();
         setting1.setKey("key");
