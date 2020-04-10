@@ -8,6 +8,7 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,25 +20,31 @@ import java.io.IOException;
 public class SendGridService implements TransactionalMailService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    private final SettingService settingService;
+
+    public SendGridService(SettingService settingService) {
+        this.settingService = settingService;
+    }
+
     @Override
     public void sendVerificationMail(MailVerificationDTO mailVerificationDTO) {
         logger.info("I am triggered!");
         logger.info(String.format("Sending a mail to %s", mailVerificationDTO.getMailAddress()));
         logger.info(String.format("Firstname %s Last name %s", mailVerificationDTO.getFirstName(), mailVerificationDTO.getLastName()));
         logger.info(String.format("The token is %s", mailVerificationDTO.getToken()));
-        Email from = new Email("secretaris@indicium.hu", "Secretaris Indicium");
+        Email from = new Email(settingService.getValueByKey("SENDGRID_VERIFICATION_FROM_MAIL"), settingService.getValueByKey("SENDGRID_VERIFICATION_FROM_NAME"));
         Email to = new Email(mailVerificationDTO.getMailAddress(), mailVerificationDTO.getFirstName() + " " + mailVerificationDTO.getLastName());
         Mail mail = new Mail();
         mail.setFrom(from);
         mail.setReplyTo(from);
-        mail.setTemplateId("d-c60b9dff12414f4da0c6521d243801ee");
+        mail.setTemplateId(settingService.getValueByKey("SENDGRID_VERIFICATION_TEMPLATE"));
         Personalization personalization = new Personalization();
         personalization.addTo(to);
         personalization.addDynamicTemplateData("firstName", mailVerificationDTO.getFirstName());
         personalization.addDynamicTemplateData("lastName", mailVerificationDTO.getLastName());
         personalization.addDynamicTemplateData("token", mailVerificationDTO.getToken());
         mail.addPersonalization(personalization);
-        SendGrid sg = new SendGrid(System.getenv("SG_API"));
+        SendGrid sg = new SendGrid(settingService.getValueByKey("SENDGRID_API_KEY"));
         Request request = new Request();
         try {
             request.setMethod(Method.POST);
