@@ -2,6 +2,8 @@ package hu.indicium.dev.ledenadministratie.studytype;
 
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import hu.indicium.dev.ledenadministratie.studytype.requests.CreateStudyTypeRequest;
+import hu.indicium.dev.ledenadministratie.util.Response;
+import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -15,27 +17,33 @@ public class StudyTypeController {
 
     private final StudyTypeService studyTypeService;
 
-
     public StudyTypeController(StudyTypeService studyTypeService) {
         this.studyTypeService = studyTypeService;
     }
 
-    @GetMapping
-    public List<StudyTypeDTO> getAllStudyTypes() {
-        return studyTypeService.getAllStudyTypes();
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<StudyTypeDTO>> getAllStudyTypes() {
+        return ResponseBuilder.ok()
+                .data(studyTypeService.getAllStudyTypes())
+                .build();
     }
 
-    @GetMapping("/{studyTypeId}")
+    @GetMapping(value = "/{studyTypeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public StudyTypeDTO getStudyTypeById(@PathVariable Long studyTypeId) {
-        return studyTypeService.getStudyTypeById(studyTypeId);
+    public Response<StudyTypeDTO> getStudyTypeById(@PathVariable Long studyTypeId) {
+        return ResponseBuilder.ok()
+                .data(studyTypeService.getStudyTypeById(studyTypeId))
+                .build();
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public StudyTypeDTO createStudyType(@RequestBody @Valid CreateStudyTypeRequest createStudyTypeRequest) {
+    public Response<StudyTypeDTO> createStudyType(@RequestBody @Valid CreateStudyTypeRequest createStudyTypeRequest) {
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
         studyTypeDTO.setName(createStudyTypeRequest.getName());
-        return studyTypeService.createStudyType(studyTypeDTO);
+        return ResponseBuilder.created()
+                .data(studyTypeService.createStudyType(studyTypeDTO))
+                .build();
     }
 }
