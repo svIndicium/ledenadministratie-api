@@ -3,9 +3,9 @@ package hu.indicium.dev.ledenadministratie.user;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
+import hu.indicium.dev.ledenadministratie.util.Response;
+import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -27,42 +27,45 @@ public class UserController {
         userRequestMapper = new UserRequestMapper();
     }
 
-    @ApiOperation(value = "Update a user", response = UserDTO.class)
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public UserDTO updateUser(
-            @ApiParam(value = "User data to update user") @RequestBody @Valid UpdateUserRequest updateUserRequest,
-            @ApiParam(value = "Id of the to be updated user", required = true) @PathVariable("id") Long userId
-    ) {
-        UserDTO userDTO = userRequestMapper.toDTO(updateUserRequest);
-        userDTO.setId(userId);
-        return userService.updateUser(userDTO);
-    }
-
-    @ApiOperation(value = "Get user by id", response = UserDTO.class)
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUser(
-            @ApiParam(value = "Id of the requested user", required = true) @PathVariable("id") Long userId
-    ) {
-        return userService.getUserById(userId);
-    }
-
-    @ApiOperation(value = "Get a list of all users", response = List.class)
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDTO> getUsers() {
-        return userService.getUsers();
+    public Response<List<UserDTO>> getUsers() {
+        return ResponseBuilder.ok()
+                .data(userService.getUsers())
+                .build();
+    }
+
+    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<UserDTO> getUser(@PathVariable Long userId) {
+        return ResponseBuilder.ok()
+                .data(userService.getUserById(userId))
+                .build();
+    }
+
+    @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Response<UserDTO> updateUser(@RequestBody @Valid UpdateUserRequest updateUserRequest, @PathVariable Long userId) {
+        UserDTO userDTO = userRequestMapper.toDTO(updateUserRequest);
+        userDTO.setId(userId);
+        return ResponseBuilder.accepted()
+                .data(userService.updateUser(userDTO))
+                .build();
     }
 
     @GetMapping(value = "/{userId}/mailaddresses", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<MailAddressDTO> getMailAddressesById(@PathVariable("userId") Long userId) {
-        return userService.getMailAddressesByUserId(userId);
+    public Response<List<MailAddressDTO>> getMailAddressesById(@PathVariable("userId") Long userId) {
+        return ResponseBuilder.ok()
+                .data(userService.getMailAddressesByUserId(userId))
+                .build();
     }
 
-    @GetMapping("/{userId}/mailaddresses/{mailAddressId}/requestverification")
-    public MailAddressDTO requestNewEmailVerification(@PathVariable Long userId, @PathVariable Long mailAddressId) {
-        return userService.requestNewMailVerification(userId, mailAddressId);
+    @GetMapping(value = "/{userId}/mailaddresses/{mailAddressId}/requestverification", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Response<MailAddressDTO> requestNewEmailVerification(@PathVariable Long userId, @PathVariable Long mailAddressId) {
+        return ResponseBuilder.accepted()
+                .data(userService.requestNewMailVerification(userId, mailAddressId))
+                .build();
     }
 }
