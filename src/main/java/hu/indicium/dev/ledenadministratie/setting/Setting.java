@@ -19,6 +19,9 @@ public class Setting {
     @Column(name = "permission", updatable = false)
     private String permission;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "description")
     private String description;
 
@@ -54,6 +57,14 @@ public class Setting {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

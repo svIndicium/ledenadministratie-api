@@ -9,6 +9,8 @@ public class SettingDTO {
 
     private String permission;
 
+    private String title;
+
     private String description;
 
     private Date updatedAt;
@@ -37,6 +39,14 @@ public class SettingDTO {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

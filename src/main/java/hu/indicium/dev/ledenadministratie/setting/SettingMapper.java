@@ -8,6 +8,7 @@ public class SettingMapper {
         settingDTO.setKey(setting.getKey());
         settingDTO.setValue(setting.getValue());
         settingDTO.setDescription(setting.getDescription());
+        settingDTO.setTitle(setting.getTitle());
         settingDTO.setPermission(setting.getPermission());
         settingDTO.setUpdatedAt(setting.getUpdatedAt());
         settingDTO.setUpdatedBy(setting.getUpdatedBy());
