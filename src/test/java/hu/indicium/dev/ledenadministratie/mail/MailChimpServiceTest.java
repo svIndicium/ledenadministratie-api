@@ -2,7 +2,9 @@ package hu.indicium.dev.ledenadministratie.mail;
 
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.requests.AddMailingListMemberRequest;
+import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import hu.indicium.dev.ledenadministratie.util.MD5;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,21 +36,25 @@ class MailChimpServiceTest {
     private RestTemplate restTemplate;
 
     @MockBean
-    private MailSettings mailSettings;
+    private SettingService settingService;
 
     @Autowired
     private MailListService mailListService;
+
+    @BeforeEach
+    void setUp() {
+        when(settingService.getValueByKey("MAILCHIMP_MEMBER_LIST_ID")).thenReturn("test");
+        when(settingService.getValueByKey("MAILCHIMP_NEWSLETTER_LIST_ID")).thenReturn("newsletter");
+        when(settingService.getValueByKey("MAILCHIMP_API_KEY")).thenReturn("testApiKey");
+        when(settingService.getValueByKey("MAILCHIMP_USERNAME")).thenReturn("testUserName");
+        when(settingService.getValueByKey("MAILCHIMP_REGION")).thenReturn("eu");
+    }
 
     @Test
     @DisplayName("Add user to mailing list")
     void shouldDoAPostRequestToMailChimp_whenAddTheUserToTheMailingList() {
 
         ArgumentCaptor<HttpEntity> httpEntityArgumentCaptor = ArgumentCaptor.forClass(HttpEntity.class);
-
-        when(mailSettings.getMemberListId()).thenReturn("test");
-        when(mailSettings.getApiKey()).thenReturn("testApiKey");
-        when(mailSettings.getUsername()).thenReturn("testUserName");
-        when(mailSettings.getRegion()).thenReturn("eu");
 
         MailEntryDTO mailEntryDTO = new MailEntryDTO("John", "Doe", "john@doe.com");
 
@@ -73,11 +79,6 @@ class MailChimpServiceTest {
     @DisplayName("Add user to mailing list")
     void shouldPatchTheUser_whenUpdateMailingListUser() {
 
-        when(mailSettings.getMemberListId()).thenReturn("test");
-        when(mailSettings.getApiKey()).thenReturn("testApiKey");
-        when(mailSettings.getUsername()).thenReturn("testUserName");
-        when(mailSettings.getRegion()).thenReturn("eu");
-
         MailEntryDTO newMailEntry = new MailEntryDTO("John", "Doe", "john@doe.com");
         MailEntryDTO oldMailEntry = new MailEntryDTO("Johan", "Dough", "johan@dough.com");
 
@@ -98,11 +99,11 @@ class MailChimpServiceTest {
         private RestTemplate restTemplate;
 
         @Autowired
-        private MailSettings mailSettings;
+        private SettingService settingService;
 
         @Bean
         public MailListService mailListService() {
-            return new MailChimpService(mailSettings, restTemplate);
+            return new MailChimpService(restTemplate, settingService);
         }
     }
 }
