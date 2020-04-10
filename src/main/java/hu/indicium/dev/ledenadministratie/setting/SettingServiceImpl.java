@@ -25,6 +25,11 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
+    public String getValueByKey(String key) {
+        return getSettingByKey(key).getValue();
+    }
+
+    @Override
     public SettingDTO getSettingByKey(String key) {
         Setting setting = getSetting(key);
         if (setting.getValue().isBlank()) {

@@ -60,6 +60,16 @@ class SettingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Get value with key")
+    void shouldReturnStringWithValue_whenGetSettingByKey() {
+        when(settingRepository.findByKey(eq("key"))).thenReturn(Optional.of(setting));
+
+        String value = settingService.getValueByKey("key");
+
+        assertThat(value).isEqualTo(setting.getValue());
+    }
+
+    @Test
     @DisplayName("Get setting")
     void shouldReturnSetting_whenGetSetting() {
         when(settingRepository.findByKey(eq("key"))).thenReturn(Optional.of(setting));
