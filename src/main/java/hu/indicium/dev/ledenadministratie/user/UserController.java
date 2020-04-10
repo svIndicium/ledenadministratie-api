@@ -55,7 +55,7 @@ public class UserController {
 
     @GetMapping(value = "/{userId}/mailaddresses", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<MailAddressDTO>> getMailAddressesById(@PathVariable("userId") Long userId) {
+    public Response<List<MailAddressDTO>> getMailAddressesById(@PathVariable Long userId) {
         return ResponseBuilder.ok()
                 .data(userService.getMailAddressesByUserId(userId))
                 .build();
