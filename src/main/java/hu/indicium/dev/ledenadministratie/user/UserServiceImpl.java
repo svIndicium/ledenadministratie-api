@@ -2,7 +2,7 @@ package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
-import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
@@ -135,8 +135,8 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     private MailAddress sendVerificationMail(MailAddress mailAddress, User user) {
-        MailVerificationDTO mailVerificationDTO = new MailVerificationDTO(user.getFirstName(), Util.getFullLastName(user.getMiddleName(), user.getLastName()));
-        return (MailAddress) mailService.sendVerificationMail(mailAddress, mailVerificationDTO);
+        TransactionalMailDTO transactionalMailDTO = new TransactionalMailDTO(user.getFirstName(), Util.getFullLastName(user.getMiddleName(), user.getLastName()));
+        return (MailAddress) mailService.sendVerificationMail(mailAddress, transactionalMailDTO);
     }
 
     private User saveUser(User user) {

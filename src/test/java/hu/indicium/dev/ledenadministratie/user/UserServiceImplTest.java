@@ -2,7 +2,7 @@ package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
-import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
@@ -225,12 +225,12 @@ class UserServiceImplTest {
     @DisplayName("Request new email verification")
     void shouldCallMailServiceCorrectly_whenRequestMailVerification() {
         ArgumentCaptor<MailObject> mailObjectArgumentCaptor = ArgumentCaptor.forClass(MailObject.class);
-        ArgumentCaptor<MailVerificationDTO> mailVerificationDTOArgumentCaptor = ArgumentCaptor.forClass(MailVerificationDTO.class);
+        ArgumentCaptor<TransactionalMailDTO> transactionalMailDTOArgumentCaptor = ArgumentCaptor.forClass(TransactionalMailDTO.class);
 
         when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
         when(mailAddressRepository.findByUserIdAndId(eq(1L), eq(0L))).thenReturn(Optional.of(mailAddress));
         when(mailAddressRepository.save(any(MailAddress.class))).thenReturn(mailAddress);
-        when(mailService.sendVerificationMail(mailObjectArgumentCaptor.capture(), mailVerificationDTOArgumentCaptor.capture())).thenReturn(mailAddress);
+        when(mailService.sendVerificationMail(mailObjectArgumentCaptor.capture(), transactionalMailDTOArgumentCaptor.capture())).thenReturn(mailAddress);
 
         MailAddressDTO mailAddressDTO = userService.requestNewMailVerification(1L, 0L);
 
@@ -240,10 +240,10 @@ class UserServiceImplTest {
 
         assertThat(capturedMailObject.getMailAddress()).isEqualTo(mailAddress.getMailAddress());
 
-        MailVerificationDTO capturedMailVerification = mailVerificationDTOArgumentCaptor.getValue();
+        TransactionalMailDTO transactionalMailDTO = transactionalMailDTOArgumentCaptor.getValue();
 
-        assertThat(capturedMailVerification.getFirstName()).isEqualTo(user.getFirstName());
-        assertThat(capturedMailVerification.getLastName()).isEqualTo(user.getFullLastName());
+        assertThat(transactionalMailDTO.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(transactionalMailDTO.getLastName()).isEqualTo(user.getFullLastName());
     }
 
     @Test

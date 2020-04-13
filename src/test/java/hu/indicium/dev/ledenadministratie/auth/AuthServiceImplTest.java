@@ -1,8 +1,7 @@
 package hu.indicium.dev.ledenadministratie.auth;
 
 import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
-import hu.indicium.dev.ledenadministratie.auth.requests.UserInfoRequest;
-import hu.indicium.dev.ledenadministratie.util.Mapper;
+import hu.indicium.dev.ledenadministratie.auth.responses.UserInfoResponse;
 import hu.indicium.dev.ledenadministratie.util.WithMockToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,9 +35,6 @@ class AuthServiceImplTest {
     private RestTemplate restTemplate;
 
     @MockBean
-    private Mapper<AuthUser, AuthUserDTO> authUserMapper;
-
-    @MockBean
     private AuthSettings authSettings;
 
     @Autowired
@@ -53,13 +49,11 @@ class AuthServiceImplTest {
         when(authSettings.getApiAudience()).thenReturn("https://lit.indicium.hu");
         when(authSettings.getIssuer()).thenReturn("https://indicium.eu.auth0.com/");
 
-        UserInfoRequest userInfoRequest = getUserInfoRequest();
+        UserInfoResponse userInfoResponse = getUserInfoRequest();
 
-        when(restTemplate.exchange(eq("https://indicium.eu.auth0.com/userinfo"), eq(HttpMethod.GET), httpEntityArgumentCaptor.capture(), eq(UserInfoRequest.class))).thenReturn(ResponseEntity.of(Optional.of(userInfoRequest)));
+        when(restTemplate.exchange(eq("https://indicium.eu.auth0.com/userinfo"), eq(HttpMethod.GET), httpEntityArgumentCaptor.capture(), eq(UserInfoResponse.class))).thenReturn(ResponseEntity.of(Optional.of(userInfoResponse)));
 
-        AuthUser authUser = getAuthUser(userInfoRequest);
-
-        when(authUserMapper.toDTO(eq(authUser))).thenReturn(getAuthUserDTO(authUser));
+        AuthUser authUser = getAuthUser(userInfoResponse);
 
         AuthUserDTO authUserDTO = authService.getAuthUser();
 
@@ -82,9 +76,9 @@ class AuthServiceImplTest {
         when(authSettings.getApiAudience()).thenReturn("https://lit.indicium.hu");
         when(authSettings.getIssuer()).thenReturn("https://indicium.eu.auth0.com/");
 
-        UserInfoRequest userInfoRequest = getUserInfoRequest();
+        UserInfoResponse userInfoResponse = getUserInfoRequest();
 
-        when(restTemplate.exchange(eq("https://indicium.eu.auth0.com/userinfo"), eq(HttpMethod.GET), httpEntityArgumentCaptor.capture(), eq(UserInfoRequest.class))).thenReturn(ResponseEntity.status(401).body(null));
+        when(restTemplate.exchange(eq("https://indicium.eu.auth0.com/userinfo"), eq(HttpMethod.GET), httpEntityArgumentCaptor.capture(), eq(UserInfoResponse.class))).thenReturn(ResponseEntity.status(401).body(null));
         try {
             AuthUserDTO authUserDTO = authService.getAuthUser();
             fail("User should not be able to identify itself");
@@ -93,37 +87,37 @@ class AuthServiceImplTest {
         }
     }
 
-    private UserInfoRequest getUserInfoRequest() {
+    private UserInfoResponse getUserInfoRequest() {
         Map<String, Object> appMetadata = new HashMap<>();
         appMetadata.put("id", 1);
-        UserInfoRequest userInfoRequest = new UserInfoRequest();
-        userInfoRequest.setSub("sub");
-        userInfoRequest.setGivenName("John");
-        userInfoRequest.setFamilyName("Doe");
-        userInfoRequest.setNickname("johndoe123");
-        userInfoRequest.setName("John Doe");
-        userInfoRequest.setPictureUrl("");
-        userInfoRequest.setLocale("nl");
-        userInfoRequest.setUpdatedAt(new Date());
-        userInfoRequest.setEmail("john@doe.com");
-        userInfoRequest.setEmailVerified(true);
-        userInfoRequest.setAppMetadata(appMetadata);
-        return userInfoRequest;
+        UserInfoResponse userInfoResponse = new UserInfoResponse();
+        userInfoResponse.setSub("sub");
+        userInfoResponse.setGivenName("John");
+        userInfoResponse.setFamilyName("Doe");
+        userInfoResponse.setNickname("johndoe123");
+        userInfoResponse.setName("John Doe");
+        userInfoResponse.setPictureUrl("");
+        userInfoResponse.setLocale("nl");
+        userInfoResponse.setUpdatedAt(new Date());
+        userInfoResponse.setEmail("john@doe.com");
+        userInfoResponse.setEmailVerified(true);
+        userInfoResponse.setAppMetadata(appMetadata);
+        return userInfoResponse;
     }
 
-    private AuthUser getAuthUser(UserInfoRequest userInfoRequest) {
+    private AuthUser getAuthUser(UserInfoResponse userInfoResponse) {
         AuthUser authUser = new AuthUser();
-        authUser.setSub(userInfoRequest.getSub());
-        authUser.setGivenName(userInfoRequest.getGivenName());
-        authUser.setFamilyName(userInfoRequest.getFamilyName());
-        authUser.setNickname(userInfoRequest.getNickname());
-        authUser.setName(userInfoRequest.getName());
-        authUser.setPictureUrl(userInfoRequest.getPictureUrl());
-        authUser.setLocale(userInfoRequest.getLocale());
-        authUser.setUpdatedAt(userInfoRequest.getUpdatedAt());
-        authUser.setEmail(userInfoRequest.getEmail());
-        authUser.setEmailVerified(userInfoRequest.isEmailVerified());
-        authUser.setAppMetadata(userInfoRequest.getAppMetadata());
+        authUser.setSub(userInfoResponse.getSub());
+        authUser.setGivenName(userInfoResponse.getGivenName());
+        authUser.setFamilyName(userInfoResponse.getFamilyName());
+        authUser.setNickname(userInfoResponse.getNickname());
+        authUser.setName(userInfoResponse.getName());
+        authUser.setPictureUrl(userInfoResponse.getPictureUrl());
+        authUser.setLocale(userInfoResponse.getLocale());
+        authUser.setUpdatedAt(userInfoResponse.getUpdatedAt());
+        authUser.setEmail(userInfoResponse.getEmail());
+        authUser.setEmailVerified(userInfoResponse.isEmailVerified());
+        authUser.setAppMetadata(userInfoResponse.getAppMetadata());
         return authUser;
     }
 
@@ -149,14 +143,11 @@ class AuthServiceImplTest {
         private RestTemplate restTemplate;
 
         @Autowired
-        private Mapper<AuthUser, AuthUserDTO> authUserMapper;
-
-        @Autowired
         private AuthSettings authSettings;
 
         @Bean
-        public AuthService authService(RestTemplate restTemplate, Mapper<AuthUser, AuthUserDTO> authUserMapper, AuthSettings authSettings) {
-            return new AuthServiceImpl(restTemplate, authUserMapper, authSettings);
+        public AuthService authService(RestTemplate restTemplate, AuthSettings authSettings) {
+            return new AuthServiceImpl(restTemplate, authSettings);
         }
     }
 }

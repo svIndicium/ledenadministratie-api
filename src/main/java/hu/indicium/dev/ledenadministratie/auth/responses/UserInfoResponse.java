@@ -1,11 +1,11 @@
-package hu.indicium.dev.ledenadministratie.auth.requests;
+package hu.indicium.dev.ledenadministratie.auth.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 import java.util.Map;
 
-public class UserInfoRequest {
+public class UserInfoResponse {
 
     @JsonProperty("sub")
     private String sub;

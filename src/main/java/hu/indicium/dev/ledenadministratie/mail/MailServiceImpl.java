@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.mail;
 
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
-import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public MailObject sendVerificationMail(MailObject mailObject, MailVerificationDTO mailVerificationDTO) {
+    public MailObject sendVerificationMail(MailObject mailObject, TransactionalMailDTO transactionalMailDTO) {
         isValidEmailAddress(mailObject.getMailAddress());
         if (this.isMailAddressAlreadyVerified(mailObject.getMailAddress())) {
             throw new IllegalArgumentException("Address is already in use");
@@ -32,10 +32,15 @@ public class MailServiceImpl implements MailService {
         }
         mailObject.setVerificationRequestedAt(new Date());
         mailObject.setVerificationToken(generateVerificationToken());
-        mailVerificationDTO.setMailAddress(mailObject.getMailAddress());
-        mailVerificationDTO.setToken(mailObject.getVerificationToken());
-        transactionalMailService.sendVerificationMail(mailVerificationDTO);
+        transactionalMailDTO.setMailAddress(mailObject.getMailAddress());
+        transactionalMailDTO.set("token", mailObject.getVerificationToken());
+        transactionalMailService.sendVerificationMail(transactionalMailDTO);
         return mailObject;
+    }
+
+    @Override
+    public void sendPasswordResetMail(TransactionalMailDTO transactionalMailDTO) {
+        this.transactionalMailService.sendPasswordResetMail(transactionalMailDTO);
     }
 
     @Override

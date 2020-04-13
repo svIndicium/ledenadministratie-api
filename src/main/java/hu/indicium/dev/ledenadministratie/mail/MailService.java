@@ -1,10 +1,12 @@
 package hu.indicium.dev.ledenadministratie.mail;
 
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
-import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 
 public interface MailService {
-    MailObject sendVerificationMail(MailObject mailObject, MailVerificationDTO mailVerificationDTO);
+    MailObject sendVerificationMail(MailObject mailObject, TransactionalMailDTO transactionalMailDTO);
+
+    void sendPasswordResetMail(TransactionalMailDTO transactionalMailDTO);
 
     void verifyMail(String mail, String token);
 

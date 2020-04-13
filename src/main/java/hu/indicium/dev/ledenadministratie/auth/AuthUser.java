@@ -1,6 +1,6 @@
 package hu.indicium.dev.ledenadministratie.auth;
 
-import hu.indicium.dev.ledenadministratie.auth.requests.UserInfoRequest;
+import hu.indicium.dev.ledenadministratie.auth.responses.UserInfoResponse;
 
 import java.util.Date;
 import java.util.Map;
@@ -33,18 +33,18 @@ public class AuthUser {
         // for modelmapper
     }
 
-    public AuthUser(UserInfoRequest userInfoRequest) {
-        this.sub = userInfoRequest.getSub();
-        this.givenName = userInfoRequest.getGivenName();
-        this.familyName = userInfoRequest.getFamilyName();
-        this.nickname = userInfoRequest.getNickname();
-        this.name = userInfoRequest.getName();
-        this.pictureUrl = userInfoRequest.getPictureUrl();
-        this.locale = userInfoRequest.getLocale();
-        this.updatedAt = userInfoRequest.getUpdatedAt();
-        this.email = userInfoRequest.getEmail();
-        this.emailVerified = userInfoRequest.isEmailVerified();
-        this.appMetadata = userInfoRequest.getAppMetadata();
+    public AuthUser(UserInfoResponse userInfoResponse) {
+        this.sub = userInfoResponse.getSub();
+        this.givenName = userInfoResponse.getGivenName();
+        this.familyName = userInfoResponse.getFamilyName();
+        this.nickname = userInfoResponse.getNickname();
+        this.name = userInfoResponse.getName();
+        this.pictureUrl = userInfoResponse.getPictureUrl();
+        this.locale = userInfoResponse.getLocale();
+        this.updatedAt = userInfoResponse.getUpdatedAt();
+        this.email = userInfoResponse.getEmail();
+        this.emailVerified = userInfoResponse.isEmailVerified();
+        this.appMetadata = userInfoResponse.getAppMetadata();
     }
 
     public String getSub() {

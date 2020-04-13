@@ -1,6 +1,6 @@
 package hu.indicium.dev.ledenadministratie.mail;
 
-import hu.indicium.dev.ledenadministratie.mail.dto.MailVerificationDTO;
+import hu.indicium.dev.ledenadministratie.mail.requests.MailVerificationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +17,7 @@ public class MailController {
 
     @PostMapping("/mail/verify")
     @ResponseStatus(HttpStatus.OK)
-    public void verifyMailAddress(@RequestBody MailVerificationDTO mailVerificationDTO) {
-        mailService.verifyMail(mailVerificationDTO.getMailAddress(), mailVerificationDTO.getToken());
+    public void verifyMailAddress(@RequestBody MailVerificationRequest mailVerificationRequest) {
+        mailService.verifyMail(mailVerificationRequest.getAddress(), mailVerificationRequest.getToken());
     }
 }

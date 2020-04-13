@@ -1,18 +1,18 @@
 package hu.indicium.dev.ledenadministratie.mail.dto;
 
-public class MailVerificationDTO {
+import java.util.HashMap;
+import java.util.Map;
+
+public class TransactionalMailDTO {
     private String firstName;
 
     private String lastName;
 
-    private String token;
-
     private String mailAddress;
 
-    public MailVerificationDTO() {
-    }
+    private Map<String, Object> params = new HashMap<>();
 
-    public MailVerificationDTO(String firstName, String lastName) {
+    public TransactionalMailDTO(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -33,19 +33,27 @@ public class MailVerificationDTO {
         this.lastName = lastName;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public String getMailAddress() {
         return mailAddress;
     }
 
     public void setMailAddress(String mailAddress) {
         this.mailAddress = mailAddress;
+    }
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
+    public void set(String key, Object value) {
+        this.params.put(key, value);
+    }
+
+    public Object get(String key) {
+        return this.params.get(key);
     }
 }

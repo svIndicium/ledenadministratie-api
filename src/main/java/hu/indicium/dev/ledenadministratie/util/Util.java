@@ -1,8 +1,6 @@
 package hu.indicium.dev.ledenadministratie.util;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Random;
+import java.util.Date;
 
 public class Util {
 
@@ -20,17 +18,28 @@ public class Util {
 
     public static String randomAlphaNumeric(int count) {
         StringBuilder builder = new StringBuilder();
-        Random random;
-        try {
-            random = SecureRandom.getInstanceStrong();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
         while (count-- != 0) {
-            int character = random.nextInt() * ALPHA_NUMERIC_STRING.length();
+            int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
             builder.append(ALPHA_NUMERIC_STRING.charAt(character));
         }
         return builder.toString();
+    }
+
+    public static String generateTemporaryPassword() {
+        return Util.randomAlphaNumeric(20) + "A1a!";
+    }
+
+    /*
+     *  Convenience method to add a specified number of minutes to a Date object
+     *  From: http://stackoverflow.com/questions/9043981/how-to-add-minutes-to-my-date
+     *  @param  minutes  The number of minutes to add
+     *  @param  beforeTime  The time that will have minutes added to it
+     *  @return  A date object with the specified number of minutes added to it
+     */
+    public static Date addMinutesToDate(int minutes, Date beforeTime) {
+        final long ONE_MINUTE_IN_MILLIS = 60000; //milliseconds
+
+        long curTimeInMs = beforeTime.getTime();
+        return new Date(curTimeInMs + (minutes * ONE_MINUTE_IN_MILLIS));
     }
 }
