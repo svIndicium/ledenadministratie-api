@@ -118,8 +118,13 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
+    @PreAuthorize("hasPermission('admin:user')")
     public void requestResetPasswordMail(Long userId) {
         User user = this.findUserById(userId);
+        if (user.getAuth0UserId() == null) {
+            this.createAuthAccountForUser(userId);
+            return;
+        }
         String passwordResetLink = authService.requestPasswordResetLink(user.getAuth0UserId());
         TransactionalMailDTO transactionalMailDTO = new TransactionalMailDTO(user.getFirstName(), user.getFullLastName());
         transactionalMailDTO.setMailAddress(user.getMailAddresses().get(0).getMailAddress());
@@ -128,8 +133,12 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
-    public void createAuthAccountForUser(Long userId) {
+    @PreAuthorize("hasPermission('admin:user')")
+    public UserDTO createAuthAccountForUser(Long userId) {
         User user = findUserById(userId);
+        if (user.getAuth0UserId() != null) {
+            throw new IllegalStateException("Account already created for user!");
+        }
         AuthUserDTO authUserDTO = new AuthUserDTO();
         authUserDTO.setName(user.getFirstName());
         authUserDTO.setFamilyName(user.getFullLastName());
@@ -138,6 +147,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         user.setAuth0UserId(authUserId);
         this.saveUser(user);
         applicationEventPublisher.publishEvent(new AuthUserCreated(this, user.getId()));
+        return UserMapper.map(user);
     }
 
     @Override

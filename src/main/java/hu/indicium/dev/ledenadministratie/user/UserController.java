@@ -68,4 +68,21 @@ public class UserController {
                 .data(userService.requestNewMailVerification(userId, mailAddressId))
                 .build();
     }
+
+    @GetMapping(value = "/{userId}/requestresetpassword", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Response<Void> requestPasswordReset(@PathVariable Long userId) {
+        this.userService.requestResetPasswordMail(userId);
+        return ResponseBuilder.accepted()
+                .build();
+    }
+
+    @GetMapping(value = "/{userId}/createauthaccount", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Response<UserDTO> createAuthAccount(@PathVariable Long userId) {
+        UserDTO userDTO = this.userService.createAuthAccountForUser(userId);
+        return ResponseBuilder.accepted()
+                .data(userDTO)
+                .build();
+    }
 }

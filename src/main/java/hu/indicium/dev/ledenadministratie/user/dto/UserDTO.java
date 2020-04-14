@@ -21,6 +21,8 @@ public class UserDTO {
 
     private Long studyTypeId;
 
+    private String userId;
+
     public Long getId() {
         return id;
     }
@@ -75,5 +77,13 @@ public class UserDTO {
 
     public void setStudyTypeId(Long studyTypeId) {
         this.studyTypeId = studyTypeId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

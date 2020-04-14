@@ -16,6 +16,7 @@ public class UserMapper {
         dto.setDateOfBirth(user.getDateOfBirth());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setStudyTypeId(user.getStudyType().getId());
+        dto.setUserId(user.getAuth0UserId());
         return dto;
     }
 
@@ -28,6 +29,7 @@ public class UserMapper {
         user.setDateOfBirth(userDTO.getDateOfBirth());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setStudyType(new StudyType(userDTO.getStudyTypeId()));
+        user.setAuth0UserId(userDTO.getUserId());
         return user;
     }
 }

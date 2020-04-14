@@ -21,7 +21,7 @@ public interface UserService {
 
     void requestResetPasswordMail(Long userId);
 
-    void createAuthAccountForUser(Long userId);
+    UserDTO createAuthAccountForUser(Long userId);
 
     List<MailAddressDTO> getMailAddressesByUserId(Long userId);
 }
