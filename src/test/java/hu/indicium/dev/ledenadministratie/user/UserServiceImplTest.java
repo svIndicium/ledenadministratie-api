@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.auth.AuthService;
 import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
@@ -52,6 +53,9 @@ class UserServiceImplTest {
 
     @MockBean
     private StudyTypeService studyTypeService;
+
+    @MockBean
+    private AuthService authService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -134,6 +138,7 @@ class UserServiceImplTest {
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
         when(userRepository.save(userArgumentCaptor.capture())).thenReturn(user);
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
 
         UserDTO returnedUserDTO = userService.createUser(registrationDTO);
 
@@ -175,7 +180,9 @@ class UserServiceImplTest {
 
         UserDTO receivedUser = userService.getUserById(1L);
 
-        assertThat(receivedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType", "studyTypeId");
+        assertThat(receivedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType", "studyTypeId", "userId");
+        assertThat(receivedUser.getUserId()).isEqualTo(user.getAuth0UserId());
+
     }
 
     @Test
@@ -315,9 +322,12 @@ class UserServiceImplTest {
         @Autowired
         private ApplicationEventPublisher applicationEventPublisher;
 
+        @Autowired
+        private AuthService authService;
+
         @Bean
         public UserService userService() {
-            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, applicationEventPublisher);
+            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, applicationEventPublisher, authService);
         }
     }
 }

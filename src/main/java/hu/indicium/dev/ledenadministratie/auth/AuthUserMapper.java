@@ -6,6 +6,7 @@ public class AuthUserMapper {
 
     public static AuthUserDTO map(AuthUser entity) {
         AuthUserDTO authUserDTO = new AuthUserDTO();
+        authUserDTO.setSub(entity.getSub());
         authUserDTO.setName(entity.getName());
         authUserDTO.setAppMetadata(entity.getAppMetadata());
         authUserDTO.setEmail(entity.getEmail());
@@ -21,6 +22,7 @@ public class AuthUserMapper {
 
     public static AuthUser map(AuthUserDTO dto) {
         AuthUser authUser = new AuthUser();
+        authUser.setSub(dto.getSub());
         authUser.setName(dto.getName());
         authUser.setAppMetadata(dto.getAppMetadata());
         authUser.setEmail(dto.getEmail());

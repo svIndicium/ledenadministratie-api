@@ -122,7 +122,6 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     public void requestResetPasswordMail(Long userId) {
         User user = this.findUserById(userId);
         if (user.getAuth0UserId() == null) {
-            this.createAuthAccountForUser(userId);
             return;
         }
         String passwordResetLink = authService.requestPasswordResetLink(user.getAuth0UserId());
