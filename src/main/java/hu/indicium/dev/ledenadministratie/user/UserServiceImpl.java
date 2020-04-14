@@ -1,5 +1,7 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
@@ -7,6 +9,7 @@ import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
+import hu.indicium.dev.ledenadministratie.user.events.AuthUserCreated;
 import hu.indicium.dev.ledenadministratie.user.events.MailAddressVerified;
 import hu.indicium.dev.ledenadministratie.user.events.UserCreated;
 import hu.indicium.dev.ledenadministratie.util.Util;
@@ -14,6 +17,7 @@ import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +42,16 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, ModelMapper modelMapper, MailService mailService, MailAddressRepository mailAddressRepository, ApplicationEventPublisher applicationEventPublisher) {
+    private final AuthService authService;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, ModelMapper modelMapper, MailService mailService, MailAddressRepository mailAddressRepository, ApplicationEventPublisher applicationEventPublisher, AuthService authService) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.modelMapper = modelMapper;
         this.mailService = mailService;
         this.mailAddressRepository = mailAddressRepository;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.authService = authService;
     }
 
     @Override
@@ -64,6 +71,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         mailAddress.setUser(user);
         mailAddress.setId(0L);
         mailAddressRepository.save(mailAddress);
+        this.createAuthAccountForUser(user.getId());
         applicationEventPublisher.publishEvent(new UserCreated(this, user.getId()));
         return UserMapper.map(user);
     }
@@ -107,6 +115,29 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         mailAddress = sendVerificationMail(mailAddress, user);
         mailAddress = mailAddressRepository.save(mailAddress);
         return MailMapper.map(mailAddress);
+    }
+
+    @Override
+    public void requestResetPasswordMail(Long userId) {
+        User user = this.findUserById(userId);
+        String passwordResetLink = authService.requestPasswordResetLink(user.getAuth0UserId());
+        TransactionalMailDTO transactionalMailDTO = new TransactionalMailDTO(user.getFirstName(), user.getFullLastName());
+        transactionalMailDTO.setMailAddress(user.getMailAddresses().get(0).getMailAddress());
+        transactionalMailDTO.set("PASSWORD_RESET_LINK", passwordResetLink);
+        mailService.sendPasswordResetMail(transactionalMailDTO);
+    }
+
+    @Override
+    public void createAuthAccountForUser(Long userId) {
+        User user = findUserById(userId);
+        AuthUserDTO authUserDTO = new AuthUserDTO();
+        authUserDTO.setName(user.getFirstName());
+        authUserDTO.setFamilyName(user.getFullLastName());
+        authUserDTO.setEmail(user.getMailAddresses().get(0).getMailAddress());
+        String authUserId = authService.createAuthUser(authUserDTO);
+        user.setAuth0UserId(authUserId);
+        this.saveUser(user);
+        applicationEventPublisher.publishEvent(new AuthUserCreated(this, user.getId()));
     }
 
     @Override
@@ -163,5 +194,10 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         if (mailAddress.receivesNewsletter()) {
             mailService.addMailAddressToNewsletter(mailEntryDTO);
         }
+    }
+
+    @EventListener(classes = AuthUserCreated.class)
+    public void onAuthUserCreated(AuthUserCreated authUserCreated) {
+        this.requestResetPasswordMail(authUserCreated.getUserId());
     }
 }

@@ -19,6 +19,10 @@ public interface UserService {
 
     MailAddressDTO requestNewMailVerification(Long userId, Long mailId);
 
+    void requestResetPasswordMail(Long userId);
+
+    void createAuthAccountForUser(Long userId);
+
     List<MailAddressDTO> getMailAddressesByUserId(Long userId);
 }
 

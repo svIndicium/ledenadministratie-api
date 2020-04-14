@@ -7,5 +7,5 @@ public interface AuthService {
 
     String createAuthUser(AuthUserDTO authUser);
 
-    String requestPasswordResetLink(String userId);
+    String requestPasswordResetLink(String auth0UserId);
 }

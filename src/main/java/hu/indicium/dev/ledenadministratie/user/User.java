@@ -31,6 +31,9 @@ public class User {
     @Column(nullable = false)
     private Date dateOfBirth;
 
+    @Column
+    private String auth0UserId;
+
     @OneToMany(mappedBy = "user")
     @OrderColumn(name = "mail_id")
     private List<MailAddress> mailAddresses = new ArrayList<>();
@@ -93,6 +96,14 @@ public class User {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getAuth0UserId() {
+        return auth0UserId;
+    }
+
+    public void setAuth0UserId(String auth0UserId) {
+        this.auth0UserId = auth0UserId;
     }
 
     public List<MailAddress> getMailAddresses() {

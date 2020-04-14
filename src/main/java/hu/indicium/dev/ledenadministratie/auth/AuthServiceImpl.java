@@ -69,8 +69,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String requestPasswordResetLink(String userId) {
-        RequestPasswordChangeTicketRequest requestPasswordChangeTicketRequest = new RequestPasswordChangeTicketRequest(userId);
+    public String requestPasswordResetLink(String auth0UserId) {
+        RequestPasswordChangeTicketRequest requestPasswordChangeTicketRequest = new RequestPasswordChangeTicketRequest(auth0UserId);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
         httpHeaders.setBearerAuth(getToken());
