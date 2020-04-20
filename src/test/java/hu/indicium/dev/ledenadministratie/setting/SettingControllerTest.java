@@ -21,6 +21,7 @@ import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -72,12 +73,13 @@ class SettingControllerTest {
                 .with(user("user")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].key", is(settingDTO.getKey())))
-                .andExpect(jsonPath("$[0].value", is(settingDTO.getValue())))
-                .andExpect(jsonPath("$[0].title", is(settingDTO.getTitle())))
-                .andExpect(jsonPath("$[0].description", is(settingDTO.getDescription())))
-                .andExpect(jsonPath("$[0].permission", is(settingDTO.getPermission())))
-                .andExpect(jsonPath("$[0].updatedBy", is(settingDTO.getUpdatedBy())));
+                .andExpect(jsonPath("$.data", notNullValue()))
+                .andExpect(jsonPath("$.data[0].key", is(settingDTO.getKey())))
+                .andExpect(jsonPath("$.data[0].value", is(settingDTO.getValue())))
+                .andExpect(jsonPath("$.data[0].title", is(settingDTO.getTitle())))
+                .andExpect(jsonPath("$.data[0].description", is(settingDTO.getDescription())))
+                .andExpect(jsonPath("$.data[0].permission", is(settingDTO.getPermission())))
+                .andExpect(jsonPath("$.data[0].updatedBy", is(settingDTO.getUpdatedBy())));
     }
 
     @Test
@@ -98,12 +100,12 @@ class SettingControllerTest {
                 .with(csrf())
                 .content(objectMapper.writer().writeValueAsString(updateSettingRequest)))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.key", is(settingDTO.getKey())))
-                .andExpect(jsonPath("$.value", is(settingDTO.getValue())))
-                .andExpect(jsonPath("$.title", is(settingDTO.getTitle())))
-                .andExpect(jsonPath("$.description", is(settingDTO.getDescription())))
-                .andExpect(jsonPath("$.permission", is(settingDTO.getPermission())))
-                .andExpect(jsonPath("$.updatedBy", is(settingDTO.getUpdatedBy())));
+                .andExpect(jsonPath("$data.key", is(settingDTO.getKey())))
+                .andExpect(jsonPath("$data.value", is(settingDTO.getValue())))
+                .andExpect(jsonPath("$data.title", is(settingDTO.getTitle())))
+                .andExpect(jsonPath("$data.description", is(settingDTO.getDescription())))
+                .andExpect(jsonPath("$data.permission", is(settingDTO.getPermission())))
+                .andExpect(jsonPath("$data.updatedBy", is(settingDTO.getUpdatedBy())));
     }
 
     @Test

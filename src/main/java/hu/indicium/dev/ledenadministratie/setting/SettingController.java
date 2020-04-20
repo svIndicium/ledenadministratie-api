@@ -2,6 +2,8 @@ package hu.indicium.dev.ledenadministratie.setting;
 
 import hu.indicium.dev.ledenadministratie.setting.dto.SettingDTO;
 import hu.indicium.dev.ledenadministratie.setting.requests.UpdateSettingRequest;
+import hu.indicium.dev.ledenadministratie.util.Response;
+import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +22,17 @@ public class SettingController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<SettingDTO> getSettings() {
-        return settingService.getAllSettings();
+    public Response<List<SettingDTO>> getSettings() {
+        return ResponseBuilder.ok()
+                .data(settingService.getAllSettings())
+                .build();
     }
 
     @PutMapping(value = "/{settingKey}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public SettingDTO updateSetting(@PathVariable String settingKey, @RequestBody @Valid UpdateSettingRequest updateSettingRequest) {
-        return settingService.updateSetting(settingKey, updateSettingRequest.getValue());
+    public Response<SettingDTO> updateSetting(@PathVariable String settingKey, @RequestBody @Valid UpdateSettingRequest updateSettingRequest) {
+        return ResponseBuilder.accepted()
+                .data(settingService.updateSetting(settingKey, updateSettingRequest.getValue()))
+                .build();
     }
 }
