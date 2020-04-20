@@ -72,8 +72,8 @@ class SettingControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$.data", notNullValue()))
+                .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].key", is(settingDTO.getKey())))
                 .andExpect(jsonPath("$.data[0].value", is(settingDTO.getValue())))
                 .andExpect(jsonPath("$.data[0].title", is(settingDTO.getTitle())))
@@ -100,12 +100,12 @@ class SettingControllerTest {
                 .with(csrf())
                 .content(objectMapper.writer().writeValueAsString(updateSettingRequest)))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$data.key", is(settingDTO.getKey())))
-                .andExpect(jsonPath("$data.value", is(settingDTO.getValue())))
-                .andExpect(jsonPath("$data.title", is(settingDTO.getTitle())))
-                .andExpect(jsonPath("$data.description", is(settingDTO.getDescription())))
-                .andExpect(jsonPath("$data.permission", is(settingDTO.getPermission())))
-                .andExpect(jsonPath("$data.updatedBy", is(settingDTO.getUpdatedBy())));
+                .andExpect(jsonPath("$.data.key", is(settingDTO.getKey())))
+                .andExpect(jsonPath("$.data.value", is(settingDTO.getValue())))
+                .andExpect(jsonPath("$.data.title", is(settingDTO.getTitle())))
+                .andExpect(jsonPath("$.data.description", is(settingDTO.getDescription())))
+                .andExpect(jsonPath("$.data.permission", is(settingDTO.getPermission())))
+                .andExpect(jsonPath("$.data.updatedBy", is(settingDTO.getUpdatedBy())));
     }
 
     @Test
