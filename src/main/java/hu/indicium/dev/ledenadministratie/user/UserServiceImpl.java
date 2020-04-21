@@ -93,6 +93,22 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
+    @PreAuthorize("hasPermission('read:user') && authentication.name == #authId")
+    public UserDTO getUserByAuthId(String authId) {
+        User user = userRepository.findByAuth0UserId(authId)
+                .orElseThrow(() -> new EntityNotFoundException("User " + authId + " not found!"));
+        return UserMapper.map(user);
+    }
+
+    @Override
+    @PreAuthorize("hasPermission('read:user') && authentication.name == #authId")
+    public List<MailAddressDTO> getMailAddressesByAuthId(String authId) {
+        return mailAddressRepository.findAllByUser_Auth0UserId(authId).stream()
+                .map(MailMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @PreAuthorize("hasPermission('admin:user')")
     public List<UserDTO> getUsers() {
         List<User> users = userRepository.findAll();

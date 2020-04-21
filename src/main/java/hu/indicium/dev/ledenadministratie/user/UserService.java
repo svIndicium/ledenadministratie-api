@@ -13,6 +13,10 @@ public interface UserService {
 
     UserDTO getUserById(Long userId);
 
+    UserDTO getUserByAuthId(String userId);
+
+    List<MailAddressDTO> getMailAddressesByAuthId(String userId);
+
     List<UserDTO> getUsers();
 
     UserDTO addMailAddressToUser(Long userId, MailAddressDTO mailAddressDTO);

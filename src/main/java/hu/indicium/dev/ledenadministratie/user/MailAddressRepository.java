@@ -21,6 +21,8 @@ public interface MailAddressRepository extends JpaRepository<MailAddress, Long> 
 
     List<MailAddress> findAllByUserId(Long userId);
 
+    List<MailAddress> findAllByUser_Auth0UserId(String authId);
+
     MailAddress findByMailAddressAndVerifiedAtIsNotNull(String mailAddress);
 
     Optional<MailAddress> findByUserIdAndId(Long userId, Long mailAddressId);

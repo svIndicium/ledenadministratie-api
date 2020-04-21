@@ -8,6 +8,8 @@ import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,6 +34,26 @@ public class UserController {
     public Response<List<UserDTO>> getUsers() {
         return ResponseBuilder.ok()
                 .data(userService.getUsers())
+                .build();
+    }
+
+    @GetMapping(value = "/userinfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<UserDTO> getUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        return ResponseBuilder.ok()
+                .data(userService.getUserByAuthId(userId))
+                .build();
+    }
+
+    @GetMapping(value = "/userinfo/mailaddresses", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<MailAddressDTO> getMailAddressesFromCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        return ResponseBuilder.ok()
+                .data(userService.getMailAddressesByAuthId(userId))
                 .build();
     }
 
