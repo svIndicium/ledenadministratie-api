@@ -65,6 +65,14 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping(value = "/a/{authId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<UserDTO> getUserByAuthId(@PathVariable String authId) {
+        return ResponseBuilder.ok()
+                .data(userService.getUserByAuthId(authId))
+                .build();
+    }
+
     @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Response<UserDTO> updateUser(@RequestBody @Valid UpdateUserRequest updateUserRequest, @PathVariable Long userId) {
@@ -80,6 +88,14 @@ public class UserController {
     public Response<List<MailAddressDTO>> getMailAddressesById(@PathVariable Long userId) {
         return ResponseBuilder.ok()
                 .data(userService.getMailAddressesByUserId(userId))
+                .build();
+    }
+
+    @GetMapping(value = "/a/{authId}/mailaddresses", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<MailAddressDTO>> getMailAddressesByAuthId(@PathVariable String authId) {
+        return ResponseBuilder.ok()
+                .data(userService.getMailAddressesByAuthId(authId))
                 .build();
     }
 
