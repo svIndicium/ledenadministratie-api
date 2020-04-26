@@ -55,16 +55,8 @@ public class AuthServiceImpl implements AuthService {
         if (oldUserId != null) {
             return oldUserId;
         }
-
         CreateUserRequest createUserRequest = new CreateUserRequest(authUser.getEmail(), authUser.getGivenName(), authUser.getFamilyName(), Util.generateTemporaryPassword());
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        httpHeaders.setBearerAuth(getToken());
-
-        HttpEntity<CreateUserRequest> requestEntity = new HttpEntity<>(createUserRequest, httpHeaders);
-
-        ResponseEntity<CreateUserResponse> response = restTemplate.exchange(authSettings.getIssuer() + "api/v2/users", HttpMethod.POST, requestEntity, CreateUserResponse.class);
+        ResponseEntity<CreateUserResponse> response = doRequest("/api/v2/users", HttpMethod.POST, createUserRequest, CreateUserResponse.class);
         assert response.getBody() != null;
         return response.getBody().getUserId();
     }
@@ -72,11 +64,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String requestPasswordResetLink(String auth0UserId) {
         RequestPasswordChangeTicketRequest requestPasswordChangeTicketRequest = new RequestPasswordChangeTicketRequest(auth0UserId);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        httpHeaders.setBearerAuth(getToken());
-        HttpEntity<RequestPasswordChangeTicketRequest> httpEntity = new HttpEntity<>(requestPasswordChangeTicketRequest, httpHeaders);
-        ResponseEntity<RequestPasswordChangeTicketResponse> response = restTemplate.exchange(authSettings.getIssuer() + "api/v2/tickets/password-change", HttpMethod.POST, httpEntity, RequestPasswordChangeTicketResponse.class);
+        ResponseEntity<RequestPasswordChangeTicketResponse> response = doRequest("/api/v2/tickets/password-change", HttpMethod.POST, requestPasswordChangeTicketRequest, RequestPasswordChangeTicketResponse.class);
         assert response.getStatusCode() == HttpStatus.CREATED;
         assert response.getBody() != null;
         return response.getBody().getTicket();
@@ -85,25 +73,29 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void assignRolesToUser(String auth0UserId, List<String> roles) {
         AssignRolesToUserRequest assignRolesToUserRequest = new AssignRolesToUserRequest(roles);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        httpHeaders.setBearerAuth(getToken());
-        HttpEntity<AssignRolesToUserRequest> httpEntity = new HttpEntity<>(assignRolesToUserRequest, httpHeaders);
-        ResponseEntity<?> response = restTemplate.exchange(authSettings.getIssuer() + "api/v2/users/" + auth0UserId + "/roles", HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<?> response = doRequest("/api/v2/users/" + auth0UserId + "/roles", HttpMethod.POST, assignRolesToUserRequest, String.class);
         assert response.getStatusCode() == HttpStatus.NO_CONTENT;
     }
 
     private String checkIfEmailAddressAlreadyExists(String email) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        httpHeaders.setBearerAuth(getToken());
-        ResponseEntity<UserIdResponse[]> response = restTemplate.exchange(authSettings.getIssuer() + "api/v2/users-by-email?email=" + email + "&fields=user_id", HttpMethod.GET, new HttpEntity<>(httpHeaders), UserIdResponse[].class);
+        ResponseEntity<UserIdResponse[]> response = doRequest("/api/v2/users-by-email?email=" + email + "&fields=user_id", HttpMethod.GET, null, UserIdResponse[].class);
         assert response.getBody() != null;
         List<UserIdResponse> list = Arrays.asList(response.getBody());
         if (list.size() != 0) {
             return list.get(0).getUserId();
         }
         return null;
+    }
+
+    private <T> ResponseEntity<T> doRequest(String endpoint, HttpMethod httpMethod, Object body, Class<T> returnValue) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        httpHeaders.setBearerAuth(getToken());
+        HttpEntity<?> httpEntity = new HttpEntity<>(body, httpHeaders);
+        if (endpoint.startsWith("/")) {
+            endpoint = endpoint.substring(1);
+        }
+        return restTemplate.exchange(authSettings.getIssuer() + endpoint, httpMethod, httpEntity, returnValue);
     }
 
     private String getToken() {
