@@ -5,6 +5,7 @@ import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
@@ -56,6 +57,9 @@ class UserServiceImplTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private SettingService settingService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -325,9 +329,12 @@ class UserServiceImplTest {
         @Autowired
         private AuthService authService;
 
+        @Autowired
+        private SettingService settingService;
+
         @Bean
         public UserService userService() {
-            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, applicationEventPublisher, authService);
+            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, applicationEventPublisher, authService, settingService);
         }
     }
 }
