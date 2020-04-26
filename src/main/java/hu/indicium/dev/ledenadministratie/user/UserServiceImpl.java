@@ -6,6 +6,7 @@ import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
@@ -45,7 +46,9 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
 
     private final AuthService authService;
 
-    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, ModelMapper modelMapper, MailService mailService, MailAddressRepository mailAddressRepository, ApplicationEventPublisher applicationEventPublisher, AuthService authService) {
+    private final SettingService settingService;
+
+    public UserServiceImpl(UserRepository userRepository, Validator<User> userValidator, ModelMapper modelMapper, MailService mailService, MailAddressRepository mailAddressRepository, ApplicationEventPublisher applicationEventPublisher, AuthService authService, SettingService settingService) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.modelMapper = modelMapper;
@@ -53,6 +56,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         this.mailAddressRepository = mailAddressRepository;
         this.applicationEventPublisher = applicationEventPublisher;
         this.authService = authService;
+        this.settingService = settingService;
     }
 
     @Override
@@ -73,7 +77,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         mailAddress.setId(0L);
         mailAddressRepository.save(mailAddress);
         this.createAuthAccountForUser(user.getId());
-        this.authService.assignRolesToUser(user.getAuth0UserId(), Collections.singletonList("rol_UQf7KbHKjsVHtjJj"));
+        this.authService.assignRolesToUser(user.getAuth0UserId(), Collections.singletonList(settingService.getValueByKey("AUTH0_DEFAULT_ROLE")));
         applicationEventPublisher.publishEvent(new UserCreated(this, user.getId()));
         return UserMapper.map(user);
     }
