@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.auth;
 
 import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
+import hu.indicium.dev.ledenadministratie.auth.requests.AssignRolesToUserRequest;
 import hu.indicium.dev.ledenadministratie.auth.requests.CreateUserRequest;
 import hu.indicium.dev.ledenadministratie.auth.requests.RequestPasswordChangeTicketRequest;
 import hu.indicium.dev.ledenadministratie.auth.responses.*;
@@ -79,6 +80,17 @@ public class AuthServiceImpl implements AuthService {
         assert response.getStatusCode() == HttpStatus.CREATED;
         assert response.getBody() != null;
         return response.getBody().getTicket();
+    }
+
+    @Override
+    public void assignRolesToUser(String auth0UserId, List<String> roles) {
+        AssignRolesToUserRequest assignRolesToUserRequest = new AssignRolesToUserRequest(roles);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        httpHeaders.setBearerAuth(getToken());
+        HttpEntity<AssignRolesToUserRequest> httpEntity = new HttpEntity<>(assignRolesToUserRequest, httpHeaders);
+        ResponseEntity<?> response = restTemplate.exchange(authSettings.getIssuer() + "api/v2/users/" + auth0UserId + "/roles", HttpMethod.POST, httpEntity, String.class);
+        assert response.getStatusCode() == HttpStatus.NO_CONTENT;
     }
 
     private String checkIfEmailAddressAlreadyExists(String email) {

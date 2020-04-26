@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +73,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         mailAddress.setId(0L);
         mailAddressRepository.save(mailAddress);
         this.createAuthAccountForUser(user.getId());
+        this.authService.assignRolesToUser(user.getAuth0UserId(), Collections.singletonList("rol_UQf7KbHKjsVHtjJj"));
         applicationEventPublisher.publishEvent(new UserCreated(this, user.getId()));
         return UserMapper.map(user);
     }
@@ -93,7 +95,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
-    @PreAuthorize("hasPermission('read:user') && authentication.name == #authId")
+    @PreAuthorize("(hasPermission('read:user') && authentication.name == #authId) || hasPermission('admin:user')")
     public UserDTO getUserByAuthId(String authId) {
         User user = userRepository.findByAuth0UserId(authId)
                 .orElseThrow(() -> new EntityNotFoundException("User " + authId + " not found!"));
@@ -101,7 +103,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
-    @PreAuthorize("hasPermission('read:user') && authentication.name == #authId")
+    @PreAuthorize("(hasPermission('read:user') && authentication.name == #authId) || hasPermission('admin:user')")
     public List<MailAddressDTO> getMailAddressesByAuthId(String authId) {
         return mailAddressRepository.findAllByUser_Auth0UserId(authId).stream()
                 .map(MailMapper::map)
@@ -121,7 +123,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
-    @PreAuthorize("hasPermission('write:user') || hasPermission('admin:user')")
+    @PreAuthorize("hasPermission('update:user') || hasPermission('admin:user')")
     public MailAddressDTO requestNewMailVerification(Long userId, Long mailId) {
         User user = findUserById(userId);
         MailAddress mailAddress = getMailAddressByUserIdAndMailId(userId, mailId);
@@ -155,7 +157,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
             throw new IllegalStateException("Account already created for user!");
         }
         AuthUserDTO authUserDTO = new AuthUserDTO();
-        authUserDTO.setName(user.getFirstName());
+        authUserDTO.setGivenName(user.getFirstName());
         authUserDTO.setFamilyName(user.getFullLastName());
         authUserDTO.setEmail(user.getMailAddresses().get(0).getMailAddress());
         String authUserId = authService.createAuthUser(authUserDTO);
@@ -174,7 +176,7 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
     }
 
     @Override
-    @PreAuthorize("hasPermission('write:user')")
+    @PreAuthorize("hasPermission('update:user')")
     public UserDTO addMailAddressToUser(Long userId, MailAddressDTO mailAddressDTO) {
         if (mailAddressRepository.existsByMailAddressAndVerifiedAtIsNotNull(mailAddressDTO.getAddress())) {
             throw new IllegalArgumentException("Email address already in use");
