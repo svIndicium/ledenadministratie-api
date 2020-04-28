@@ -67,7 +67,7 @@ class StudyTypeControllerTest {
 
         when(studyTypeService.getAllStudyTypes()).thenReturn(Collections.singletonList(studyTypeDTO));
 
-        mvc.perform(get("/studytype")
+        mvc.perform(get("/studytypes")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -86,7 +86,7 @@ class StudyTypeControllerTest {
 
         when(studyTypeService.getStudyTypeById(eq(1L))).thenReturn(studyTypeDTO);
 
-        mvc.perform(get("/studytype/1")
+        mvc.perform(get("/studytypes/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -107,7 +107,7 @@ class StudyTypeControllerTest {
 
         given(studyTypeService.createStudyType(any(StudyTypeDTO.class))).willReturn(studyTypeDTO);
 
-        mvc.perform(post("/studytype")
+        mvc.perform(post("/studytypes")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())

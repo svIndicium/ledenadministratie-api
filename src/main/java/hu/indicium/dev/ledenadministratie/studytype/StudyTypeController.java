@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/studytype")
+@RequestMapping("/studytypes")
 public class StudyTypeController {
 
     private final StudyTypeService studyTypeService;

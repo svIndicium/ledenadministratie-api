@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/registration")
+@RequestMapping("/registrations")
 public class RegistrationController {
 
     private final RegistrationService registrationService;
