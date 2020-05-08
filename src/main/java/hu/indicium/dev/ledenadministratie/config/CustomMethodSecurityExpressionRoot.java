@@ -47,7 +47,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
 
     public boolean hasPermission(String permission) {
         for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
-            if (grantedAuthority.getAuthority().equals(permission)) {
+            if (grantedAuthority.getAuthority().equals("ledenadministratie/" + permission)) {
                 return true;
             }
         }
