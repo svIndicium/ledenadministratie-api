@@ -68,7 +68,7 @@ class SettingControllerTest {
     void shouldReturnJson_whenGetAllSettings() throws Exception {
         given(settingService.getAllSettings()).willReturn(Collections.singletonList(settingDTO));
 
-        mvc.perform(get("/settings/lit")
+        mvc.perform(get("/api/v1/settings/lit")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -94,7 +94,7 @@ class SettingControllerTest {
         UpdateSettingRequest updateSettingRequest = new UpdateSettingRequest();
         updateSettingRequest.setValue(newValue);
 
-        mvc.perform(put("/settings/lit/" + settingDTO.getKey())
+        mvc.perform(put("/api/v1/settings/lit/" + settingDTO.getKey())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -116,7 +116,7 @@ class SettingControllerTest {
         UpdateSettingRequest updateSettingRequest = new UpdateSettingRequest();
         updateSettingRequest.setValue(newValue);
 
-        mvc.perform(put("/settings/lit/" + settingDTO.getKey())
+        mvc.perform(put("/api/v1/settings/lit/" + settingDTO.getKey())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())

@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static hu.indicium.dev.ledenadministratie.util.BaseUrl.API_V1;
+
 @RestController
-@RequestMapping("/settings/lit")
+@RequestMapping(API_V1 + "/settings/lit")
 public class SettingController {
     private final SettingService settingService;
 

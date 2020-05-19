@@ -88,7 +88,7 @@ class RegistrationControllerTest {
 
         when(registrationService.register(registrationDTOArgumentCaptor.capture())).thenReturn(registrationDTO);
 
-        mvc.perform(post("/registrations")
+        mvc.perform(post("/api/v1/registrations")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -125,7 +125,7 @@ class RegistrationControllerTest {
     void shouldReturnJsonArrayOfRegistrations() throws Exception {
         when(registrationService.getRegistrations()).thenReturn(Collections.singletonList(registrationDTO));
 
-        mvc.perform(get("/registrations")
+        mvc.perform(get("/api/v1/registrations")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -150,7 +150,7 @@ class RegistrationControllerTest {
 
         when(registrationService.getRegistrationByFinalization(eq(false))).thenReturn(Collections.singletonList(registrationDTO));
 
-        mvc.perform(get("/registrations?finalized=false")
+        mvc.perform(get("/api/v1/registrations?finalized=false")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -176,7 +176,7 @@ class RegistrationControllerTest {
 
         when(registrationService.getRegistrationByFinalization(eq(true))).thenReturn(Collections.singletonList(registrationDTO));
 
-        mvc.perform(get("/registrations?finalized=true")
+        mvc.perform(get("/api/v1/registrations?finalized=true")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -208,7 +208,7 @@ class RegistrationControllerTest {
 
         when(registrationService.finalizeRegistration(finishRegistrationDTOArgumentCaptor.capture())).thenReturn(registrationDTO);
 
-        mvc.perform(post("/registrations/5/finalize")
+        mvc.perform(post("/api/v1/registrations/5/finalize")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -246,7 +246,7 @@ class RegistrationControllerTest {
 
         when(registrationService.finalizeRegistration(finishRegistrationDTOArgumentCaptor.capture())).thenReturn(registrationDTO);
 
-        mvc.perform(post("/registrations/1/finalize")
+        mvc.perform(post("/api/v1/registrations/1/finalize")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())

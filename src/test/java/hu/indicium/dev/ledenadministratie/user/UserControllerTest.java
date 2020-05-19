@@ -90,7 +90,7 @@ class UserControllerTest {
 
         given(userService.getUserById(eq(1L))).willReturn(userDTO);
 
-        mvc.perform(get("/users/1")
+        mvc.perform(get("/api/v1/users/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -112,7 +112,7 @@ class UserControllerTest {
 
         given(userService.getUsers()).willReturn(Arrays.asList(userDTO, userDTO));
 
-        mvc.perform(get("/users")
+        mvc.perform(get("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -142,7 +142,7 @@ class UserControllerTest {
 
         given(userService.updateUser(any(UserDTO.class))).willReturn(userDTO);
 
-        mvc.perform(put("/users/1")
+        mvc.perform(put("/api/v1/users/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user"))
                 .with(csrf())
@@ -167,7 +167,7 @@ class UserControllerTest {
     void shouldReturnJsonObject_whenGetMailAddressesByUserId() throws Exception {
         given(userService.getMailAddressesByUserId(eq(1L))).willReturn(Collections.singletonList(mailAddressDTO));
 
-        mvc.perform(get("/users/1/mailaddresses")
+        mvc.perform(get("/api/v1/users/1/mailaddresses")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isOk())
@@ -187,7 +187,7 @@ class UserControllerTest {
     void shouldReturnJsonObject_whenRequestNewMailVerification() throws Exception {
         given(userService.requestNewMailVerification(eq(1L), eq(0L))).willReturn(mailAddressDTO);
 
-        mvc.perform(get("/users/1/mailaddresses/0/requestverification")
+        mvc.perform(get("/api/v1/users/1/mailaddresses/0/requestverification")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(user("user")))
                 .andExpect(status().isAccepted())

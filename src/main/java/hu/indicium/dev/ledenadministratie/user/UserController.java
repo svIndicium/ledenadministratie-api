@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static hu.indicium.dev.ledenadministratie.util.BaseUrl.API_V1;
+
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(API_V1 + "/users")
 @Api(tags = "User Endpoint", value = "Users")
 public class UserController {
 

@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static hu.indicium.dev.ledenadministratie.util.BaseUrl.API_V1;
+
 @RestController
-@RequestMapping("/studytypes")
+@RequestMapping(API_V1 + "/studytypes")
 public class StudyTypeController {
 
     private final StudyTypeService studyTypeService;
