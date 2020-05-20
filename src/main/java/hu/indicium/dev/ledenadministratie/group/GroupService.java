@@ -10,4 +10,6 @@ public interface GroupService {
     GroupDTO getGroupById(Long groupId);
 
     GroupDTO updateGroup(GroupDTO group);
+
+    GroupDTO createGroup(GroupDTO group);
 }

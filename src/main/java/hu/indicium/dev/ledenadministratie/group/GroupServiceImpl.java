@@ -42,6 +42,15 @@ public class GroupServiceImpl implements GroupService {
         return GroupMapper.map(group);
     }
 
+    @Override
+    public GroupDTO createGroup(GroupDTO groupDTO) {
+        Group group = new Group();
+        group.setName(groupDTO.getName());
+        group.setDescription(groupDTO.getDescription());
+        group = groupRepository.save(group);
+        return GroupMapper.map(group);
+    }
+
     private Group getGroup(Long groupId) {
         return groupRepository.findById(groupId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Groep %d niet gevonden", groupId)));
