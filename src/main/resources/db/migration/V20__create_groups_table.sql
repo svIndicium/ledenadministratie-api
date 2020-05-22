@@ -11,3 +11,6 @@ create table groups
 
 create unique index groups_name_uindex
     on groups (name);
+
+create sequence group_seq;
+
