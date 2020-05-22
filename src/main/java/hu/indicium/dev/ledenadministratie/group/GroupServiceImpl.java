@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.group;
 
 import hu.indicium.dev.ledenadministratie.group.dto.GroupDTO;
+import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,8 +13,11 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
 
-    public GroupServiceImpl(GroupRepository groupRepository) {
+    private final Validator<Group> groupValidator;
+
+    public GroupServiceImpl(GroupRepository groupRepository, Validator<Group> groupValidator) {
         this.groupRepository = groupRepository;
+        this.groupValidator = groupValidator;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class GroupServiceImpl implements GroupService {
         Group group = getGroup(groupDTO.getId());
         group.setName(groupDTO.getName());
         group.setDescription(groupDTO.getDescription());
-        group = groupRepository.save(group);
+        group = this.saveAndValidate(group);
         return GroupMapper.map(group);
     }
 
@@ -47,12 +51,17 @@ public class GroupServiceImpl implements GroupService {
         Group group = new Group();
         group.setName(groupDTO.getName());
         group.setDescription(groupDTO.getDescription());
-        group = groupRepository.save(group);
+        group = this.saveAndValidate(group);
         return GroupMapper.map(group);
     }
 
     private Group getGroup(Long groupId) {
         return groupRepository.findById(groupId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Groep %d niet gevonden", groupId)));
+    }
+
+    private Group saveAndValidate(Group group) {
+        groupValidator.validate(group);
+        return groupRepository.save(group);
     }
 }

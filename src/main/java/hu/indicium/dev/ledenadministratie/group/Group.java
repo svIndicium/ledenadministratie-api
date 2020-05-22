@@ -7,12 +7,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "groups") // group is a reserved name in Postgres
 public class Group {
     @Id
     @SequenceGenerator(name = "group_id_generator", sequenceName = "group_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_id_generator")
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     private String description;
