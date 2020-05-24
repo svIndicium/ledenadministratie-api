@@ -140,7 +140,7 @@ class GroupServiceImplTest {
         assertThat(group).isNotNull();
         assertThat(group.getName()).isEqualTo(newGroupDTO.getName());
         assertThat(group.getDescription()).isEqualTo(newGroupDTO.getDescription());
-        assertThat(group.getId()).isEqualTo(this.group.getId());
+        assertThat(group.getId()).isNull();
         assertThat(group.getCreatedAt()).isEqualTo(this.group.getCreatedAt());
         assertThat(group.getUpdatedAt()).isEqualTo(this.group.getUpdatedAt());
     }
