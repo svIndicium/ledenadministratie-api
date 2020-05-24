@@ -52,6 +52,7 @@ sonarqube {
         property 'sonar.coverage.exclusions', '**/dto/**/*,**/events/**,**/config/**/*'
         property 'sonar.cpd.exclusions', '**/*Request.java,**/dto/**/*,**/Registration.java'
         property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        property 'sonar.branch.name', System.getenv('TRAVIS_BRANCH')
     }
 }
 
