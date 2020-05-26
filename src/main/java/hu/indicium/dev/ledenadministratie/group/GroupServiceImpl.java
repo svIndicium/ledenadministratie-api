@@ -2,6 +2,7 @@ package hu.indicium.dev.ledenadministratie.group;
 
 import hu.indicium.dev.ledenadministratie.group.dto.GroupDTO;
 import hu.indicium.dev.ledenadministratie.util.Validator;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -21,6 +22,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('read:group')")
     public List<GroupDTO> getGroups() {
         List<Group> groups = groupRepository.findAll();
         List<GroupDTO> groupDTOS = new ArrayList<>();
@@ -32,12 +34,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('read:group')")
     public GroupDTO getGroupById(Long groupId) {
         Group group = getGroup(groupId);
         return GroupMapper.map(group);
     }
 
     @Override
+    @PreAuthorize("hasPermission('write:group')")
     public GroupDTO updateGroup(GroupDTO groupDTO) {
         Group group = getGroup(groupDTO.getId());
         group.setName(groupDTO.getName());
@@ -47,6 +51,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('write:group')")
     public GroupDTO createGroup(GroupDTO groupDTO) {
         Group group = new Group();
         group.setName(groupDTO.getName());
