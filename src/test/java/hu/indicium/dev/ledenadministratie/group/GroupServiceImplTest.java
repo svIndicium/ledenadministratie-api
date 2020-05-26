@@ -135,14 +135,18 @@ class GroupServiceImplTest {
 
         verify(groupValidator, atLeastOnce()).validate(any(Group.class));
 
+        assertThat(groupDTO.getId()).isEqualTo(this.group.getId());
+        assertThat(groupDTO.getName()).isEqualTo(this.group.getName());
+        assertThat(groupDTO.getDescription()).isEqualTo(this.group.getDescription());
+        assertThat(groupDTO.getCreatedAt()).isEqualTo(this.group.getCreatedAt());
+        assertThat(groupDTO.getUpdatedAt()).isEqualTo(this.group.getUpdatedAt());
+
         Group group = groupArgumentCaptor.getValue();
 
         assertThat(group).isNotNull();
         assertThat(group.getName()).isEqualTo(newGroupDTO.getName());
         assertThat(group.getDescription()).isEqualTo(newGroupDTO.getDescription());
         assertThat(group.getId()).isNull();
-        assertThat(group.getCreatedAt()).isEqualTo(this.group.getCreatedAt());
-        assertThat(group.getUpdatedAt()).isEqualTo(this.group.getUpdatedAt());
     }
 
     @Test
