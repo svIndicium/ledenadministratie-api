@@ -10,14 +10,14 @@ import java.util.Arrays;
 @Configuration
 public class GroupValidationConfiguration {
 
-    private final GroupRepository groupRepository;
+    private final GroupService groupService;
 
-    public GroupValidationConfiguration(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
+    public GroupValidationConfiguration(GroupService groupService) {
+        this.groupService = groupService;
     }
 
     @Bean
     ValidatorGroup<Group> groupValidatorGroup() {
-        return new ValidatorGroup<>(Arrays.asList(new UniqueGroupNameValidator(groupRepository)));
+        return new ValidatorGroup<>(Arrays.asList(new UniqueGroupNameValidator(groupService)));
     }
 }

@@ -55,6 +55,11 @@ public class GroupServiceImpl implements GroupService {
         return GroupMapper.map(group);
     }
 
+    @Override
+    public boolean existsByName(String name) {
+        return groupRepository.existsByNameIgnoreCase(name);
+    }
+
     private Group getGroup(Long groupId) {
         return groupRepository.findById(groupId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Groep %d niet gevonden", groupId)));

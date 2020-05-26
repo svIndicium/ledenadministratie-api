@@ -12,4 +12,6 @@ public interface GroupService {
     GroupDTO updateGroup(GroupDTO group);
 
     GroupDTO createGroup(GroupDTO group);
+
+    boolean existsByName(String name);
 }
