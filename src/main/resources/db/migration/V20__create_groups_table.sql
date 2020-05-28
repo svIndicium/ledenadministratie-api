@@ -4,7 +4,7 @@ create table groups
         constraint groups_pkey
             primary key,
     created_at  timestamp,
-    description varchar(255),
+    description text,
     name        varchar(255) not null,
     updated_at  timestamp
 );
