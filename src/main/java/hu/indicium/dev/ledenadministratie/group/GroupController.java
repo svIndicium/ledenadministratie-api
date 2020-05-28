@@ -33,6 +33,15 @@ public class GroupController {
                 .build();
     }
 
+    @GetMapping(value = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Response<GroupDTO> getGroup(@PathVariable Long groupId) {
+        GroupDTO group = groupService.getGroupById(groupId);
+        return ResponseBuilder.ok()
+                .data(group)
+                .build();
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Response<GroupDTO> createGroup(@RequestBody @Valid CreateGroupRequest createGroupRequest) {
