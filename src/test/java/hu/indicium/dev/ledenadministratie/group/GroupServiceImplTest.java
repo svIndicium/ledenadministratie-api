@@ -127,6 +127,7 @@ class GroupServiceImplTest {
         ArgumentCaptor<Group> groupArgumentCaptor = ArgumentCaptor.forClass(Group.class);
 
         when(groupRepository.save(groupArgumentCaptor.capture())).thenReturn(group);
+        when(groupRepository.existsByNameIgnoreCase(any())).thenReturn(false);
 
         GroupDTO newGroupDTO = new GroupDTO("Actiecom", "ja dat ja");
         newGroupDTO.setId(1L);
@@ -147,6 +148,21 @@ class GroupServiceImplTest {
         assertThat(group.getName()).isEqualTo(newGroupDTO.getName());
         assertThat(group.getDescription()).isEqualTo(newGroupDTO.getDescription());
         assertThat(group.getId()).isNull();
+    }
+
+    @Test
+    @DisplayName("Create group with name already in use throws exception")
+    void createGroupWithNameInUseThrowsException() {
+        when(groupRepository.existsByNameIgnoreCase(any())).thenReturn(true);
+
+        GroupDTO newGroupDTO = new GroupDTO("Actiecom", "ja dat ja");
+
+        try {
+            groupService.createGroup(newGroupDTO);
+            fail("Should throw exception because the name is in use");
+        } catch (Exception e) {
+            assertThat(e.getMessage()).contains(newGroupDTO.getName());
+        }
     }
 
     @Test

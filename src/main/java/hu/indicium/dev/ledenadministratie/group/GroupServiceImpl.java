@@ -5,6 +5,7 @@ import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,9 @@ public class GroupServiceImpl implements GroupService {
         Group group = new Group();
         group.setName(groupDTO.getName());
         group.setDescription(groupDTO.getDescription());
+        if (this.existsByName(group.getName())) {
+            throw new EntityExistsException(String.format("Groep met de naam %s bestaat al", group.getName()));
+        }
         group = this.saveAndValidate(group);
         return GroupMapper.map(group);
     }
