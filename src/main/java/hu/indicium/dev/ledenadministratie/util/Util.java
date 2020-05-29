@@ -1,5 +1,7 @@
 package hu.indicium.dev.ledenadministratie.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Util {
@@ -41,5 +43,14 @@ public class Util {
 
         long curTimeInMs = beforeTime.getTime();
         return new Date(curTimeInMs + (minutes * ONE_MINUTE_IN_MILLIS));
+    }
+
+    public static Date getDateWithoutTime(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return formatter.parse(formatter.format(date));
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("This should not happen");
+        }
     }
 }

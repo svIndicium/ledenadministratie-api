@@ -10,6 +10,7 @@ import hu.indicium.dev.ledenadministratie.group.repositories.GroupMemberReposito
 import hu.indicium.dev.ledenadministratie.group.repositories.GroupRepository;
 import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
+import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,8 @@ public class GroupServiceImpl implements GroupService {
         UserDTO user = userService.getUserByAuthId(groupMemberDto.getUserId());
         groupMember.getUser().setId(user.getId());
         groupMember.setGroup(group);
+        groupMember.setStartDate(Util.getDateWithoutTime(groupMember.getStartDate()));
+        groupMember.setEndDate(Util.getDateWithoutTime(groupMember.getEndDate()));
         groupMemberValidator.validate(groupMember);
         group.addMember(groupMember);
         saveAndValidate(group);
