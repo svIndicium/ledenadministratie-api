@@ -42,4 +42,13 @@ public class GroupMemberController {
                 .data(groupMemberDto)
                 .build();
     }
+
+    @GetMapping("/users/a/{authId}/groups")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<GroupMemberDto> getGroupsFromMember(@PathVariable String authId) {
+        List<GroupMemberDto> groupMemberDtos = groupService.findByUserId(authId);
+        return ResponseBuilder.ok()
+                .data(groupMemberDtos)
+                .build();
+    }
 }

@@ -120,6 +120,14 @@ public class GroupServiceImpl implements GroupService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<GroupMemberDto> findByUserId(String userId) {
+        List<GroupMember> groupMembers = groupMemberRepository.findByUser_Auth0UserId(userId);
+        return groupMembers.stream()
+                .map(GroupMemberMapper::map)
+                .collect(Collectors.toList());
+    }
+
     private Group getGroup(Long groupId) {
         return groupRepository.findById(groupId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Groep %d niet gevonden", groupId)));

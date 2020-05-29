@@ -21,4 +21,6 @@ public interface GroupService {
     List<GroupMemberDto> getMembersFromGroup(Long groupId);
 
     List<GroupMemberDto> findByGroupIdAndUserId(Long groupId, Long userId);
+
+    List<GroupMemberDto> findByUserId(String userId);
 }
