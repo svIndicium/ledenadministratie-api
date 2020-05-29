@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.group;
 
 import hu.indicium.dev.ledenadministratie.group.dto.GroupDTO;
+import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,15 @@ class GroupServiceImplTest {
 
     @MockBean
     private Validator<Group> groupValidator;
+
+    @MockBean
+    private GroupMemberRepository groupMemberRepository;
+
+    @MockBean
+    private Validator<GroupMember> groupMemberValidator;
+
+    @MockBean
+    private UserService userService;
 
     @Autowired
     private GroupService groupService;
@@ -193,9 +203,18 @@ class GroupServiceImplTest {
         @Autowired
         private Validator<Group> groupValidator;
 
+        @Autowired
+        private GroupMemberRepository groupMemberRepository;
+
+        @Autowired
+        private Validator<GroupMember> groupMemberValidator;
+
+        @Autowired
+        private UserService userService;
+
         @Bean
         public GroupService groupService() {
-            return new GroupServiceImpl(groupRepository, groupValidator);
+            return new GroupServiceImpl(groupRepository, groupValidator, groupMemberRepository, userService, groupMemberValidator);
         }
     }
 }

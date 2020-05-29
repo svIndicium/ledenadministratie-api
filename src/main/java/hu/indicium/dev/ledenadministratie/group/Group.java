@@ -4,7 +4,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "groups") // group is a reserved name in Postgres
@@ -18,6 +20,9 @@ public class Group {
     private String name;
 
     private String description;
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private List<GroupMember> members = new ArrayList<>();
 
     @CreationTimestamp
     private Date createdAt;
@@ -47,6 +52,18 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<GroupMember> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<GroupMember> members) {
+        this.members = members;
+    }
+
+    public void addMember(GroupMember groupMember) {
+        this.members.add(groupMember);
     }
 
     public Date getCreatedAt() {
