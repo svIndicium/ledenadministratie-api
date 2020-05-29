@@ -1,5 +1,7 @@
-package hu.indicium.dev.ledenadministratie.group;
+package hu.indicium.dev.ledenadministratie.group.validation.configuration;
 
+import hu.indicium.dev.ledenadministratie.group.GroupService;
+import hu.indicium.dev.ledenadministratie.group.domain.Group;
 import hu.indicium.dev.ledenadministratie.util.ValidatorGroup;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

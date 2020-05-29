@@ -1,5 +1,6 @@
-package hu.indicium.dev.ledenadministratie.group;
+package hu.indicium.dev.ledenadministratie.group.controller;
 
+import hu.indicium.dev.ledenadministratie.group.GroupService;
 import hu.indicium.dev.ledenadministratie.group.dto.GroupDTO;
 import hu.indicium.dev.ledenadministratie.group.requests.CreateGroupRequest;
 import hu.indicium.dev.ledenadministratie.group.requests.UpdateGroupRequest;

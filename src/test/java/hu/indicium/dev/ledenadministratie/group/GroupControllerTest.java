@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.group;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hu.indicium.dev.ledenadministratie.group.controller.GroupController;
 import hu.indicium.dev.ledenadministratie.group.dto.GroupDTO;
 import hu.indicium.dev.ledenadministratie.group.requests.CreateGroupRequest;
 import hu.indicium.dev.ledenadministratie.group.requests.UpdateGroupRequest;

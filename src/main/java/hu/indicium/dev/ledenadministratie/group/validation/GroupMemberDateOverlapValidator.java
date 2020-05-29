@@ -1,17 +1,17 @@
 package hu.indicium.dev.ledenadministratie.group.validation;
 
-import hu.indicium.dev.ledenadministratie.group.GroupMember;
 import hu.indicium.dev.ledenadministratie.group.GroupService;
+import hu.indicium.dev.ledenadministratie.group.domain.GroupMember;
 import hu.indicium.dev.ledenadministratie.group.dto.GroupMemberDto;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 
 import java.util.List;
 
-public class DateOverlapValidator implements Validator<GroupMember> {
+public class GroupMemberDateOverlapValidator implements Validator<GroupMember> {
 
     private final GroupService groupService;
 
-    public DateOverlapValidator(GroupService groupService) {
+    public GroupMemberDateOverlapValidator(GroupService groupService) {
         this.groupService = groupService;
     }
 

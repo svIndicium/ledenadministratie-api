@@ -1,5 +1,6 @@
-package hu.indicium.dev.ledenadministratie.group;
+package hu.indicium.dev.ledenadministratie.group.mapper;
 
+import hu.indicium.dev.ledenadministratie.group.domain.Group;
 import hu.indicium.dev.ledenadministratie.group.dto.GroupDTO;
 
 public class GroupMapper {

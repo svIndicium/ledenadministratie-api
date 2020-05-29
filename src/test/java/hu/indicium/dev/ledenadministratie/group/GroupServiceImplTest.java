@@ -1,6 +1,10 @@
 package hu.indicium.dev.ledenadministratie.group;
 
+import hu.indicium.dev.ledenadministratie.group.domain.Group;
+import hu.indicium.dev.ledenadministratie.group.domain.GroupMember;
 import hu.indicium.dev.ledenadministratie.group.dto.GroupDTO;
+import hu.indicium.dev.ledenadministratie.group.repositories.GroupMemberRepository;
+import hu.indicium.dev.ledenadministratie.group.repositories.GroupRepository;
 import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.junit.jupiter.api.BeforeEach;

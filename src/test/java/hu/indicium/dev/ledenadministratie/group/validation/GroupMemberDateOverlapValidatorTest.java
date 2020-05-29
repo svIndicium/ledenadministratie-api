@@ -1,8 +1,8 @@
 package hu.indicium.dev.ledenadministratie.group.validation;
 
-import hu.indicium.dev.ledenadministratie.group.Group;
-import hu.indicium.dev.ledenadministratie.group.GroupMember;
 import hu.indicium.dev.ledenadministratie.group.GroupService;
+import hu.indicium.dev.ledenadministratie.group.domain.Group;
+import hu.indicium.dev.ledenadministratie.group.domain.GroupMember;
 import hu.indicium.dev.ledenadministratie.group.dto.GroupMemberDto;
 import hu.indicium.dev.ledenadministratie.user.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,13 +25,13 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("GroupMembership date overlap validator")
-class DateOverlapValidatorTest {
+class GroupMemberDateOverlapValidatorTest {
 
     @MockBean
     private GroupService groupService;
 
     @Autowired
-    private DateOverlapValidator dateOverlapValidator;
+    private GroupMemberDateOverlapValidator groupMemberDateOverlapValidator;
 
     private GroupMemberDto groupMemberOne;
 
@@ -78,7 +78,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
         } catch (Exception e) {
             fail("Should not throw exception");
         }
@@ -97,7 +97,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
         } catch (Exception e) {
             fail("Should not throw exception");
         }
@@ -116,7 +116,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
         } catch (Exception e) {
             fail("Should not throw exception");
         }
@@ -135,7 +135,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
         } catch (Exception e) {
             fail("Should not throw exception");
         }
@@ -154,7 +154,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
             fail("Should throw exception");
         } catch (Exception e) {
             assert true;
@@ -174,7 +174,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
             fail("Should throw exception");
         } catch (Exception e) {
             assert true;
@@ -194,7 +194,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
             fail("Should throw exception");
         } catch (Exception e) {
             assert true;
@@ -214,7 +214,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
             fail("Should throw exception");
         } catch (Exception e) {
             assert true;
@@ -237,7 +237,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Arrays.asList(groupMemberOne, groupMemberTwo));
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
         } catch (Exception e) {
             fail("Should not throw exception");
         }
@@ -253,7 +253,7 @@ class DateOverlapValidatorTest {
         when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(new ArrayList<>());
 
         try {
-            dateOverlapValidator.validate(newGroupMember);
+            groupMemberDateOverlapValidator.validate(newGroupMember);
         } catch (Exception e) {
             fail("Should not throw exception");
         }
@@ -269,8 +269,8 @@ class DateOverlapValidatorTest {
         private GroupService groupService;
 
         @Bean
-        public DateOverlapValidator dateOverlapValidator() {
-            return new DateOverlapValidator(groupService);
+        public GroupMemberDateOverlapValidator dateOverlapValidator() {
+            return new GroupMemberDateOverlapValidator(groupService);
         }
     }
 }
