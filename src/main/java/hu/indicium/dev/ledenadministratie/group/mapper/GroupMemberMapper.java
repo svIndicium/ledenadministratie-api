@@ -30,6 +30,7 @@ public class GroupMemberMapper {
         groupMemberDto.setEndDate(groupMember.getEndDate());
         groupMemberDto.setCreatedAt(groupMember.getCreatedAt());
         groupMemberDto.setUpdatedAt(groupMember.getUpdatedAt());
+        groupMemberDto.setGroupName(groupMember.getGroup().getName());
         return groupMemberDto;
     }
 }

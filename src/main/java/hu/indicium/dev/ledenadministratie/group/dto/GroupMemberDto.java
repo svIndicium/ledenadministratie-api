@@ -23,4 +23,6 @@ public class GroupMemberDto {
     private Date updatedAt;
 
     private Long groupId;
+
+    private String groupName;
 }
