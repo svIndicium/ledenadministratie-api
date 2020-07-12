@@ -202,6 +202,26 @@ class GroupMemberDateOverlapValidatorTest {
     }
 
     @Test
+    @DisplayName("New period is period one")
+    void shouldThrow_whenNewPeriodIsPeriodOne() {
+
+        groupMemberOne.setStartDate(getDate(2020, Calendar.SEPTEMBER, 15));
+        groupMemberOne.setEndDate(getDate(2020, Calendar.NOVEMBER, 15));
+
+        newGroupMember.setStartDate(getDate(2020, Calendar.SEPTEMBER, 15));
+        newGroupMember.setEndDate(getDate(2020, Calendar.NOVEMBER, 15));
+
+        when(groupService.findByGroupIdAndUserId(eq(1L), eq(1L))).thenReturn(Collections.singletonList(groupMemberOne));
+
+        try {
+            groupMemberDateOverlapValidator.validate(newGroupMember);
+            fail("Should throw exception");
+        } catch (Exception e) {
+            assert true;
+        }
+    }
+
+    @Test
     @DisplayName("New period has period in it")
     void shouldThrow_whenNewPeriodHasPeriodInIt() {
 

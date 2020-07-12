@@ -20,12 +20,12 @@ public class GroupMemberDateOverlapValidator implements Validator<GroupMember> {
         List<GroupMemberDto> allUserMemberships = groupService.findByGroupIdAndUserId(groupMember.getGroup().getId(), groupMember.getUser().getId());
         if (allUserMemberships.size() != 0) {
             for (GroupMemberDto membership : allUserMemberships) {
-                if (
-                        membership.getEndDate().after(groupMember.getStartDate()) &&
-                                membership.getStartDate().before(groupMember.getEndDate())
-
+                if ((membership.getEndDate().after(groupMember.getStartDate()) &&
+                        membership.getStartDate().before(groupMember.getEndDate())) ||
+                        membership.getStartDate().getTime() == groupMember.getStartDate().getTime() ||
+                        membership.getEndDate().getTime() == groupMember.getEndDate().getTime()
                 ) {
-                    throw new RuntimeException("Lid is al groepslid in deze periode");
+                    throw new RuntimeException("Lid is al commissielid tussen de start en de eind datum.");
                 }
             }
         }
