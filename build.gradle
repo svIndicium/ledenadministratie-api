@@ -28,7 +28,7 @@ dependencies {
     implementation 'com.sendgrid:sendgrid-java:4.6.1'
     implementation 'org.modelmapper:modelmapper:2.3.7'
     implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.10.5'
     implementation 'io.springfox:springfox-bean-validators:2.9.2'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
