@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class StudyTypeController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PermitAll
     public Response<List<StudyTypeDTO>> getAllStudyTypes() {
         return ResponseBuilder.ok()
                 .data(studyTypeService.getAllStudyTypes())

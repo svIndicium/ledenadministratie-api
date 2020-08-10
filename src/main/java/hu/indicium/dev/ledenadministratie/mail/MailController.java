@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.PermitAll;
+
 import static hu.indicium.dev.ledenadministratie.util.BaseUrl.API_V1;
 
 @RestController
@@ -21,6 +23,7 @@ public class MailController {
 
     @PostMapping(API_V1 + "/mail/verify")
     @ResponseStatus(HttpStatus.OK)
+    @PermitAll
     public Response<?> verifyMailAddress(@RequestBody MailVerificationRequest mailVerificationRequest) {
         mailService.verifyMail(mailVerificationRequest.getAddress(), mailVerificationRequest.getToken());
         return ResponseBuilder.ok()

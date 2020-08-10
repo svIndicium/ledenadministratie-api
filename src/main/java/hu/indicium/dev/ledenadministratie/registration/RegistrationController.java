@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class RegistrationController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PermitAll
     public Response<RegistrationDTO> register(@RequestBody @Valid CreateRegistrationRequest createRegistrationRequest) {
         RegistrationDTO registrationDTO = new RegistrationDTO();
         registrationDTO.setFirstName(createRegistrationRequest.getFirstName());
