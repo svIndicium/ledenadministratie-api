@@ -19,5 +19,4 @@ public class LedenadministratieApplication {
                 .setSkipNullEnabled(true);
         return modelMapper;
     }
-
 }

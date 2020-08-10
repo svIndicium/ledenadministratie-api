@@ -15,6 +15,10 @@ public class StudyType {
     public StudyType() {
     }
 
+    public StudyType(Long id) {
+        this.id = id;
+    }
+
     public StudyType(String name) {
         this.name = name;
     }

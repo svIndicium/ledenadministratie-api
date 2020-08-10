@@ -1,14 +1,24 @@
 {
   "properties": [
     {
-      "name": "mailchimp.member-list-id",
+      "name": "auth0.apiAudience",
       "type": "java.lang.String",
-      "description": "Description for mailchimp.member-list-id."
+      "description": "Description for auth0.apiAudience."
     },
     {
-      "name": "mailchimp.newsletter-list-id",
+      "name": "auth0.issuer",
       "type": "java.lang.String",
-      "description": "Description for mailchimp.newsletter-list-id."
+      "description": "Description for auth0.issuer."
+    },
+    {
+      "name": "auth0.clientSecret",
+      "type": "java.lang.String",
+      "description": "Description for auth0.clientSecret."
+    },
+    {
+      "name": "auth0.clientId",
+      "type": "java.lang.String",
+      "description": "Description for auth0.clientId."
     }
   ]
 }

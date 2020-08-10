@@ -7,14 +7,16 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 public class WithMockTokenSecurityContextFactory implements WithSecurityContextFactory<WithMockToken> {
     @Override
     public SecurityContext createSecurityContext(WithMockToken tokenAnnotation) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        String scopes = String.join(" ", tokenAnnotation.scope());
+        String scopes = Arrays.stream(tokenAnnotation.scope()).map(scope -> "ledenadministratie/" + scope).collect(Collectors.joining(" "));
 
         String token = JWT.create()
                 .withIssuer("https://indicium.eu.auth0.com/")

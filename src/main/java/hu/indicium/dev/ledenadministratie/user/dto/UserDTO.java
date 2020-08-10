@@ -1,7 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 
 import java.util.Date;
 
@@ -16,15 +15,13 @@ public class UserDTO {
 
     private String lastName;
 
-    private String email;
-
     private String phoneNumber;
 
     private Date dateOfBirth;
 
-    private StudyTypeDTO studyType;
+    private Long studyTypeId;
 
-    private boolean isToReceiveNewsletter;
+    private String userId;
 
     public Long getId() {
         return id;
@@ -58,14 +55,6 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -82,19 +71,19 @@ public class UserDTO {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public StudyTypeDTO getStudyType() {
-        return studyType;
+    public Long getStudyTypeId() {
+        return studyTypeId;
     }
 
-    public void setStudyType(StudyTypeDTO studyType) {
-        this.studyType = studyType;
+    public void setStudyTypeId(Long studyTypeId) {
+        this.studyTypeId = studyTypeId;
     }
 
-    public boolean isToReceiveNewsletter() {
-        return isToReceiveNewsletter;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setToReceiveNewsletter(boolean isToReceiveNewsletter) {
-        this.isToReceiveNewsletter = isToReceiveNewsletter;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

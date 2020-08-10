@@ -1,29 +1,33 @@
 package hu.indicium.dev.ledenadministratie.user;
 
-import hu.indicium.dev.ledenadministratie.hooks.CreationHook;
-import hu.indicium.dev.ledenadministratie.hooks.UpdateHook;
+import hu.indicium.dev.ledenadministratie.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.mail.MailObject;
+import hu.indicium.dev.ledenadministratie.mail.MailService;
+import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
+import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
+import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
-import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
+import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
+import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
-import hu.indicium.dev.ledenadministratie.util.Mapper;
 import hu.indicium.dev.ledenadministratie.util.Validator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -40,58 +44,127 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @MockBean
-    private Mapper<User, UserDTO> userMapper;
+    private Validator<User> userValidator;
 
     @MockBean
-    private Validator<User> userValidator;
+    private MailService mailService;
+
+    @MockBean
+    private MailAddressRepository mailAddressRepository;
+
+    @MockBean
+    private StudyTypeService studyTypeService;
+
+    @MockBean
+    private AuthService authService;
+
+    @MockBean
+    private SettingService settingService;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    @MockBean
-    private CreationHook<UserDTO> creationHook;
-
-    @MockBean
-    private UpdateHook<UserDTO> updateHook;
-
     @Autowired
     private UserService userService;
+
+    private User user;
+
+    private UserDTO userDTO;
+
+    private MailAddress mailAddress;
+
+    private MailAddressDTO mailAddressDTO;
+
+    private StudyType studyType;
+
+    private RegistrationDTO registrationDTO;
+
+
+    @BeforeEach
+    void setUp() {
+        user = new User();
+        user.setId(1L);
+        user.setFirstName("John");
+        user.setMiddleName("Daniel");
+        user.setLastName("Doe");
+        user.setPhoneNumber("+31612345678");
+        user.setDateOfBirth(new Date());
+
+        mailAddress = new MailAddress();
+        mailAddress.setId(0L);
+        mailAddress.setMailAddress("john@doe.com");
+        mailAddress.setReceivesNewsletter(true);
+        mailAddress.setVerificationToken("ASBD");
+        mailAddress.setVerificationRequestedAt(new Date());
+        mailAddress.setUser(user);
+
+        user.addMailAddress(mailAddress);
+
+        studyType = new StudyType();
+        studyType.setId(1L);
+        studyType.setName("Software Development");
+
+        user.setStudyType(studyType);
+
+        userDTO = new UserDTO();
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setMiddleName(user.getMiddleName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setDateOfBirth(user.getDateOfBirth());
+        userDTO.setStudyTypeId(user.getStudyType().getId());
+
+        mailAddressDTO = new MailAddressDTO();
+        mailAddressDTO.setId(mailAddress.getId());
+        mailAddressDTO.setAddress(mailAddress.getMailAddress());
+        mailAddressDTO.setReceivesNewsletter(mailAddress.receivesNewsletter());
+        mailAddressDTO.setVerifiedAt(mailAddress.getVerifiedAt());
+        mailAddressDTO.setVerified(mailAddress.getVerifiedAt() != null);
+        mailAddressDTO.setVerificationRequestedAt(mailAddress.getVerificationRequestedAt());
+
+        registrationDTO = new RegistrationDTO();
+        registrationDTO.setId(1L);
+        registrationDTO.setFirstName(user.getFirstName());
+        registrationDTO.setMiddleName(user.getMiddleName());
+        registrationDTO.setLastName(user.getLastName());
+        registrationDTO.setPhoneNumber(user.getPhoneNumber());
+        registrationDTO.setDateOfBirth(user.getDateOfBirth());
+        registrationDTO.setMailAddress(mailAddress.getMailAddress());
+        registrationDTO.setVerificationToken(mailAddress.getVerificationToken());
+        registrationDTO.setToReceiveNewsletter(mailAddress.receivesNewsletter());
+        registrationDTO.setVerificationRequestedAt(mailAddress.getVerificationRequestedAt());
+        registrationDTO.setStudyTypeId(studyType.getId());
+    }
 
     @Test
     @DisplayName("Create user")
     void createUser() {
-        UserDTO userDTO = getUserDTO();
-        User user = getUser();
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
-        when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
-        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
-        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.save(userArgumentCaptor.capture())).thenReturn(user);
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
 
-        UserDTO returnedUserDTO = userService.createUser(userDTO);
+        UserDTO returnedUserDTO = userService.createUser(registrationDTO);
 
-        verify(userRepository).save(eq(user));
         verify(userValidator, atLeastOnce()).validate(any(User.class));
-        verify(creationHook, times(1)).execute(null, userDTO);
-        verify(updateHook, never()).execute(any(UserDTO.class), any(UserDTO.class));
 
         assertThat(returnedUserDTO).isNotNull();
+
+        User savedUser = userArgumentCaptor.getValue();
+
+        assertThat(savedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType");
     }
 
     @Test
     @DisplayName("Create invalid user should not be persisted")
     void creatingUserFails_shouldNotBePersisted() {
-        UserDTO userDTO = getUserDTO();
-        User user = getUser();
-
-        when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
-        when(userMapper.toEntity(any(UserDTO.class))).thenReturn(user);
         when(userRepository.save(any(User.class))).thenReturn(user);
         doThrow(new IllegalArgumentException("User not legitimate")).when(userValidator).validate(any(User.class));
 
         UserDTO returnedUserDTO = null;
 
         try {
-            returnedUserDTO = userService.createUser(userDTO);
+            returnedUserDTO = userService.createUser(registrationDTO);
             fail();
         } catch (Exception e) {
             assertThat(true).isTrue();
@@ -100,8 +173,6 @@ class UserServiceImplTest {
 
         verify(userValidator, atLeastOnce()).validate(any(User.class));
         verify(userRepository, never()).save(eq(user));
-        verify(creationHook, never()).execute(any(UserDTO.class), any(UserDTO.class));
-        verify(updateHook, never()).execute(any(UserDTO.class), any(UserDTO.class));
 
         assertThat(returnedUserDTO).isNull();
     }
@@ -109,37 +180,42 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Get user by id")
     void getUserById() {
-        UserDTO userDTO = getUserDTO();
-        User user = getUser();
-
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
-        when(userMapper.toDTO(any(User.class))).thenReturn(userDTO);
 
         UserDTO receivedUser = userService.getUserById(1L);
 
-        assertThat(receivedUser).isEqualTo(userDTO);
+        assertThat(receivedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType", "studyTypeId", "userId");
+        assertThat(receivedUser.getUserId()).isEqualTo(user.getAuth0UserId());
+
     }
 
     @Test
     @DisplayName("Get all users")
     void getAllUsers() {
-        UserDTO userDTO = getUserDTO();
-        User user = getUser();
-        UserDTO userDTO2 = getUserDTO();
-        userDTO2.setFirstName("Harry");
-        User user2 = getUser();
-        user2.setFirstName("Harry");
+        User user1 = new User();
+        user1.setId(1L);
+        user1.setFirstName("John");
+        user1.setMiddleName("Daniel");
+        user1.setLastName("Doe");
+        user1.setPhoneNumber("+31612345678");
+        user1.setDateOfBirth(new Date());
+        user1.setStudyType(new StudyType(1L));
 
-        when(userMapper.toDTO(refEq(user))).thenReturn(userDTO);
-        when(userMapper.toDTO(refEq(user2))).thenReturn(userDTO2);
+        UserDTO userDTO1 = new UserDTO();
+        userDTO1.setFirstName(user1.getFirstName());
+        userDTO1.setMiddleName(user1.getMiddleName());
+        userDTO1.setLastName(user1.getLastName());
+        userDTO1.setPhoneNumber(user1.getPhoneNumber());
+        userDTO1.setDateOfBirth(user1.getDateOfBirth());
+        userDTO1.setStudyTypeId(user1.getStudyType().getId());
 
-        when(userRepository.findAll()).thenReturn(Arrays.asList(user, user2));
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user, user1));
 
         List<UserDTO> users = userService.getUsers();
 
         assertThat(users).hasSize(2);
-        assertThat(users.get(0)).isEqualToComparingFieldByField(userDTO);
-        assertThat(users.get(1)).isEqualToComparingFieldByField(userDTO2);
+        assertThat(users.get(0)).isEqualToIgnoringGivenFields(userDTO, "id");
+        assertThat(users.get(1)).isEqualToIgnoringGivenFields(userDTO1, "id");
     }
 
     @Test
@@ -148,7 +224,7 @@ class UserServiceImplTest {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         try {
-            UserDTO receivedUser = userService.getUserById(1L);
+            userService.getUserById(1L);
             fail();
         } catch (Exception ex) {
             assertThat(ex.getClass()).isEqualTo(EntityNotFoundException.class);
@@ -157,68 +233,76 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Update user")
-    void shouldUpdateUserAndRunHook_whenUpdateUser() {
-        User user = getUser();
-        UserDTO userDTO = getUserDTO();
-        userDTO.setId(1L);
-
-        User updatedUser = getUser();
-        updatedUser.setFirstName("kek");
-        UserDTO updatedUserDTO = getUserDTO();
-        updatedUserDTO.setFirstName("kek");
-        updatedUserDTO.setId(1L);
+    @DisplayName("Request new email verification")
+    void shouldCallMailServiceCorrectly_whenRequestMailVerification() {
+        ArgumentCaptor<MailObject> mailObjectArgumentCaptor = ArgumentCaptor.forClass(MailObject.class);
+        ArgumentCaptor<TransactionalMailDTO> transactionalMailDTOArgumentCaptor = ArgumentCaptor.forClass(TransactionalMailDTO.class);
 
         when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
-        when(userMapper.toDTO(refEq(user))).thenReturn(userDTO);
-        when(userMapper.toDTO(refEq(updatedUser))).thenReturn(updatedUserDTO);
-        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+        when(mailAddressRepository.findByUserIdAndId(eq(1L), eq(0L))).thenReturn(Optional.of(mailAddress));
+        when(mailAddressRepository.save(any(MailAddress.class))).thenReturn(mailAddress);
+        when(mailService.sendVerificationMail(mailObjectArgumentCaptor.capture(), transactionalMailDTOArgumentCaptor.capture())).thenReturn(mailAddress);
 
-        UserDTO newUserDTO = userService.updateUser(updatedUserDTO);
+        MailAddressDTO mailAddressDTO = userService.requestNewMailVerification(1L, 0L);
 
-        verify(updateHook).execute(refEq(userDTO), refEq(updatedUserDTO));
-        verify(userRepository, times(1)).save(any(User.class));
-        verify(userValidator, times(1)).validate(any(User.class));
+        assertThat(mailAddressDTO.getAddress()).isEqualTo(mailAddress.getMailAddress());
+
+        MailObject capturedMailObject = mailObjectArgumentCaptor.getValue();
+
+        assertThat(capturedMailObject.getMailAddress()).isEqualTo(mailAddress.getMailAddress());
+
+        TransactionalMailDTO transactionalMailDTO = transactionalMailDTOArgumentCaptor.getValue();
+
+        assertThat(transactionalMailDTO.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(transactionalMailDTO.getLastName()).isEqualTo(user.getFullLastName());
     }
 
-    private StudyType getStudyType() {
-        StudyType studyType = new StudyType("Software Development");
-        studyType.setId(1L);
-        return studyType;
+    @Test
+    @DisplayName("Throw exception when ask for verication mail for already verified mailaddress")
+    void shouldThrowException_whenRequestMailVerification_withAlreadyVerifiedMail() {
+        mailAddress.verify();
+
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
+        when(mailAddressRepository.findByUserIdAndId(eq(1L), eq(0L))).thenReturn(Optional.of(mailAddress));
+
+        try {
+            userService.requestNewMailVerification(1L, 0L);
+            fail("Should throw exception because the email is already verified");
+        } catch (Exception e) {
+            assertThat(true).isTrue();
+        }
+
+        verify(userRepository, never()).save(any(User.class));
+        verify(mailAddressRepository, never()).save(any(MailAddress.class));
     }
 
-    private User getUser() {
-        User user = new User();
-        user.setFirstName("John");
-        user.setMiddleName("Daniel");
-        user.setLastName("Doe");
-        user.setEmail("John@doe.com");
-        user.setStudyType(getStudyType());
-        user.setToReceiveNewsletter(true);
-        user.setDateOfBirth(new Date());
-        return user;
+    @Test
+    @DisplayName("Throw exception when ask for verication mail for already verified mailaddress")
+    void shouldThrowException_whenGetInvalidMail() {
+
+        when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
+        when(mailAddressRepository.findByUserIdAndId(eq(1L), eq(0L))).thenReturn(Optional.empty());
+
+        try {
+            userService.requestNewMailVerification(1L, 0L);
+            fail("Should throw exception because the email does not exist");
+        } catch (Exception e) {
+            assertThat(true).isTrue();
+        }
+
+        verify(userRepository, never()).save(any(User.class));
+        verify(mailAddressRepository, never()).save(any(MailAddress.class));
     }
 
-    private StudyTypeDTO getStudyTypeDTO() {
-        StudyType studyType = getStudyType();
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO();
-        studyTypeDTO.setId(studyType.getId());
-        studyTypeDTO.setName(studyType.getName());
-        return studyTypeDTO;
-    }
+    @Test
+    @DisplayName("Get mail addresses by user id")
+    void getMailAddressesByUserId() {
+        when(mailAddressRepository.findAllByUserId(eq(1L))).thenReturn(Collections.singletonList(mailAddress));
 
-    private UserDTO getUserDTO() {
-        User user = getUser();
-        StudyTypeDTO studyTypeDTO = getStudyTypeDTO();
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setMiddleName(user.getMiddleName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setStudyType(studyTypeDTO);
-        userDTO.setToReceiveNewsletter(user.isToReceiveNewsletter());
-        userDTO.setDateOfBirth(user.getDateOfBirth());
-        return userDTO;
+        List<MailAddressDTO> mailAddresses = userService.getMailAddressesByUserId(1L);
+
+        assertThat(mailAddresses).hasSize(1);
+        assertThat(mailAddresses.get(0)).isEqualToComparingFieldByField(mailAddressDTO);
     }
 
     @TestConfiguration
@@ -228,23 +312,29 @@ class UserServiceImplTest {
         private UserRepository userRepository;
 
         @Autowired
-        private Mapper<User, UserDTO> userMapper;
-
-        @Autowired
         private Validator<User> userValidator;
 
         @Autowired
         private ModelMapper modelMapper;
 
         @Autowired
-        private CreationHook<UserDTO> creationHook;
+        private MailService mailService;
 
         @Autowired
-        private UpdateHook<UserDTO> updateHook;
+        private MailAddressRepository mailAddressRepository;
+
+        @Autowired
+        private ApplicationEventPublisher applicationEventPublisher;
+
+        @Autowired
+        private AuthService authService;
+
+        @Autowired
+        private SettingService settingService;
 
         @Bean
         public UserService userService() {
-            return new UserServiceImpl(userRepository, userValidator, userMapper, modelMapper, creationHook, updateHook);
+            return new UserServiceImpl(userRepository, userValidator, modelMapper, mailService, mailAddressRepository, applicationEventPublisher, authService, settingService);
         }
     }
 }
