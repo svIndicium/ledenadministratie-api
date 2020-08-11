@@ -148,7 +148,11 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         }
         String passwordResetLink = authService.requestPasswordResetLink(user.getAuth0UserId());
         TransactionalMailDTO transactionalMailDTO = new TransactionalMailDTO(user.getFirstName(), user.getFullLastName());
-        transactionalMailDTO.setMailAddress(user.getMailAddresses().get(1).getMailAddress());
+        if (user.getMailAddresses().size() > 1) {
+            transactionalMailDTO.setMailAddress(user.getMailAddresses().get(1).getMailAddress());
+        } else {
+            transactionalMailDTO.setMailAddress(user.getMailAddresses().get(0).getMailAddress());
+        }
         transactionalMailDTO.set("PASSWORD_RESET_LINK", passwordResetLink);
         mailService.sendPasswordResetMail(transactionalMailDTO);
     }
@@ -163,7 +167,11 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         AuthUserDTO authUserDTO = new AuthUserDTO();
         authUserDTO.setGivenName(user.getFirstName());
         authUserDTO.setFamilyName(user.getFullLastName());
-        authUserDTO.setEmail(user.getMailAddresses().get(1).getMailAddress());
+        if (user.getMailAddresses().size() > 1) {
+            authUserDTO.setEmail(user.getMailAddresses().get(1).getMailAddress());
+        } else {
+            authUserDTO.setEmail(user.getMailAddresses().get(0).getMailAddress());
+        }
         String authUserId = authService.createAuthUser(authUserDTO);
         user.setAuth0UserId(authUserId);
         this.saveUser(user);
