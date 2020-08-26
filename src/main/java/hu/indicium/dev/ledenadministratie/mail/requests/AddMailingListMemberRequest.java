@@ -3,6 +3,7 @@ package hu.indicium.dev.ledenadministratie.mail.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class AddMailingListMemberRequest {
         this.emailAddress = mailEntryDTO.getEmail();
         this.status = "subscribed";
         this.mergeFields = new HashMap<>();
+        this.tags = Arrays.asList("newnewnew");
         this.mergeFields.put("FNAME", mailEntryDTO.getFirstName());
         this.mergeFields.put("LNAME", mailEntryDTO.getLastName());
     }
