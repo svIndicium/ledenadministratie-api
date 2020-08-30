@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;
@@ -29,6 +30,15 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
         userRequestMapper = new UserRequestMapper();
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<UserDTO> createUser(@RequestBody RegistrationDTO registrationDTO) {
+        UserDTO userDTO = userService.createUser(registrationDTO);
+        return ResponseBuilder.created()
+                .data(userDTO)
+                .build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

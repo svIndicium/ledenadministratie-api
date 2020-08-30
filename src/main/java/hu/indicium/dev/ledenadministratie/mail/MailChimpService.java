@@ -43,12 +43,12 @@ public class MailChimpService implements MailListService {
 
     @Override
     public void addUserToNewsLetter(MailEntryDTO mailEntryDTO) {
-        addUserToList(mailEntryDTO, settingService.getValueByKey("MAILCHIMP_NEWSLETTER_ID"));
+        addUserToList(mailEntryDTO, settingService.getValueByKey("MAILCHIMP_NEWSLETTER_LIST_ID"));
     }
 
     @Override
     public void removeUserFromNewsLetter(MailEntryDTO mailEntryDTO) {
-        archiveUser(mailEntryDTO, settingService.getValueByKey("MAILCHIMP_NEWSLETTER_ID"));
+        archiveUser(mailEntryDTO, settingService.getValueByKey("MAILCHIMP_NEWSLETTER_LIST_ID"));
     }
 
     private void addUserToList(MailEntryDTO mailEntryDTO, String listId) {

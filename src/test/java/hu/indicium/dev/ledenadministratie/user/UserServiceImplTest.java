@@ -152,7 +152,7 @@ class UserServiceImplTest {
 
         User savedUser = userArgumentCaptor.getValue();
 
-        assertThat(savedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType");
+        assertThat(savedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType", "memberships");
     }
 
     @Test

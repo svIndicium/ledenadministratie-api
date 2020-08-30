@@ -5,6 +5,7 @@ import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.MailEntryDTO;
 import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
+import hu.indicium.dev.ledenadministratie.membership.Membership;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
@@ -16,6 +17,7 @@ import hu.indicium.dev.ledenadministratie.user.events.UserCreated;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.util.Members;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
@@ -24,9 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,12 +72,19 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         user.setStudyType(new StudyType(registrationDTO.getStudyTypeId()));
         MailAddress mailAddress = new MailAddress(registrationDTO.getMailAddress(), registrationDTO.getVerificationToken(), registrationDTO.getVerificationRequestedAt(), registrationDTO.getVerifiedAt(), registrationDTO.isToReceiveNewsletter());
         user.addMailAddress(mailAddress);
+        Membership membership = new Membership(new GregorianCalendar(2020, Calendar.SEPTEMBER, 1).getTime(), new GregorianCalendar(2021, Calendar.AUGUST, 31).getTime());
+        user.addMembership(membership);
         user = this.saveUser(user);
         mailAddress.setUser(user);
         mailAddress.setId(0L);
         mailAddressRepository.save(mailAddress);
-        this.createAuthAccountForUser(user.getId());
-        this.authService.assignRolesToUser(user.getAuth0UserId(), Collections.singletonList(settingService.getValueByKey("AUTH0_DEFAULT_ROLE")));
+        MailEntryDTO mailEntryDTO = new MailEntryDTO(user.getFirstName(), user.getFullLastName(), mailAddress.getMailAddress());
+        mailService.addMailAddressToMailingList(mailEntryDTO);
+        if (mailAddress.receivesNewsletter()) {
+            mailService.addMailAddressToNewsletter(mailEntryDTO);
+        }
+//        this.createAuthAccountForUser(user.getId());
+//        this.authService.assignRolesToUser(user.getAuth0UserId(), Collections.singletonList(settingService.getValueByKey("AUTH0_DEFAULT_ROLE")));
         applicationEventPublisher.publishEvent(new UserCreated(this, user.getId()));
         return UserMapper.map(user);
     }
@@ -148,7 +155,11 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         }
         String passwordResetLink = authService.requestPasswordResetLink(user.getAuth0UserId());
         TransactionalMailDTO transactionalMailDTO = new TransactionalMailDTO(user.getFirstName(), user.getFullLastName());
-        transactionalMailDTO.setMailAddress(user.getMailAddresses().get(0).getMailAddress());
+        if (user.getMailAddresses().size() > 1) {
+            transactionalMailDTO.setMailAddress(user.getMailAddresses().get(1).getMailAddress());
+        } else {
+            transactionalMailDTO.setMailAddress(user.getMailAddresses().get(0).getMailAddress());
+        }
         transactionalMailDTO.set("PASSWORD_RESET_LINK", passwordResetLink);
         mailService.sendPasswordResetMail(transactionalMailDTO);
     }
@@ -163,7 +174,11 @@ public class UserServiceImpl implements UserService, ApplicationListener<MailAdd
         AuthUserDTO authUserDTO = new AuthUserDTO();
         authUserDTO.setGivenName(user.getFirstName());
         authUserDTO.setFamilyName(user.getFullLastName());
-        authUserDTO.setEmail(user.getMailAddresses().get(0).getMailAddress());
+        if (user.getMailAddresses().size() > 1) {
+            authUserDTO.setEmail(user.getMailAddresses().get(1).getMailAddress());
+        } else {
+            authUserDTO.setEmail(user.getMailAddresses().get(0).getMailAddress());
+        }
         String authUserId = authService.createAuthUser(authUserDTO);
         user.setAuth0UserId(authUserId);
         this.saveUser(user);

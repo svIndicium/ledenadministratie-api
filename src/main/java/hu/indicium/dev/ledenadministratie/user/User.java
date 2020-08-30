@@ -1,12 +1,12 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.membership.Membership;
+import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.util.Util;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -41,6 +41,9 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "study_type_id", nullable = false)
     private StudyType studyType;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Membership> memberships = new ArrayList<>();
 
     public User() {
         //  Public no-args constructor for Hibernate
@@ -124,5 +127,22 @@ public class User {
 
     public void setStudyType(StudyType studyType) {
         this.studyType = studyType;
+    }
+
+    public List<Membership> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(List<Membership> memberships) {
+        this.memberships = memberships;
+    }
+
+    public void addMembership(Membership membership) {
+        membership.setUser(this);
+        this.memberships.add(membership);
+    }
+
+    public boolean isActive() {
+        return this.memberships.stream().anyMatch(Membership::isActive);
     }
 }
