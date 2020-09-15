@@ -7,12 +7,16 @@ import org.modelmapper.convention.MatchingStrategies;
 
 public class RegistrationRequestMapper {
 
-    private ModelMapper modelMapper = new ModelMapper();
-
-    public RegistrationDTO toDTO(CreateRegistrationRequest createRegistrationRequest) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        RegistrationDTO registrationDTO = modelMapper.map(createRegistrationRequest, RegistrationDTO.class);
+    public static RegistrationDTO toDTO(CreateRegistrationRequest createRegistrationRequest) {
+        RegistrationDTO registrationDTO = new RegistrationDTO();
+        registrationDTO.setFirstName(createRegistrationRequest.getFirstName());
+        registrationDTO.setMiddleName(createRegistrationRequest.getMiddleName());
+        registrationDTO.setLastName(createRegistrationRequest.getLastName());
+        registrationDTO.setMailAddress(createRegistrationRequest.getMailAddress());
+        registrationDTO.setPhoneNumber(createRegistrationRequest.getPhoneNumber());
+        registrationDTO.setDateOfBirth(createRegistrationRequest.getDateOfBirth());
         registrationDTO.setStudyTypeId(createRegistrationRequest.getStudyTypeId());
+        registrationDTO.setToReceiveNewsletter(createRegistrationRequest.isToReceiveNewsletter());
         return registrationDTO;
     }
 }
