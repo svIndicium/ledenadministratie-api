@@ -52,17 +52,10 @@ public class RegistrationController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Response<RegistrationDTO> register(@RequestBody @Valid CreateRegistrationRequest createRegistrationRequest) {
-        RegistrationDTO registrationDTO = new RegistrationDTO();
-        registrationDTO.setFirstName(createRegistrationRequest.getFirstName());
-        registrationDTO.setMiddleName(createRegistrationRequest.getMiddleName());
-        registrationDTO.setLastName(createRegistrationRequest.getLastName());
-        registrationDTO.setMailAddress(createRegistrationRequest.getMailAddress());
-        registrationDTO.setPhoneNumber(createRegistrationRequest.getPhoneNumber());
-        registrationDTO.setDateOfBirth(createRegistrationRequest.getDateOfBirth());
-        registrationDTO.setStudyTypeId(createRegistrationRequest.getStudyTypeId());
-        registrationDTO.setToReceiveNewsletter(createRegistrationRequest.isToReceiveNewsletter());
+        RegistrationDTO registrationDTO = RegistrationRequestMapper.toDTO(createRegistrationRequest);
+        RegistrationDTO newRegistration = registrationService.register(registrationDTO);
         return ResponseBuilder.created()
-                .data(registrationService.register(registrationDTO))
+                .data(newRegistration)
                 .build();
     }
 

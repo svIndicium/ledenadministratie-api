@@ -132,33 +132,6 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Register user with more data that shouldn't be persisted")
-    void shouldCreateRegistration_withoutExtraData() {
-        ArgumentCaptor<Registration> registrationArgument = ArgumentCaptor.forClass(Registration.class);
-
-        registration.setApproved(true);
-        registration.setComment("kek");
-        registration.setId(2L);
-        registration.setFinalizedAt(new Date());
-        registration.setFinalizedBy("Alex");
-
-        when(registrationRepository.save(any(Registration.class))).thenReturn(registration);
-
-        RegistrationDTO returnedRegistration = registrationService.register(registrationDTO);
-
-        verify(registrationRepository, times(1)).save(registrationArgument.capture());
-        verify(registrationValidator, atLeastOnce()).validate(any(Registration.class));
-
-        Registration savedRegistration = registrationArgument.getValue();
-
-        assertThat(savedRegistration.getId()).isNull();
-        assertThat(savedRegistration.isApproved()).isFalse();
-        assertThat(savedRegistration.getComment()).isNull();
-        assertThat(savedRegistration.getFinalizedAt()).isNull();
-        assertThat(savedRegistration.getFinalizedBy()).isNull();
-    }
-
-    @Test
     @DisplayName("Finalize registration")
     void shouldCreateUser_whenFinalizeRegistration() {
         ArgumentCaptor<Registration> registrationArgument = ArgumentCaptor.forClass(Registration.class);
