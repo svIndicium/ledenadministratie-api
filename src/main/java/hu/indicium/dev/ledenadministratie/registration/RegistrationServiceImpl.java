@@ -49,16 +49,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Transactional
     public RegistrationDTO register(RegistrationDTO registrationDTO) {
         Registration registration = RegistrationMapper.map(registrationDTO);
-        registration.setFinalizedAt(null);
-        registration.setFinalizedBy(null);
-        registration.setApproved(false);
-        registration.setComment(null);
-        registration.setId(null);
-        TransactionalMailDTO transactionalMailDTO = new TransactionalMailDTO(registration.getFirstName(), Util.getFullLastName(registration.getMiddleName(), registration.getLastName()));
-        mailService.sendVerificationMail(registration, transactionalMailDTO);
         registration = saveRegistration(registration);
-        applicationEventPublisher.publishEvent(new NewRegistrationAdded(this, registration.getId()));
-        return RegistrationMapper.map(registration);
+        RegistrationDTO createdRegistration = RegistrationMapper.map(registration);
+        applicationEventPublisher.publishEvent(new NewRegistrationAdded(this, createdRegistration));
+        return createdRegistration;
     }
 
     @Override
