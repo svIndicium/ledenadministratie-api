@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.user;
 
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +20,7 @@ class UserMapperTest {
         StudyType studyType = new StudyType("Software Development");
         studyType.setId(1L);
 
-        User user = new User();
+        Member user = new Member();
         user.setId(1L);
         user.setFirstName("John");
         user.setMiddleName("Nicholas");
@@ -59,7 +60,7 @@ class UserMapperTest {
         userDTO.setPhoneNumber("+31612345678");
         userDTO.setStudyTypeId(studyType.getId());
 
-        User user = UserMapper.map(userDTO);
+        Member user = UserMapper.map(userDTO);
 
         assertThat(user).isNotNull();
         assertThat(user.getId()).isEqualTo(userDTO.getId());

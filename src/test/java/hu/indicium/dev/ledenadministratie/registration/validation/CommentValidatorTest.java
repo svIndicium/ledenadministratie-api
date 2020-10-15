@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.registration.validation;
 
 import hu.indicium.dev.ledenadministratie.registration.Registration;
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

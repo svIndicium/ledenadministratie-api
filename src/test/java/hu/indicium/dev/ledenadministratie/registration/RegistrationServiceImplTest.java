@@ -6,7 +6,7 @@ import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import hu.indicium.dev.ledenadministratie.user.UserService;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;

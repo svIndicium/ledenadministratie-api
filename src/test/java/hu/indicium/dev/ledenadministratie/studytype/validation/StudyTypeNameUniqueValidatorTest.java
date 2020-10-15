@@ -1,6 +1,6 @@
 package hu.indicium.dev.ledenadministratie.studytype.validation;
 
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
 import hu.indicium.dev.ledenadministratie.user.requests.UpdateUserRequest;

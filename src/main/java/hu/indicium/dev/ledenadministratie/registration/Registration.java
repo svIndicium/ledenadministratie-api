@@ -2,7 +2,7 @@ package hu.indicium.dev.ledenadministratie.registration;
 
 
 import hu.indicium.dev.ledenadministratie.mail.MailObject;
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

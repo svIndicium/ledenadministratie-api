@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.user;
 
+import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

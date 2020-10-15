@@ -1,6 +1,6 @@
 package hu.indicium.dev.ledenadministratie.studytype.validation;
 
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 

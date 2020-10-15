@@ -1,12 +1,14 @@
 package hu.indicium.dev.ledenadministratie.user;
 
 import hu.indicium.dev.ledenadministratie.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
+import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import hu.indicium.dev.ledenadministratie.mail.MailObject;
 import hu.indicium.dev.ledenadministratie.mail.MailService;
 import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.setting.SettingService;
-import hu.indicium.dev.ledenadministratie.studytype.StudyType;
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.user.dto.MailAddressDTO;
 import hu.indicium.dev.ledenadministratie.user.dto.UserDTO;
@@ -44,7 +46,7 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @MockBean
-    private Validator<User> userValidator;
+    private Validator<Member> userValidator;
 
     @MockBean
     private MailService mailService;
@@ -67,7 +69,7 @@ class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
-    private User user;
+    private Member user;
 
     private UserDTO userDTO;
 
@@ -82,7 +84,7 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        user = new User();
+        user = new Member();
         user.setId(1L);
         user.setFirstName("John");
         user.setMiddleName("Daniel");
@@ -139,18 +141,18 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Create user")
     void createUser() {
-        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<Member> userArgumentCaptor = ArgumentCaptor.forClass(Member.class);
 
         when(userRepository.save(userArgumentCaptor.capture())).thenReturn(user);
         when(userRepository.findById(eq(1L))).thenReturn(Optional.of(user));
 
         UserDTO returnedUserDTO = userService.createUser(registrationDTO);
 
-        verify(userValidator, atLeastOnce()).validate(any(User.class));
+        verify(userValidator, atLeastOnce()).validate(any(Member.class));
 
         assertThat(returnedUserDTO).isNotNull();
 
-        User savedUser = userArgumentCaptor.getValue();
+        Member savedUser = userArgumentCaptor.getValue();
 
         assertThat(savedUser).isEqualToIgnoringGivenFields(user, "id", "mailAddresses", "studyType", "memberships");
     }
@@ -158,8 +160,8 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Create invalid user should not be persisted")
     void creatingUserFails_shouldNotBePersisted() {
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        doThrow(new IllegalArgumentException("User not legitimate")).when(userValidator).validate(any(User.class));
+        when(userRepository.save(any(Member.class))).thenReturn(user);
+        doThrow(new IllegalArgumentException("User not legitimate")).when(userValidator).validate(any(Member.class));
 
         UserDTO returnedUserDTO = null;
 
@@ -171,7 +173,7 @@ class UserServiceImplTest {
         }
 
 
-        verify(userValidator, atLeastOnce()).validate(any(User.class));
+        verify(userValidator, atLeastOnce()).validate(any(Member.class));
         verify(userRepository, never()).save(eq(user));
 
         assertThat(returnedUserDTO).isNull();
@@ -192,7 +194,7 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Get all users")
     void getAllUsers() {
-        User user1 = new User();
+        Member user1 = new Member();
         user1.setId(1L);
         user1.setFirstName("John");
         user1.setMiddleName("Daniel");
@@ -272,7 +274,7 @@ class UserServiceImplTest {
             assertThat(true).isTrue();
         }
 
-        verify(userRepository, never()).save(any(User.class));
+        verify(userRepository, never()).save(any(Member.class));
         verify(mailAddressRepository, never()).save(any(MailAddress.class));
     }
 
@@ -290,7 +292,7 @@ class UserServiceImplTest {
             assertThat(true).isTrue();
         }
 
-        verify(userRepository, never()).save(any(User.class));
+        verify(userRepository, never()).save(any(Member.class));
         verify(mailAddressRepository, never()).save(any(MailAddress.class));
     }
 
@@ -312,7 +314,7 @@ class UserServiceImplTest {
         private UserRepository userRepository;
 
         @Autowired
-        private Validator<User> userValidator;
+        private Validator<Member> userValidator;
 
         @Autowired
         private ModelMapper modelMapper;

@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.studytype;
 
+import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.studytype.dto.StudyTypeDTO;
 import hu.indicium.dev.ledenadministratie.util.Validator;
 import org.junit.jupiter.api.DisplayName;
