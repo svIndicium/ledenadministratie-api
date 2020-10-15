@@ -6,9 +6,9 @@ import java.util.Date;
 
 @Getter
 public class MailAddressAlreadyVerifiedException extends RuntimeException {
-    private String address;
+    private final String address;
 
-    private Date verifiedAt;
+    private final Date verifiedAt;
 
     public MailAddressAlreadyVerifiedException(MailAddress mailAddress) {
         this.address = mailAddress.getAddress();

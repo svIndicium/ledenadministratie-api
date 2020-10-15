@@ -1,6 +1,5 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user;
 
-import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

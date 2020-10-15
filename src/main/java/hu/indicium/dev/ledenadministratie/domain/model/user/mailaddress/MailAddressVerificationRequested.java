@@ -8,9 +8,9 @@ import java.util.Date;
 @Getter
 public class MailAddressVerificationRequested implements DomainEvent {
 
-    private String mailAddress;
+    private final String mailAddress;
 
-    private String verificationToken;
+    private final String verificationToken;
 
     private final int eventVersion = 1;
 

@@ -7,11 +7,11 @@ import java.util.Date;
 
 public class MailAddressVerified implements DomainEvent {
 
-    private MemberId memberId;
+    private final MemberId memberId;
 
-    private String address;
+    private final String address;
 
-    private Date verifiedAt;
+    private final Date verifiedAt;
 
     private final int eventVersion = 1;
 
