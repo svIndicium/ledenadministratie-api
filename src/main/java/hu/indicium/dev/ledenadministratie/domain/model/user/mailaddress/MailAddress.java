@@ -74,7 +74,7 @@ public class MailAddress {
         }
         this.verifiedAt = new Date();
         DomainEventPublisher.instance()
-                .publish(new MailAddressVerified(getMember().getMemberId(), getAddress(), getVerifiedAt()));
+                .publish(new MailAddressVerified(getAddress(), getVerifiedAt()));
     }
 
     public boolean isVerified() {
