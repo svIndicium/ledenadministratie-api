@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor
 public class ReviewDetails {
     @Column(name = "reviewed_at")

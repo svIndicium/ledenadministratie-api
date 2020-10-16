@@ -1,16 +1,16 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class Name {
 
     @Column(name = "first_name", nullable = false)

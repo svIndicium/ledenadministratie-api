@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user;
 
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,8 +9,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Embeddable
-@NoArgsConstructor
 @Getter
+@EqualsAndHashCode
+@NoArgsConstructor
 public class MemberDetails {
 
     @Embedded
