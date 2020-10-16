@@ -22,7 +22,7 @@ class ReviewDetailsTest {
         assertThat(reviewDetails).isNotNull();
         assertThat(reviewDetails.getReviewedBy()).isEqualTo(reviewedBy);
         assertThat(reviewDetails.getComment()).isNull();
-        assertThat(reviewDetails.getReviewedAt()).isAfter(startDate);
+        assertThat(reviewDetails.getReviewedAt()).isAfterOrEqualsTo(startDate);
         assertThat(reviewDetails.getReviewedAt()).isBefore(new Date());
     }
 
@@ -38,7 +38,7 @@ class ReviewDetailsTest {
         assertThat(reviewDetails).isNotNull();
         assertThat(reviewDetails.getReviewedBy()).isEqualTo(reviewedBy);
         assertThat(reviewDetails.getComment()).isEqualTo(comment);
-        assertThat(reviewDetails.getReviewedAt()).isAfter(startDate);
+        assertThat(reviewDetails.getReviewedAt()).isAfterOrEqualsTo(startDate);
         assertThat(reviewDetails.getReviewedAt()).isBefore(new Date());
     }
 }

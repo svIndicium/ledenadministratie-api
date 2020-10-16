@@ -29,7 +29,7 @@ class MemberDetailsTest {
         assertThat(memberDetails.getStudyType()).isEqualTo(studyType);
         assertThat(memberDetails.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(memberDetails.getDateOfBirth()).isEqualTo(dateOfBirth);
-        assertThat(memberDetails.getCreatedAt()).isAfter(startDate);
+        assertThat(memberDetails.getCreatedAt()).isAfterOrEqualsTo(startDate);
         assertThat(memberDetails.getCreatedAt()).isBefore(new Date());
     }
 }
