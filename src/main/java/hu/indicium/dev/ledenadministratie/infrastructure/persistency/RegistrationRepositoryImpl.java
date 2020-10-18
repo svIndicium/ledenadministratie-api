@@ -43,6 +43,6 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     @Override
     public Collection<Registration> getAllRegistrations() {
-        return registrationRepository.getAll();
+        return registrationRepository.findAll();
     }
 }

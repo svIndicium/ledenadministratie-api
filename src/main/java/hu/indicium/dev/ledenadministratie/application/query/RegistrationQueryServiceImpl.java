@@ -6,6 +6,8 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registr
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @AllArgsConstructor
 @Service
 public class RegistrationQueryServiceImpl implements RegistrationQueryService {
@@ -15,5 +17,10 @@ public class RegistrationQueryServiceImpl implements RegistrationQueryService {
     @Override
     public Registration getRegistrationById(RegistrationId registrationId) {
         return registrationRepository.getRegistrationById(registrationId);
+    }
+
+    @Override
+    public Collection<Registration> getAllRegistrations() {
+        return registrationRepository.getAllRegistrations();
     }
 }

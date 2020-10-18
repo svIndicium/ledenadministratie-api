@@ -13,6 +13,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping(BaseUrl.API_V1)
@@ -21,7 +24,7 @@ public class RegistrationController {
 
     private final RegistrationQueryService queryService;
 
-    @PostMapping("/registration")
+    @PostMapping("/registrations")
     @ResponseStatus(HttpStatus.CREATED)
     public Response<RegistrationDTO> createNewRegistration(@RequestBody NewRegistrationCommand newRegistrationCommand) {
         RegistrationId registrationId = registrationService.register(newRegistrationCommand);
@@ -29,6 +32,18 @@ public class RegistrationController {
         RegistrationDTO registrationDTO = new RegistrationDTO(registration);
         return ResponseBuilder.created()
                 .data(registrationDTO)
+                .build();
+    }
+
+    @GetMapping("/registrations")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<Collection<RegistrationDTO>> getAllRegistrations() {
+        Collection<Registration> registrations = queryService.getAllRegistrations();
+        Collection<RegistrationDTO> registrationDTOS = registrations.stream()
+                .map(RegistrationDTO::new)
+                .collect(Collectors.toSet());
+        return ResponseBuilder.created()
+                .data(registrationDTOS)
                 .build();
     }
 }

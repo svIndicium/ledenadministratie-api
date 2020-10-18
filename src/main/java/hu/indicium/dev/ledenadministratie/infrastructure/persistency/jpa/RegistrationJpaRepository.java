@@ -11,6 +11,4 @@ import java.util.UUID;
 @Repository
 public interface RegistrationJpaRepository extends JpaRepository<Registration, UUID> {
     boolean existsByRegistrationId(RegistrationId registrationId);
-
-    Collection<Registration> getAll();
 }
