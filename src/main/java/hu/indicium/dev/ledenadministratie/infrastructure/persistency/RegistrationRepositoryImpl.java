@@ -32,7 +32,7 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     @Override
     public Registration getRegistrationById(RegistrationId registrationId) {
-        return registrationRepository.findById(registrationId.getId())
+        return registrationRepository.findByRegistrationId(registrationId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Registration %s not found.", registrationId.getId().toString())));
     }
 
