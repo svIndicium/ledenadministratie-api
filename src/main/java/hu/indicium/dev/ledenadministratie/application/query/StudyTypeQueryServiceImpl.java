@@ -6,6 +6,8 @@ import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeReposi
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @AllArgsConstructor
 @Service
 public class StudyTypeQueryServiceImpl implements StudyTypeQueryService {
@@ -15,5 +17,10 @@ public class StudyTypeQueryServiceImpl implements StudyTypeQueryService {
     @Override
     public StudyType getStudyTypeById(StudyTypeId studyTypeId) {
         return studyTypeRepository.getStudyTypeById(studyTypeId);
+    }
+
+    @Override
+    public Collection<StudyType> getStudyTypes() {
+        return studyTypeRepository.getAllStudyTypes();
     }
 }

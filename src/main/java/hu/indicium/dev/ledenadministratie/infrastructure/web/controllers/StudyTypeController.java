@@ -13,6 +13,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @RequestMapping(BaseUrl.API_V1)
 @RestController
@@ -29,6 +32,18 @@ public class StudyTypeController {
         StudyTypeDTO studyTypeDTO = new StudyTypeDTO(studyType);
         return ResponseBuilder.created()
                 .data(studyTypeDTO)
+                .build();
+    }
+
+    @GetMapping("/studytypes")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<Collection<StudyTypeDTO>> getStudyTypes() {
+        Collection<StudyType> studyTypes = studyTypeQueryService.getStudyTypes();
+        Collection<StudyTypeDTO> studyTypeDTOS = studyTypes.stream()
+                .map(StudyTypeDTO::new)
+                .collect(Collectors.toSet());
+        return ResponseBuilder.created()
+                .data(studyTypeDTOS)
                 .build();
     }
 }
