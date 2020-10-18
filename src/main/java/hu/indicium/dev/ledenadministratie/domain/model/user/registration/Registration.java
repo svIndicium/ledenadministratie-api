@@ -30,7 +30,7 @@ public class Registration {
     @Column(name = "review_status")
     private ReviewStatus reviewStatus;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "mail_address_id")
     private MailAddress mailAddress;
 
