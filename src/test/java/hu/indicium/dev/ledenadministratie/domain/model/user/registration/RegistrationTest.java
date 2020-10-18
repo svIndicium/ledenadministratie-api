@@ -49,7 +49,7 @@ class RegistrationTest {
         this.studyTypeId = StudyTypeId.fromId(UUID.randomUUID());
         StudyType studyType = new StudyType(studyTypeId, "SD", "Software Development");
         this.memberDetails = new MemberDetails(name, "+31612345678", new Date(), studyType);
-        this.mailAddress = new MailAddress("mdg@example.com", true, "xdf");
+        this.mailAddress = new MailAddress("mdg@example.com", true);
         this.eventSubscriber.clear();
     }
 

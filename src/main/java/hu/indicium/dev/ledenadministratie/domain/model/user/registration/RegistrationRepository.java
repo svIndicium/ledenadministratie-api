@@ -9,5 +9,5 @@ public interface RegistrationRepository {
 
     Registration save(Registration registration);
 
-    Collection<Registration> getAllRegistration();
+    Collection<Registration> getAllRegistrations();
 }

@@ -3,6 +3,7 @@ package hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventPublisher;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registration;
+import hu.indicium.dev.ledenadministratie.util.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -51,7 +52,7 @@ public class MailAddress {
     @OneToOne(mappedBy = "mailAddress")
     private Registration registration;
 
-    public MailAddress(String address, boolean receivesNewsletter, String verificationToken) {
+    public MailAddress(String address, boolean receivesNewsletter) {
         this.setAddress(address);
         this.setReceivesNewsletter(receivesNewsletter);
         this.createdAt = new Date();
@@ -63,7 +64,7 @@ public class MailAddress {
             throw new MailAddressAlreadyVerifiedException(this);
         }
         this.verificationRequestedAt = new Date();
-        this.verificationToken = verificationToken;
+        this.generateVerificationToken();
         DomainEventPublisher.instance()
                 .publish(new MailAddressVerificationRequested(getAddress(), verificationToken));
     }
@@ -81,4 +82,7 @@ public class MailAddress {
         return this.verifiedAt != null;
     }
 
+    private void generateVerificationToken() {
+        this.verificationToken = Util.randomAlphaNumeric(10).toUpperCase();
+    }
 }

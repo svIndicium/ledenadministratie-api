@@ -1,4 +1,4 @@
-package hu.indicium.dev.ledenadministratie.application.command;
+package hu.indicium.dev.ledenadministratie.application.service;
 
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import org.springframework.stereotype.Service;
