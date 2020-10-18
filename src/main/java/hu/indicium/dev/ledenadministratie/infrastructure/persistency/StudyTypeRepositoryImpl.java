@@ -31,7 +31,7 @@ public class StudyTypeRepositoryImpl implements StudyTypeRepository {
 
     @Override
     public StudyType getStudyTypeById(StudyTypeId studyTypeId) {
-        return studyTypeRepository.findById(studyTypeId.getId())
+        return studyTypeRepository.findByStudyTypeId(studyTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Studytype %s not found.", studyTypeId.getId().toString())));
     }
 
