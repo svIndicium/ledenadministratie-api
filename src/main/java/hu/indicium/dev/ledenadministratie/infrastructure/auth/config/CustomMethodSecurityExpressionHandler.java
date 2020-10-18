@@ -1,4 +1,4 @@
-package hu.indicium.dev.ledenadministratie.config;
+package hu.indicium.dev.ledenadministratie.infrastructure.auth.config;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;

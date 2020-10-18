@@ -1,4 +1,4 @@
-package hu.indicium.dev.ledenadministratie.config;
+package hu.indicium.dev.ledenadministratie.infrastructure.auth.config;
 
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;

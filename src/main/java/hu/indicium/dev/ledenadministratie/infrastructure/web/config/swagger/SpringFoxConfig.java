@@ -1,4 +1,4 @@
-package hu.indicium.dev.ledenadministratie.config.swagger;
+package hu.indicium.dev.ledenadministratie.infrastructure.web.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

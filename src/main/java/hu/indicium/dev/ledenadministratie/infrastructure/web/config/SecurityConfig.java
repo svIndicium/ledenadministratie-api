@@ -1,4 +1,4 @@
-package hu.indicium.dev.ledenadministratie.config;
+package hu.indicium.dev.ledenadministratie.infrastructure.web.config;
 
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
 import com.google.common.collect.ImmutableList;
