@@ -4,7 +4,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registr
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationRepository;
 import hu.indicium.dev.ledenadministratie.infrastructure.persistency.jpa.RegistrationJpaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityNotFoundException;

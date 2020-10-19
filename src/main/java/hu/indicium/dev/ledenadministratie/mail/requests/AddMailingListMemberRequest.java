@@ -11,16 +11,16 @@ import java.util.Map;
 public class AddMailingListMemberRequest {
 
     @JsonProperty("email_address")
-    private String emailAddress;
+    private final String emailAddress;
 
     @JsonProperty("status")
-    private String status;
+    private final String status;
 
     @JsonProperty("tags")
-    private List<String> tags;
+    private final List<String> tags;
 
     @JsonProperty("merge_fields")
-    private Map<String, String> mergeFields;
+    private final Map<String, String> mergeFields;
 
     public AddMailingListMemberRequest(MailEntryDTO mailEntryDTO) {
         this.emailAddress = mailEntryDTO.getEmail();

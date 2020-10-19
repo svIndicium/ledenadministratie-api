@@ -10,7 +10,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 

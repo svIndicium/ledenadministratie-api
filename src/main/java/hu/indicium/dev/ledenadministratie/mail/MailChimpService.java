@@ -17,7 +17,7 @@ public class MailChimpService implements MailListService {
 
     private final RestTemplate restTemplate;
 
-    private MD5 md5;
+    private final MD5 md5;
 
     public MailChimpService(RestTemplate restTemplate, SettingService settingService) {
         this.restTemplate = restTemplate;

@@ -18,7 +18,7 @@ public class EventListenerConfig implements CommandLineRunner {
         List<DomainEventSubscriber> subscribers = Arrays.asList(
                 new RegistrationCreatedListener()
         );
-        for (DomainEventSubscriber subscriber: subscribers) {
+        for (DomainEventSubscriber subscriber : subscribers) {
             DomainEventPublisher.instance().subscribe(subscriber);
         }
     }
