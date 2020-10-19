@@ -43,7 +43,7 @@ public class StudyTypeController {
         Collection<StudyTypeDTO> studyTypeDTOS = studyTypes.stream()
                 .map(StudyTypeDTO::new)
                 .collect(Collectors.toSet());
-        return ResponseBuilder.created()
+        return ResponseBuilder.ok()
                 .data(studyTypeDTOS)
                 .build();
     }
