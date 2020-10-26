@@ -99,11 +99,10 @@ class RegistrationTest {
     void shouldThrowException_whenApproveRegistrationWithoutVerifiedMailAddress() {
         Registration registration = new Registration(registrationId, memberDetails, mailAddress);
 
-        MemberId memberId = MemberId.fromAuthId("auth:123");
         String reviewedBy = "Secretary's name";
 
         try {
-            registration.approve(memberId, reviewedBy);
+            registration.approve(reviewedBy);
             fail("Should throw an exception because the mail address is not verfied");
         } catch (Exception e) {
             assertThat(e).isInstanceOf(MailAddressNotVerifiedException.class);
@@ -117,18 +116,11 @@ class RegistrationTest {
 
         mailAddress.verify();
 
-        MemberId memberId = MemberId.fromAuthId("auth:123");
         String reviewedBy = "Secretary's name";
 
-        Member member = registration.approve(memberId, reviewedBy);
+        registration.approve(reviewedBy);
 
-        assertThat(member).isNotNull();
-        assertThat(member.getMemberId()).isEqualTo(memberId);
-        assertThat(member.getReviewDetails()).isEqualTo(registration.getReviewDetails());
-        assertThat(member.getMemberDetails()).isEqualTo(registration.getMemberDetails());
-        assertThat(member.getRegistration()).isEqualTo(registration);
-        assertThat(member.getMailAddresses()).contains(mailAddress);
-        ReviewDetails reviewDetails = member.getReviewDetails();
+        ReviewDetails reviewDetails = registration.getReviewDetails();
         assertThat(reviewDetails.getReviewedBy()).isEqualTo(reviewedBy);
         assertThat(reviewDetails.getReviewedAt()).isCloseTo(startDate, 100);
         assertThat(reviewDetails.getComment()).isNull();
@@ -143,13 +135,12 @@ class RegistrationTest {
 
         mailAddress.verify();
 
-        MemberId memberId = MemberId.fromAuthId("auth:123");
         String reviewedBy = "Secretary's name";
 
-        registration.approve(memberId, reviewedBy);
+        registration.approve(reviewedBy);
 
         try {
-            registration.approve(memberId, reviewedBy);
+            registration.approve(reviewedBy);
             fail("Should throw exception because registration was already reviewed");
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RegistrationAlreadyReviewedException.class);

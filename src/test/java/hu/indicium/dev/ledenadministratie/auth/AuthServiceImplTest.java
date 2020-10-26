@@ -2,6 +2,8 @@ package hu.indicium.dev.ledenadministratie.auth;
 
 import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
 import hu.indicium.dev.ledenadministratie.auth.responses.UserInfoResponse;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthSettings;
 import hu.indicium.dev.ledenadministratie.util.WithMockToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,7 +57,7 @@ class AuthServiceImplTest {
 
         AuthUser authUser = getAuthUser(userInfoResponse);
 
-        AuthUserDTO authUserDTO = authService.getAuthUser();
+        AuthUserDTO authUserDTO = authService.getCurrentUser();
 
         HttpEntity httpEntity = httpEntityArgumentCaptor.getValue();
         List<String> authorizationHeaders = httpEntity.getHeaders().get("Authorization");
@@ -80,7 +82,7 @@ class AuthServiceImplTest {
 
         when(restTemplate.exchange(eq("https://indicium.eu.auth0.com/userinfo"), eq(HttpMethod.GET), httpEntityArgumentCaptor.capture(), eq(UserInfoResponse.class))).thenReturn(ResponseEntity.status(401).body(null));
         try {
-            AuthUserDTO authUserDTO = authService.getAuthUser();
+            AuthUserDTO authUserDTO = authService.getCurrentUser();
             fail("User should not be able to identify itself");
         } catch (Exception e) {
             assertThat(e.getClass()).isEqualTo(EntityNotFoundException.class);

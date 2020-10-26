@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.auth;
 
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthSettings;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

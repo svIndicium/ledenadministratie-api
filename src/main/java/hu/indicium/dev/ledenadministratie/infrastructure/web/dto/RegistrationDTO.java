@@ -1,9 +1,11 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.web.dto;
 
+import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewStatus;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registration;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,6 +30,16 @@ public class RegistrationDTO {
 
     private UUID studyTypeId;
 
+    private Date reviewedAt;
+
+    private String reviewedBy;
+
+    private String comment;
+
+    private String memberId;
+
+    private ReviewStatus reviewStatus;
+
     public RegistrationDTO(Registration registration) {
         this.registrationId = registration.getRegistrationId().getId();
         this.firstName = registration.getMemberDetails().getName().getFirstName();
@@ -38,5 +50,14 @@ public class RegistrationDTO {
         this.mailAddress = registration.getMailAddress().getAddress();
         this.receivingNewsletter = registration.getMailAddress().isReceivesNewsletter();
         this.studyTypeId = registration.getMemberDetails().getStudyType().getStudyTypeId().getId();
+        this.reviewStatus = registration.getReviewStatus();
+        if (registration.getReviewStatus() != ReviewStatus.PENDING) {
+            this.reviewedAt = registration.getReviewDetails().getReviewedAt();
+            this.reviewedBy = registration.getReviewDetails().getReviewedBy();
+            this.comment = registration.getReviewDetails().getComment();
+        }
+        if (registration.getMember() != null) {
+            this.memberId = registration.getMember().getMemberId().getAuthId();
+        }
     }
 }

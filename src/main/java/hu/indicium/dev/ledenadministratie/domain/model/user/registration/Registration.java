@@ -45,7 +45,11 @@ public class Registration {
                 .publish(new RegistrationCreated(this));
     }
 
-    public Member approve(MemberId memberId, String reviewedBy) {
+    public boolean isEligibleForAccount() {
+        return reviewStatus == ReviewStatus.PENDING && !mailAddress.isVerified();
+    }
+
+    public void approve(String reviewedBy) {
         if (reviewStatus != ReviewStatus.PENDING) {
             throw new RegistrationAlreadyReviewedException(this);
         }
@@ -54,9 +58,8 @@ public class Registration {
         }
         this.reviewDetails = ReviewDetails.approve(reviewedBy);
         this.reviewStatus = ReviewStatus.APPROVED;
-        Member member = Member.fromRegistration(this, memberId);
-        this.member = member;
-        return member;
+        DomainEventPublisher.instance()
+                .publish(new RegistrationApproved(this));
     }
 
     public void deny(String reviewedBy, String comment) {
@@ -65,5 +68,9 @@ public class Registration {
         }
         this.reviewDetails = ReviewDetails.deny(reviewedBy, comment);
         this.reviewStatus = ReviewStatus.DENIED;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 }

@@ -1,6 +1,6 @@
 package hu.indicium.dev.ledenadministratie.setting;
 
-import hu.indicium.dev.ledenadministratie.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
 import hu.indicium.dev.ledenadministratie.setting.dto.SettingDTO;
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotFoundException;
@@ -110,7 +110,7 @@ class SettingServiceImplTest {
     void shouldUpdateSettingCorrectly_whenUpdatingSetting() {
         ArgumentCaptor<Setting> settingArgumentCaptor = ArgumentCaptor.forClass(Setting.class);
 
-        when(authService.getAuthUser()).thenReturn(authUserDTO);
+        when(authService.getCurrentUser()).thenReturn(authUserDTO);
         when(settingRepository.findByKey(eq("key"))).thenReturn(Optional.of(setting));
         when(settingRepository.save(settingArgumentCaptor.capture())).thenReturn(setting);
 
@@ -132,7 +132,7 @@ class SettingServiceImplTest {
     @WithMockToken(scope = "write:key")
     void shouldThrowException_whenUpdateNonExistingSetting() {
 
-        when(authService.getAuthUser()).thenReturn(authUserDTO);
+        when(authService.getCurrentUser()).thenReturn(authUserDTO);
 
         try {
             settingService.updateSetting("key", "newValue");

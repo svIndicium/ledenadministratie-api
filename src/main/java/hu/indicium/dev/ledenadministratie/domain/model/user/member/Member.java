@@ -30,7 +30,7 @@ public class Member {
     @Embedded
     private ReviewDetails reviewDetails;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MailAddress> mailAddresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -39,7 +39,7 @@ public class Member {
     @UpdateTimestamp
     private Date updatedAt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "registration_id")
     private Registration registration;
 
@@ -49,6 +49,7 @@ public class Member {
         this.reviewDetails = registration.getReviewDetails();
         this.registration = registration;
         this.addMailAddress(registration.getMailAddress());
+        registration.setMember(this);
     }
 
     public static Member fromRegistration(Registration registration, MemberId memberId) {

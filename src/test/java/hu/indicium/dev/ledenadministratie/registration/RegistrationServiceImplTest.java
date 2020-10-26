@@ -1,9 +1,9 @@
 //package hu.indicium.dev.ledenadministratie.registration;
 //
-//import hu.indicium.dev.ledenadministratie.auth.AuthService;
+//import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 //import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
 //import hu.indicium.dev.ledenadministratie.mail.MailObject;
-//import hu.indicium.dev.ledenadministratie.mail.MailService;
+//import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailService;
 //import hu.indicium.dev.ledenadministratie.registration.dto.FinishRegistrationDTO;
 //import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 //import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;

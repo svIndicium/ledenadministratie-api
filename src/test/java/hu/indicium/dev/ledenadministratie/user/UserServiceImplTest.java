@@ -1,10 +1,10 @@
 //package hu.indicium.dev.ledenadministratie.user;
 //
-//import hu.indicium.dev.ledenadministratie.auth.AuthService;
+//import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 //import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 //import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 //import hu.indicium.dev.ledenadministratie.mail.MailObject;
-//import hu.indicium.dev.ledenadministratie.mail.MailService;
+//import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailService;
 //import hu.indicium.dev.ledenadministratie.mail.dto.TransactionalMailDTO;
 //import hu.indicium.dev.ledenadministratie.registration.dto.RegistrationDTO;
 //import hu.indicium.dev.ledenadministratie.setting.SettingService;

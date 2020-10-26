@@ -4,6 +4,7 @@ import hu.indicium.dev.ledenadministratie.infrastructure.notification.handlers.D
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.handlers.LoggingNotificationHandler;
 import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -15,7 +16,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final Collection<NotificationHandler> notificationHandlers;
 
-    public NotificationServiceImpl(SettingService settingService) {
+    public NotificationServiceImpl(@Lazy SettingService settingService) {
         this.notificationHandlers = new HashSet<>(
                 Arrays.asList(
                         new DiscordNotificationHandler(settingService),
