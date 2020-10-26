@@ -23,4 +23,15 @@ public class Name {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    public String getFullName() {
+        return String.format("%s %s", firstName, getFullLastName());
+    }
+
+    public String getFullLastName() {
+        if (middleName != null) {
+            return String.format("%s %s", middleName, lastName);
+        }
+        return lastName;
+    }
 }
