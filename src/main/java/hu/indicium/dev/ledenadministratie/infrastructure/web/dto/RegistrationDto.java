@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class RegistrationDTO {
+public class RegistrationDto {
     private UUID registrationId;
 
     private String firstName;
@@ -39,7 +39,7 @@ public class RegistrationDTO {
 
     private ReviewStatus reviewStatus;
 
-    public RegistrationDTO(Registration registration) {
+    public RegistrationDto(Registration registration) {
         this.registrationId = registration.getRegistrationId().getId();
         this.firstName = registration.getMemberDetails().getName().getFirstName();
         this.middleName = registration.getMemberDetails().getName().getMiddleName();

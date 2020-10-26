@@ -5,7 +5,7 @@ import hu.indicium.dev.ledenadministratie.application.query.StudyTypeQueryServic
 import hu.indicium.dev.ledenadministratie.application.service.StudyTypeService;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeId;
-import hu.indicium.dev.ledenadministratie.infrastructure.web.dto.StudyTypeDTO;
+import hu.indicium.dev.ledenadministratie.infrastructure.web.dto.StudyTypeDto;
 import hu.indicium.dev.ledenadministratie.util.BaseUrl;
 import hu.indicium.dev.ledenadministratie.util.Response;
 import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
@@ -26,10 +26,10 @@ public class StudyTypeController {
 
     @PostMapping("/studytypes")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<StudyTypeDTO> createStudyType(@RequestBody NewStudyTypeCommand newStudyTypeCommand) {
+    public Response<StudyTypeDto> createStudyType(@RequestBody NewStudyTypeCommand newStudyTypeCommand) {
         StudyTypeId studyTypeId = studyTypeService.createStudyType(newStudyTypeCommand);
         StudyType studyType = studyTypeQueryService.getStudyTypeById(studyTypeId);
-        StudyTypeDTO studyTypeDTO = new StudyTypeDTO(studyType);
+        StudyTypeDto studyTypeDTO = new StudyTypeDto(studyType);
         return ResponseBuilder.created()
                 .data(studyTypeDTO)
                 .build();
@@ -37,13 +37,13 @@ public class StudyTypeController {
 
     @GetMapping("/studytypes")
     @ResponseStatus(HttpStatus.OK)
-    public Response<Collection<StudyTypeDTO>> getStudyTypes() {
+    public Response<Collection<StudyTypeDto>> getStudyTypes() {
         Collection<StudyType> studyTypes = studyTypeQueryService.getStudyTypes();
-        Collection<StudyTypeDTO> studyTypeDTOS = studyTypes.stream()
-                .map(StudyTypeDTO::new)
+        Collection<StudyTypeDto> studyTypeDtos = studyTypes.stream()
+                .map(StudyTypeDto::new)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
-                .data(studyTypeDTOS)
+                .data(studyTypeDtos)
                 .build();
     }
 }

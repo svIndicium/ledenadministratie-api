@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class MemberDTO {
+public class MemberDto {
     private String memberId;
 
     private String firstName;
@@ -25,7 +25,7 @@ public class MemberDTO {
 
     private Date dateOfBirth;
 
-    private Collection<MailAddressDTO> mailAddresses;
+    private Collection<MailAddressDto> mailAddresses;
 
     private UUID studyTypeId;
 
@@ -33,7 +33,7 @@ public class MemberDTO {
 
     private String reviewedBy;
 
-    public MemberDTO(Member member) {
+    public MemberDto(Member member) {
         this.memberId = member.getMemberId().getAuthId();
         this.firstName = member.getMemberDetails().getName().getFirstName();
         this.middleName = member.getMemberDetails().getName().getMiddleName();
@@ -45,7 +45,7 @@ public class MemberDTO {
         this.reviewedBy = member.getReviewDetails().getReviewedBy();
         this.mailAddresses = new HashSet<>();
         for (MailAddress mailAddress : member.getMailAddresses()) {
-            this.mailAddresses.add(new MailAddressDTO(mailAddress));
+            this.mailAddresses.add(new MailAddressDto(mailAddress));
         }
     }
 }

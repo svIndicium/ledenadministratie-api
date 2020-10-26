@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class MailAddressDTO {
+public class MailAddressDto {
     private UUID id;
 
     private String address;
@@ -24,7 +24,7 @@ public class MailAddressDTO {
 
     private Date updatedAt;
 
-    public MailAddressDTO(MailAddress mailAddress) {
+    public MailAddressDto(MailAddress mailAddress) {
         this.id = mailAddress.getId();
         this.address = mailAddress.getAddress();
         this.verificationRequestedAt = mailAddress.getVerificationRequestedAt();
