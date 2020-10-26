@@ -7,7 +7,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewStatus;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddressNotVerifiedException;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
-import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

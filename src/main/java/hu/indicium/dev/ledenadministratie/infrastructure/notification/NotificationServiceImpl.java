@@ -3,7 +3,6 @@ package hu.indicium.dev.ledenadministratie.infrastructure.notification;
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.handlers.DiscordNotificationHandler;
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.handlers.LoggingNotificationHandler;
 import hu.indicium.dev.ledenadministratie.setting.SettingService;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 

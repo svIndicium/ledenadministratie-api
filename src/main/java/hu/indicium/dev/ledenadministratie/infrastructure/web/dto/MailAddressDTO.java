@@ -3,9 +3,7 @@ package hu.indicium.dev.ledenadministratie.infrastructure.web.dto;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
 import java.util.Date;
 import java.util.UUID;
 

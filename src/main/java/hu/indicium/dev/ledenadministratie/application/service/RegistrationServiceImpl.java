@@ -2,11 +2,6 @@ package hu.indicium.dev.ledenadministratie.application.service;
 
 import hu.indicium.dev.ledenadministratie.application.commands.NewRegistrationCommand;
 import hu.indicium.dev.ledenadministratie.application.commands.ReviewRegistrationCommand;
-import hu.indicium.dev.ledenadministratie.domain.DomainEventPublisher;
-import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationApproved;
-import hu.indicium.dev.ledenadministratie.infrastructure.auth.Auth0User;
-import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
-import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeId;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeRepository;
@@ -17,6 +12,8 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberReposit
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registration;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationRepository;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.Auth0User;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -5,7 +5,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;

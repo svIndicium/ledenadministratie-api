@@ -2,7 +2,6 @@ package hu.indicium.dev.ledenadministratie.setting;
 
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.Auth0User;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
-import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
 import hu.indicium.dev.ledenadministratie.setting.dto.SettingDTO;
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotFoundException;
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotSetException;

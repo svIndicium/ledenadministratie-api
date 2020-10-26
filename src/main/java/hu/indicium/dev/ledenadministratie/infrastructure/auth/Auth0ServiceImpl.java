@@ -1,31 +1,19 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.auth;
 
 import com.auth0.client.mgmt.filter.UserFilter;
-import com.auth0.exception.APIException;
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.mgmt.users.User;
-import com.auth0.json.mgmt.users.UsersPage;
 import com.auth0.net.Request;
-import com.auth0.spring.security.api.authentication.AuthenticationJsonWebToken;
-import hu.indicium.dev.ledenadministratie.auth.dto.AuthUserDTO;
-import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
-import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
-import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
-import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.NotificationService;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Service

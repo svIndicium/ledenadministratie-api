@@ -4,12 +4,9 @@ import hu.indicium.dev.ledenadministratie.application.commands.NewRegistrationCo
 import hu.indicium.dev.ledenadministratie.application.commands.ReviewRegistrationCommand;
 import hu.indicium.dev.ledenadministratie.application.query.RegistrationQueryService;
 import hu.indicium.dev.ledenadministratie.application.service.RegistrationService;
-import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewStatus;
-import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registration;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
-import hu.indicium.dev.ledenadministratie.infrastructure.web.dto.MemberDTO;
 import hu.indicium.dev.ledenadministratie.infrastructure.web.dto.RegistrationDTO;
 import hu.indicium.dev.ledenadministratie.util.BaseUrl;
 import hu.indicium.dev.ledenadministratie.util.Response;

@@ -2,10 +2,8 @@ package hu.indicium.dev.ledenadministratie.infrastructure.auth;
 
 import com.auth0.client.auth.AuthAPI;
 import com.auth0.client.mgmt.ManagementAPI;
-import com.auth0.exception.APIException;
 import com.auth0.exception.Auth0Exception;
 import com.auth0.json.auth.TokenHolder;
-import com.auth0.json.mgmt.users.User;
 import com.auth0.net.AuthRequest;
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.NotificationService;
 import lombok.AllArgsConstructor;
