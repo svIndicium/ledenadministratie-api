@@ -13,27 +13,13 @@ import java.util.UUID;
 public class RegistrationDto {
     private UUID registrationId;
 
-    private String firstName;
+    private MemberDetailsDto memberDetails;
 
-    private String middleName;
-
-    private String lastName;
-
-    private String phoneNumber;
-
-    private Date dateOfBirth;
+    private ReviewDetailsDto reviewDetails;
 
     private String mailAddress;
 
     private boolean receivingNewsletter;
-
-    private UUID studyTypeId;
-
-    private Date reviewedAt;
-
-    private String reviewedBy;
-
-    private String comment;
 
     private String memberId;
 
@@ -41,19 +27,12 @@ public class RegistrationDto {
 
     public RegistrationDto(Registration registration) {
         this.registrationId = registration.getRegistrationId().getId();
-        this.firstName = registration.getMemberDetails().getName().getFirstName();
-        this.middleName = registration.getMemberDetails().getName().getMiddleName();
-        this.lastName = registration.getMemberDetails().getName().getLastName();
-        this.phoneNumber = registration.getMemberDetails().getPhoneNumber();
-        this.dateOfBirth = registration.getMemberDetails().getDateOfBirth();
+        this.memberDetails = new MemberDetailsDto(registration.getMemberDetails());
         this.mailAddress = registration.getMailAddress().getAddress();
         this.receivingNewsletter = registration.getMailAddress().isReceivesNewsletter();
-        this.studyTypeId = registration.getMemberDetails().getStudyType().getStudyTypeId().getId();
         this.reviewStatus = registration.getReviewStatus();
         if (registration.getReviewStatus() != ReviewStatus.PENDING) {
-            this.reviewedAt = registration.getReviewDetails().getReviewedAt();
-            this.reviewedBy = registration.getReviewDetails().getReviewedBy();
-            this.comment = registration.getReviewDetails().getComment();
+            this.reviewDetails = new ReviewDetailsDto(registration.getReviewDetails());
         }
         if (registration.getMember() != null) {
             this.memberId = registration.getMember().getMemberId().getAuthId();
