@@ -13,10 +13,12 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@DisplayName("Mail Settings")
+@DisplayName("Auth0 settings")
 @TestPropertySource(properties = {
         "auth0.apiAudience=https://test.auth0.com",
-        "auth0.issuer=https://lit.test.com"
+        "auth0.issuer=https://lit.test.com",
+        "auth0.clientId=abcabc",
+        "auth0.clientSecret=abcdef"
 })
 class AuthSettingsTest {
 
@@ -33,5 +35,17 @@ class AuthSettingsTest {
     @DisplayName("Get issuer")
     void getIssuer() {
         assertThat(authSettings.getIssuer()).isEqualTo("https://lit.test.com");
+    }
+
+    @Test
+    @DisplayName("Get client id")
+    void getClientId() {
+        assertThat(authSettings.getClientId()).isEqualTo("abcabc");
+    }
+
+    @Test
+    @DisplayName("Get client secret")
+    void getClientSecret() {
+        assertThat(authSettings.getClientSecret()).isEqualTo("abcdef");
     }
 }
