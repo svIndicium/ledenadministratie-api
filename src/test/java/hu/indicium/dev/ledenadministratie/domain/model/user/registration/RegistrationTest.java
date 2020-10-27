@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user.registration;
 
 import hu.indicium.dev.ledenadministratie.domain.DomainEvent;
+import hu.indicium.dev.ledenadministratie.domain.DomainEventPublisher;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
@@ -39,10 +40,12 @@ class RegistrationTest {
 
     private MailAddress mailAddress;
 
-    private final TestDomainEventSubscriber eventSubscriber = TestDomainEventSubscriber.subscribe();
+    private TestDomainEventSubscriber eventSubscriber;
 
     @BeforeEach
     void setUp() {
+        DomainEventPublisher.instance().reset();
+        eventSubscriber = TestDomainEventSubscriber.subscribe();
         this.startDate = new Date();
         this.registrationId = RegistrationId.fromId(UUID.randomUUID());
         this.name = new Name("Miguel", "Don", "Gomez");
@@ -84,7 +87,7 @@ class RegistrationTest {
         RegistrationCreated registrationCreated = emittedRegistrationCreatedEvents.get(0);
 
         assertThat(registrationCreated.occurredOn()).isBeforeOrEqualsTo(new Date());
-        assertThat(registrationCreated.occurredOn()).isCloseTo(startDate, 100);
+        assertThat(registrationCreated.occurredOn()).isCloseTo(startDate, 1000);
         assertThat(registrationCreated.getCreatedAt()).isEqualTo(memberDetails.getCreatedAt());
         assertThat(registrationCreated.getName()).isEqualTo(name);
         assertThat(registrationCreated.getDateOfBirth()).isEqualTo(memberDetails.getDateOfBirth());
