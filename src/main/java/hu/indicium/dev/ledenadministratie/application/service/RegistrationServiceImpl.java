@@ -8,7 +8,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeReposi
 import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
-import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberRepository;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registration;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationRepository;
@@ -24,8 +23,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final RegistrationRepository registrationRepository;
 
     private final StudyTypeRepository studyTypeRepository;
-
-    private final MemberRepository memberRepository;
 
     private final AuthService authService;
 
