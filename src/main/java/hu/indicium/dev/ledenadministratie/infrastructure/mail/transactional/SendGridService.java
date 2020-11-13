@@ -9,6 +9,7 @@ import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
+import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailType;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional.notifications.MailFailedToSendNotification;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional.notifications.MailSentNotification;
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.NotificationService;

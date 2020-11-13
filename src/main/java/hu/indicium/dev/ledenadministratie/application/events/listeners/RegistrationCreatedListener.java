@@ -3,7 +3,7 @@ package hu.indicium.dev.ledenadministratie.application.events.listeners;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventSubscriber;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationCreated;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailService;
-import hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional.MailType;
+import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailType;
 import lombok.AllArgsConstructor;
 
 import java.util.HashMap;

@@ -2,6 +2,7 @@ package hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional;
 
 import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
+import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailType;
 
 import java.util.Map;
 

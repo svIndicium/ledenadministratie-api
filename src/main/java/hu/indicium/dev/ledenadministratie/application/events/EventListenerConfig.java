@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.application.events;
 
+import hu.indicium.dev.ledenadministratie.application.events.listeners.MemberCreatedListener;
 import hu.indicium.dev.ledenadministratie.application.events.listeners.RegistrationApprovedListener;
 import hu.indicium.dev.ledenadministratie.application.events.listeners.RegistrationCreatedListener;
 import hu.indicium.dev.ledenadministratie.application.service.MemberService;
@@ -26,7 +27,8 @@ public class EventListenerConfig implements CommandLineRunner {
     public void run(String... args) throws Exception {
         List<DomainEventSubscriber> subscribers = Arrays.asList(
                 new RegistrationCreatedListener(mailService),
-                new RegistrationApprovedListener(memberService)
+                new RegistrationApprovedListener(memberService),
+                new MemberCreatedListener(mailService)
         );
         for (DomainEventSubscriber subscriber : subscribers) {
             DomainEventPublisher.instance().subscribe(subscriber);

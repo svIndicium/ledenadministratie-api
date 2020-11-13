@@ -3,7 +3,6 @@ package hu.indicium.dev.ledenadministratie.infrastructure.mail;
 import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.list.MailChimpService;
-import hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional.MailType;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional.TransactionalMailService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,12 +23,12 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void addMailAddressToMailingList(MailAddress mailAddress, String mailListId) {
-        mailChimpService.addMailAddressToMailingList(mailAddress, mailListId);
+    public void addMailAddressToMailingList(MailAddress mailAddress, Name name, MailListType mailListType) {
+        mailChimpService.addMailAddressToMailingList(mailAddress, name, mailListType);
     }
 
     @Override
-    public void removeMailAddressToMailingList(MailAddress mailAddress, String mailListId) {
-        mailChimpService.removeMailAddressToMailingList(mailAddress, mailListId);
+    public void removeMailAddressToMailingList(MailAddress mailAddress, Name name, MailListType mailListType) {
+        mailChimpService.removeMailAddressToMailingList(mailAddress, name, mailListType);
     }
 }

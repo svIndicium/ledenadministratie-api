@@ -1,6 +1,6 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional.notifications;
 
-import hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional.MailType;
+import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailType;
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.Notification;
 import lombok.AllArgsConstructor;
 
