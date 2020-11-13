@@ -5,7 +5,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddr
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailListType;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.list.requests.AddMailingListMemberRequest;
 import hu.indicium.dev.ledenadministratie.setting.SettingService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.client.RestTemplate;
 
-@AllArgsConstructor
 @Service
 public class MailChimpService implements MailListService {
 
@@ -21,7 +19,13 @@ public class MailChimpService implements MailListService {
 
     private final RestTemplate restTemplate;
 
-    private final MailChimpMailListIdFactory mailChimpMailListIdFactory = new MailChimpMailListIdFactory(settingService);
+    private final MailChimpMailListIdFactory mailChimpMailListIdFactory;
+
+    public MailChimpService(SettingService settingService, RestTemplate restTemplate) {
+        this.settingService = settingService;
+        this.restTemplate = restTemplate;
+        this.mailChimpMailListIdFactory = new MailChimpMailListIdFactory(settingService);
+    }
 
     @Override
     public void addMailAddressToMailingList(MailAddress mailAddress, Name name, MailListType mailListType) {
