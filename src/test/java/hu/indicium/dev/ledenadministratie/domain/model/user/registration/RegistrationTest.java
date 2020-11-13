@@ -88,7 +88,7 @@ class RegistrationTest {
 
         assertThat(registrationCreated.occurredOn()).isBeforeOrEqualsTo(new Date());
         assertThat(registrationCreated.occurredOn()).isCloseTo(startDate, 1000);
-        assertThat(registrationCreated.getCreatedAt()).isEqualTo(memberDetails.getCreatedAt());
+        assertThat(registrationCreated.getCreatedAt()).isAfterOrEqualsTo(memberDetails.getCreatedAt());
         assertThat(registrationCreated.getName()).isEqualTo(name);
         assertThat(registrationCreated.getDateOfBirth()).isEqualTo(memberDetails.getDateOfBirth());
         assertThat(registrationCreated.getPhoneNumber()).isEqualTo(memberDetails.getPhoneNumber());
@@ -191,7 +191,7 @@ class RegistrationTest {
             assertThat(e).isInstanceOf(RegistrationAlreadyReviewedException.class);
             RegistrationAlreadyReviewedException exception = (RegistrationAlreadyReviewedException) e;
             assertThat(exception.getRegistrationId()).isEqualTo(registrationId);
-            assertThat(exception.getReviewedAt()).isBeforeOrEqualsTo(startDate);
+            assertThat(exception.getReviewedAt()).isAfterOrEqualsTo(startDate);
             assertThat(exception.getReviewedAt()).isCloseTo(startDate, 100);
             assertThat(exception.getReviewedBy()).isEqualTo(reviewedBy);
         }
