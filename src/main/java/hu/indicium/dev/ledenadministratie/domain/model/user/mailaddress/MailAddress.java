@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress;
 
+import hu.indicium.dev.ledenadministratie.domain.AssertionConcern;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventPublisher;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registration;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MailAddress {
+public class MailAddress extends AssertionConcern {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -63,7 +64,7 @@ public class MailAddress {
         if (this.isVerified()) {
             throw new MailAddressAlreadyVerifiedException(this);
         }
-        this.verificationRequestedAt = new Date();
+        this.setVerificationRequestedAt(new Date());
         this.generateVerificationToken();
         DomainEventPublisher.instance()
                 .publish(new MailAddressVerificationRequested(getAddress(), verificationToken));
@@ -73,7 +74,7 @@ public class MailAddress {
         if (this.isVerified()) {
             throw new MailAddressAlreadyVerifiedException(this);
         }
-        this.verifiedAt = new Date();
+        this.setVerifiedAt(new Date());
         DomainEventPublisher.instance()
                 .publish(new MailAddressVerified(getAddress(), getVerifiedAt()));
     }
@@ -83,6 +84,50 @@ public class MailAddress {
     }
 
     private void generateVerificationToken() {
-        this.verificationToken = Util.randomAlphaNumeric(10).toUpperCase();
+        this.setVerificationToken(Util.randomAlphaNumeric(10).toUpperCase());
+    }
+
+    public void setId(UUID id) {
+        assertArgumentNotNull(id, "An ID for the mail address must be provided");
+
+        this.id = id;
+    }
+
+    public void setAddress(String address) {
+        assertArgumentNotNull(address, "Mail address must be provided");
+
+        this.address = address;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        assertArgumentNotNull(verificationToken, "A verification token for the mail address must be provided");
+
+        this.verificationToken = verificationToken;
+    }
+
+    public void setVerificationRequestedAt(Date verificationRequestedAt) {
+        assertArgumentNotNull(verificationRequestedAt, "A date for the mail verification must be provided");
+
+        this.verificationRequestedAt = verificationRequestedAt;
+    }
+
+    public void setVerifiedAt(Date verifiedAt) {
+        assertArgumentNotNull(verifiedAt, "A date when the mail address was verified must be provided");
+
+        this.verifiedAt = verifiedAt;
+    }
+
+    public void setReceivesNewsletter(boolean receivesNewsletter) {
+        this.receivesNewsletter = receivesNewsletter;
+    }
+
+    public void setMember(Member member) {
+        assertArgumentNotNull(member, "A member must be provided");
+        this.member = member;
+    }
+
+    public void setRegistration(Registration registration) {
+        assertArgumentNotNull(registration, "A registration must be provided");
+        this.registration = registration;
     }
 }

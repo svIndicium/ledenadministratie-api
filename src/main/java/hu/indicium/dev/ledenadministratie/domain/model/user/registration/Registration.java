@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user.registration;
 
+import hu.indicium.dev.ledenadministratie.domain.AssertionConcern;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventPublisher;
 import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewDetails;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Registration {
+public class Registration extends AssertionConcern {
     @EmbeddedId
     private RegistrationId registrationId;
 
@@ -36,10 +37,10 @@ public class Registration {
     private Member member;
 
     public Registration(RegistrationId registrationId, MemberDetails memberDetails, MailAddress mailAddress) {
-        this.registrationId = registrationId;
-        this.memberDetails = memberDetails;
-        this.mailAddress = mailAddress;
-        this.reviewStatus = ReviewStatus.PENDING;
+        this.setRegistrationId(registrationId);
+        this.setMemberDetails(memberDetails);
+        this.setMailAddress(mailAddress);
+        this.setReviewStatus(ReviewStatus.PENDING);
         DomainEventPublisher.instance()
                 .publish(new RegistrationCreated(this));
     }
@@ -55,8 +56,8 @@ public class Registration {
         if (!mailAddress.isVerified()) {
             throw new MailAddressNotVerifiedException(mailAddress);
         }
-        this.reviewDetails = ReviewDetails.approve(reviewedBy);
-        this.reviewStatus = ReviewStatus.APPROVED;
+        this.setReviewDetails(ReviewDetails.approve(reviewedBy));
+        this.setReviewStatus(ReviewStatus.APPROVED);
         DomainEventPublisher.instance()
                 .publish(new RegistrationApproved(this));
     }
@@ -65,11 +66,42 @@ public class Registration {
         if (reviewStatus != ReviewStatus.PENDING) {
             throw new RegistrationAlreadyReviewedException(this);
         }
-        this.reviewDetails = ReviewDetails.deny(reviewedBy, comment);
-        this.reviewStatus = ReviewStatus.DENIED;
+        this.setReviewDetails(ReviewDetails.deny(reviewedBy, comment));
+        this.setReviewStatus(ReviewStatus.DENIED);
     }
 
     public void setMember(Member member) {
+        assertArgumentNotNull(member, "Member must not be null.");
+
         this.member = member;
+    }
+
+    public void setRegistrationId(RegistrationId registrationId) {
+        assertArgumentNotNull(registrationId, "Member must not be null.");
+
+        this.registrationId = registrationId;
+    }
+
+    public void setMemberDetails(MemberDetails memberDetails) {
+        assertArgumentNotNull(memberDetails, "Memberdetails must not be null.");
+
+        this.memberDetails = memberDetails;
+    }
+
+    public void setReviewDetails(ReviewDetails reviewDetails) {
+        assertArgumentNotNull(reviewDetails, "Review details must not be null.");
+
+        this.reviewDetails = reviewDetails;
+    }
+
+    public void setReviewStatus(ReviewStatus reviewStatus) {
+        assertArgumentNotNull(reviewStatus, "Review status must not be null.");
+
+        this.reviewStatus = reviewStatus;
+    }
+
+    public void setMailAddress(MailAddress mailAddress) {
+        assertArgumentNotNull(mailAddress, "Mail address must not be null.");
+        this.mailAddress = mailAddress;
     }
 }

@@ -1,5 +1,6 @@
 package hu.indicium.dev.ledenadministratie.domain.model.user;
 
+import hu.indicium.dev.ledenadministratie.domain.AssertionConcern;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,9 @@ import java.util.Date;
 
 @Embeddable
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class ReviewDetails {
+public class ReviewDetails extends AssertionConcern {
     @Column(name = "reviewed_at")
     private Date reviewedAt;
 
@@ -24,12 +25,12 @@ public class ReviewDetails {
 
     private ReviewDetails(String reviewedBy) {
         this.reviewedAt = new Date();
-        this.reviewedBy = reviewedBy;
+        this.setReviewedBy(reviewedBy);
     }
 
     private ReviewDetails(String reviewedBy, String comment) {
         this(reviewedBy);
-        this.comment = comment;
+        this.setComment(comment);
     }
 
     public static ReviewDetails approve(String reviewedBy) {
@@ -38,5 +39,19 @@ public class ReviewDetails {
 
     public static ReviewDetails deny(String reviewedBy, String comment) {
         return new ReviewDetails(reviewedBy, comment);
+    }
+
+    public void setReviewedBy(String reviewedBy) {
+        assertArgumentNotNull(reviewedBy, "Name of reviewer must be given.");
+        assertArgumentLength(reviewedBy, 255, "Name of reviewer must be shorter than 255 characters.");
+
+        this.reviewedBy = reviewedBy;
+    }
+
+    public void setComment(String comment) {
+        assertArgumentNotNull(comment, "Comment must be given.");
+        assertArgumentLength(comment, 255, "Comment must be shorter than 255 characters.");
+
+        this.comment = comment;
     }
 }
