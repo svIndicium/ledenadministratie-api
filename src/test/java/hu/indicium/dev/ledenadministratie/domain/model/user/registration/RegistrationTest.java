@@ -17,9 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +49,9 @@ class RegistrationTest {
         this.name = new Name("Miguel", "Don", "Gomez");
         this.studyTypeId = StudyTypeId.fromId(UUID.randomUUID());
         StudyType studyType = new StudyType(studyTypeId, "SD", "Software Development");
-        this.memberDetails = new MemberDetails(name, "+31612345678", new Date(), studyType);
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 18);
+        this.memberDetails = new MemberDetails(name, "+31612345678", calendar.getTime(), studyType);
         this.mailAddress = new MailAddress("mdg@example.com", true);
         this.eventSubscriber.clear();
     }
