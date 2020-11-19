@@ -58,7 +58,7 @@ public class MemberDetails extends AssertionConcern {
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 15);
 
-        assertArgumentTrue(calendar.getTime().after(dateOfBirth), "Date of birth must be 15.");
+        assertArgumentTrue(calendar.getTime().after(dateOfBirth), "Date of birth must be at least 15 years ago.");
 
         this.dateOfBirth = dateOfBirth;
     }
