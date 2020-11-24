@@ -49,7 +49,9 @@ public class Name extends AssertionConcern {
     }
 
     public void setMiddleName(String middleName) {
-        assertArgumentLength(middleName, 255, "Middle name is too long.");
+        if (middleName != null) {
+            assertArgumentLength(middleName, 255, "Middle name is too long.");
+        }
 
         this.middleName = middleName;
     }

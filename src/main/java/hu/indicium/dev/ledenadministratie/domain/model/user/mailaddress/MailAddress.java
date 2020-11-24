@@ -50,7 +50,8 @@ public class MailAddress extends AssertionConcern {
     @ManyToOne
     private Member member;
 
-    @OneToOne(mappedBy = "mailAddress")
+    @OneToOne
+    @JoinColumn(name = "registration_id")
     private Registration registration;
 
     public MailAddress(String address, boolean receivesNewsletter) {

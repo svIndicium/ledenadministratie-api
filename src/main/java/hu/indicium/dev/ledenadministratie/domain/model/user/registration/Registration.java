@@ -29,8 +29,7 @@ public class Registration extends AssertionConcern {
     @Column(name = "review_status")
     private ReviewStatus reviewStatus;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "mail_address_id")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "registration")
     private MailAddress mailAddress;
 
     @OneToOne(mappedBy = "registration")
@@ -102,6 +101,8 @@ public class Registration extends AssertionConcern {
 
     public void setMailAddress(MailAddress mailAddress) {
         assertArgumentNotNull(mailAddress, "Mail address must not be null.");
+
+        mailAddress.setRegistration(this);
         this.mailAddress = mailAddress;
     }
 }

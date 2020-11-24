@@ -8,12 +8,16 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import hu.indicium.dev.ledenadministratie.infrastructure.notification.NotificationService;
+import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import hu.indicium.dev.ledenadministratie.util.Util;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @AllArgsConstructor
 @Service
@@ -22,6 +26,8 @@ public class Auth0ServiceImpl implements AuthService {
     private final Auth0ApiProvider auth0ApiProvider;
 
     private final NotificationService notificationService;
+
+    private final SettingService settingService;
 
     @Override
     public Auth0User getCurrentUser() {
@@ -38,6 +44,8 @@ public class Auth0ServiceImpl implements AuthService {
         User user = mapToUser(memberDetails, mailAddress);
         Request<User> userRequest = auth0ApiProvider.getManagementAPI().users().create(user);
         user = executeRequest(userRequest);
+        Request<?> request = auth0ApiProvider.getManagementAPI().users().addRoles(user.getId(), Collections.singletonList(settingService.getValueByKey("AUTH0_DEFAULT_ROLE")));
+        executeRequest(request);
         return MemberId.fromAuthId(user.getId());
     }
 

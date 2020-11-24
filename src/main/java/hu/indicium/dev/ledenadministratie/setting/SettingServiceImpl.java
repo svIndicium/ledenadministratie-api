@@ -5,6 +5,7 @@ import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 import hu.indicium.dev.ledenadministratie.setting.dto.SettingDTO;
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotFoundException;
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotSetException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +21,7 @@ public class SettingServiceImpl implements SettingService {
 
     private final AuthService authService;
 
-    public SettingServiceImpl(SettingRepository settingRepository, AuthService authService) {
+    public SettingServiceImpl(SettingRepository settingRepository, @Lazy AuthService authService) {
         this.settingRepository = settingRepository;
         this.authService = authService;
     }

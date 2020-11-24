@@ -57,6 +57,11 @@ public class Member extends AssertionConcern {
         return new Member(registration, memberId);
     }
 
+    public void addMembership(Membership membership) {
+        assertArgumentNotNull(membership, "Membership must be given.");
+        this.memberships.add(membership);
+    }
+
     public void addMailAddress(MailAddress mailAddress) {
         mailAddress.setMember(this);
         mailAddresses.add(mailAddress);
