@@ -28,8 +28,10 @@ public class SendGridService implements TransactionalMailService {
 
     private final NotificationService notificationService;
 
+    private final SendGridTemplateFactory sendGridTemplateFactory;
+
     public void sendMail(MailAddress mailAddress, Name name, MailType mailType, Map<String, Object> params) {
-        String templateId = SendGridTemplateFactory.fromMailType(mailType);
+        String templateId = sendGridTemplateFactory.fromMailType(mailType);
         Email from = new Email("secretaris@joostlek.dev", "Secretaris Indicium");
         Email to = new Email(mailAddress.getAddress(), name.getFullName());
         Mail mail = new Mail();

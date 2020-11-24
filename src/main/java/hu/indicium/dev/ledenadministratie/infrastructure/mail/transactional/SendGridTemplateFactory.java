@@ -1,16 +1,20 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.mail.transactional;
 
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailType;
+import hu.indicium.dev.ledenadministratie.setting.SettingService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@AllArgsConstructor
 public class SendGridTemplateFactory {
 
-    private SendGridTemplateFactory() {
-    }
+    private final SettingService settingService;
 
-    public static String fromMailType(MailType mailType) {
+    public String fromMailType(MailType mailType) {
         switch (mailType) {
             case VERIFY_EMAIL:
-                return "d-c60b9dff12414f4da0c6521d243801ee";
+                return settingService.getValueByKey("SENDGRID_VERIFICATION_TEMPLATE");
             default:
                 return "";
         }
