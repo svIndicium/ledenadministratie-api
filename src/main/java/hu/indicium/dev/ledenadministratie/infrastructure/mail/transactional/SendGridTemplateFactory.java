@@ -15,6 +15,8 @@ public class SendGridTemplateFactory {
         switch (mailType) {
             case VERIFY_EMAIL:
                 return settingService.getValueByKey("SENDGRID_VERIFICATION_TEMPLATE");
+            case RESET_PASSWORD:
+                return settingService.getValueByKey("SENDGRID_PASSWORD_RESET_TEMPLATE");
             default:
                 return "";
         }
