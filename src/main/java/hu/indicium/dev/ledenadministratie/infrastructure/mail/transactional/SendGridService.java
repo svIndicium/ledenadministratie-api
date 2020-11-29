@@ -32,7 +32,7 @@ public class SendGridService implements TransactionalMailService {
 
     public void sendMail(MailAddress mailAddress, Name name, MailType mailType, Map<String, Object> params) {
         String templateId = sendGridTemplateFactory.fromMailType(mailType);
-        Email from = new Email("secretaris@indicium.hu", "Secretaris Indicium");
+        Email from = new Email(settingService.getValueByKey("SENDGRID_VERIFICATION_FROM_MAIL"), settingService.getValueByKey("SENDGRID_VERIFICATION_FROM_NAME"));
         Email to = new Email(mailAddress.getAddress(), name.getFullName());
         Mail mail = new Mail();
         mail.setFrom(from);
