@@ -5,7 +5,9 @@ import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +21,9 @@ class MemberDetailsTest {
         Name name = new Name("Miguel", "Don", "Gomez");
         StudyType studyType = new StudyType(StudyTypeId.fromId(UUID.randomUUID()), "SD", "Software Development");
         String phoneNumber = "+31612345678";
-        Date dateOfBirth = new Date();
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 18);
+        Date dateOfBirth = calendar.getTime();
 
         Date startDate = new Date();
         MemberDetails memberDetails = new MemberDetails(name, phoneNumber, dateOfBirth, studyType);
