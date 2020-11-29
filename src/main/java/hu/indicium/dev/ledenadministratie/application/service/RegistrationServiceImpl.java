@@ -14,6 +14,7 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registr
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.Auth0User;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -48,6 +49,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('create:member')")
     public void reviewRegistration(ReviewRegistrationCommand reviewRegistrationCommand) {
         RegistrationId registrationId = RegistrationId.fromId(reviewRegistrationCommand.getRegistrationId());
 

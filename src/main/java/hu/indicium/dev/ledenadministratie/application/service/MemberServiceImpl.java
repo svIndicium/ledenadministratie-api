@@ -18,6 +18,7 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registr
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationRepository;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -38,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
     private final MembershipRepository membershipRepository;
 
     @Override
+    @PreAuthorize("hasPermission('create:member')")
     public MemberId registerMember(RegistrationId registrationId) {
 
         Registration registration = registrationRepository.getRegistrationById(registrationId);
@@ -52,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('create:member')")
     public MemberId importMember(ImportMemberCommand importMemberCommand) {
         RegistrationId registrationId = registrationRepository.nextIdentity();
 
