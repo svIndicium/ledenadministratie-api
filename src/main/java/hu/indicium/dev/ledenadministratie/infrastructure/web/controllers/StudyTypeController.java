@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -44,6 +45,16 @@ public class StudyTypeController {
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
                 .data(studyTypeDtos)
+                .build();
+    }
+
+    @GetMapping("/studytypes/{studyTypeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<StudyTypeDto> getStudyTypeByStudyTypeId(@PathVariable UUID studyTypeId) {
+        StudyTypeId typeId = StudyTypeId.fromId(studyTypeId);
+        StudyType studyTypes = studyTypeQueryService.getStudyTypeById(typeId);
+        return ResponseBuilder.ok()
+                .data(studyTypes)
                 .build();
     }
 }
