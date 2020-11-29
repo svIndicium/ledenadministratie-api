@@ -25,8 +25,8 @@ public class Util {
         return builder.toString();
     }
 
-    public static String generateTemporaryPassword() {
-        return Util.randomAlphaNumeric(20) + "A1a!";
+    public static char[] generateTemporaryPassword() {
+        return (Util.randomAlphaNumeric(20) + "A1a!").toCharArray();
     }
 
     /*

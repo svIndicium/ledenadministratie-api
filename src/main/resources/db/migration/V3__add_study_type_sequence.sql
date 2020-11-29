@@ -1,1 +1,0 @@
-create sequence study_type_seq;

@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
 
-    private Logger logger = LoggerFactory.getLogger(MD5.class);
+    private final Logger logger = LoggerFactory.getLogger(MD5.class);
 
     public String hash(String string) {
         try {
