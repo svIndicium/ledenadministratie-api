@@ -55,7 +55,7 @@ public class RegistrationController {
     @PostMapping("/registrations/{registrationId}/review")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Response<RegistrationDto> reviewRegistration(@RequestBody ReviewRegistrationCommand reviewRegistrationCommand, @PathVariable UUID registrationId) {
-        reviewRegistrationCommand.setRegistrationId(registrationId);
+        reviewRegistrationCommand.setId(registrationId);
         registrationService.reviewRegistration(reviewRegistrationCommand);
         Registration registration = queryService.getRegistrationById(RegistrationId.fromId(registrationId));
         RegistrationDto registrationDTO = new RegistrationDto(registration);

@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ReviewRegistrationCommand {
 
-    private UUID registrationId;
+    private UUID id;
 
     private ReviewStatus reviewStatus;
 

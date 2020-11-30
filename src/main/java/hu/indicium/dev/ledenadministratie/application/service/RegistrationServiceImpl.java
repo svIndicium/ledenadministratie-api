@@ -51,7 +51,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     @PreAuthorize("hasPermission('create:member')")
     public void reviewRegistration(ReviewRegistrationCommand reviewRegistrationCommand) {
-        RegistrationId registrationId = RegistrationId.fromId(reviewRegistrationCommand.getRegistrationId());
+        RegistrationId registrationId = RegistrationId.fromId(reviewRegistrationCommand.getId());
 
         Registration registration = registrationRepository.getRegistrationById(registrationId);
 

@@ -9,14 +9,14 @@ import java.util.UUID;
 @Getter
 @Setter
 public class StudyTypeDto {
-    private UUID studyTypeId;
+    private UUID id;
 
     private String shortName;
 
     private String name;
 
     public StudyTypeDto(StudyType studyType) {
-        this.studyTypeId = studyType.getStudyTypeId().getId();
+        this.id = studyType.getStudyTypeId().getId();
         this.shortName = studyType.getShortName();
         this.name = studyType.getName();
     }

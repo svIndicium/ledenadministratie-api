@@ -5,13 +5,12 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registr
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Getter
 @Setter
 public class RegistrationDto {
-    private UUID registrationId;
+    private UUID id;
 
     private MemberDetailsDto memberDetails;
 
@@ -26,7 +25,7 @@ public class RegistrationDto {
     private ReviewStatus reviewStatus;
 
     public RegistrationDto(Registration registration) {
-        this.registrationId = registration.getRegistrationId().getId();
+        this.id = registration.getRegistrationId().getId();
         this.memberDetails = new MemberDetailsDto(registration.getMemberDetails());
         this.mailAddress = registration.getMailAddress().getAddress();
         this.receivingNewsletter = registration.getMailAddress().isReceivesNewsletter();

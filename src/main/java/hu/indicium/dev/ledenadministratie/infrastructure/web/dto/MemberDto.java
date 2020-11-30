@@ -11,7 +11,7 @@ import java.util.HashSet;
 @Getter
 @Setter
 public class MemberDto {
-    private String memberId;
+    private String id;
 
     private MemberDetailsDto memberDetails;
 
@@ -20,7 +20,7 @@ public class MemberDto {
     private Collection<MailAddressDto> mailAddresses;
 
     public MemberDto(Member member) {
-        this.memberId = member.getMemberId().getAuthId();
+        this.id = member.getMemberId().getAuthId();
         this.memberDetails = new MemberDetailsDto(member.getMemberDetails());
         this.reviewDetails = new ReviewDetailsDto(member.getReviewDetails());
         this.mailAddresses = new HashSet<>();
