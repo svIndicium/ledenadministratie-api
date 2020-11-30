@@ -33,10 +33,8 @@ public class RegistrationController {
     @ResponseStatus(HttpStatus.CREATED)
     public Response<RegistrationDto> createNewRegistration(@RequestBody NewRegistrationCommand newRegistrationCommand) {
         RegistrationId registrationId = registrationService.register(newRegistrationCommand);
-        Registration registration = queryService.getRegistrationById(registrationId);
-        RegistrationDto registrationDTO = new RegistrationDto(registration);
         return ResponseBuilder.created()
-                .data(registrationDTO)
+                .data(registrationId)
                 .build();
     }
 
