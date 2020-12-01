@@ -45,8 +45,19 @@ public class RegistrationController {
         Collection<RegistrationDto> registrationDtos = registrations.stream()
                 .map(RegistrationDto::new)
                 .collect(Collectors.toSet());
-        return ResponseBuilder.created()
+        return ResponseBuilder.ok()
                 .data(registrationDtos)
+                .build();
+    }
+
+    @GetMapping("/registrations/{registrationUuid}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<RegistrationDto> getRegistrationById(@PathVariable UUID registrationUuid) {
+        RegistrationId registrationId = RegistrationId.fromId(registrationUuid);
+        Registration registration = queryService.getRegistrationById(registrationId);
+        RegistrationDto registrationDto = new RegistrationDto(registration);
+        return ResponseBuilder.ok()
+                .data(registrationDto)
                 .build();
     }
 
