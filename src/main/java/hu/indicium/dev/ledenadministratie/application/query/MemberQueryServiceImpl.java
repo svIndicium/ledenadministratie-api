@@ -16,13 +16,13 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final MemberRepository memberRepository;
 
     @Override
-    @PreAuthorize("hasPermission('admin:member') || (hasPermission('read:member') && #memberId.authId == principal)")
+    @PreAuthorize("hasPermission('manage-members') || (hasPermission('view-members') && #memberId.authId == principal)")
     public Member getMemberById(MemberId memberId) {
         return memberRepository.getMemberById(memberId);
     }
 
     @Override
-    @PreAuthorize("hasPermission('admin:member')")
+    @PreAuthorize("hasPermission('manage-members')")
     public Collection<Member> getAllMembers() {
         return memberRepository.getAllMembers();
     }

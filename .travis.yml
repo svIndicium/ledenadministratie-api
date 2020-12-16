@@ -20,7 +20,8 @@ before_script:
   - bash ./.travis/install-postgres-11.sh
 
 script:
-  - ./gradlew build jacocoTestReport sonarqube
+  - chmod +x mvnw
+  - ./mvnw package
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "stable"; elif [ "$TRAVIS_BRANCH" == "dev" ]; then echo "latest"; else echo $TRAVIS_BRANCH | tr "/" -; fi`
 
 deploy:

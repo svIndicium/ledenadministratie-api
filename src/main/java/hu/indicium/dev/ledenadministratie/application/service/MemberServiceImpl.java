@@ -39,7 +39,6 @@ public class MemberServiceImpl implements MemberService {
     private final MembershipRepository membershipRepository;
 
     @Override
-    @PreAuthorize("hasPermission('create:member')")
     public MemberId registerMember(RegistrationId registrationId) {
 
         Registration registration = registrationRepository.getRegistrationById(registrationId);
@@ -54,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @PreAuthorize("hasPermission('create:member')")
+    @PreAuthorize("hasPermission('manage-members')")
     public MemberId importMember(ImportMemberCommand importMemberCommand) {
         RegistrationId registrationId = registrationRepository.nextIdentity();
 

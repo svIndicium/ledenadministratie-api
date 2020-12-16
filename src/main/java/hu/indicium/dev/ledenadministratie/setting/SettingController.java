@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 import static hu.indicium.dev.ledenadministratie.util.BaseUrl.API_V1;
@@ -32,7 +31,7 @@ public class SettingController {
 
     @PutMapping(value = "/{settingKey}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Response<SettingDTO> updateSetting(@PathVariable String settingKey, @RequestBody @Valid UpdateSettingRequest updateSettingRequest) {
+    public Response<SettingDTO> updateSetting(@PathVariable String settingKey, @RequestBody UpdateSettingRequest updateSettingRequest) {
         return ResponseBuilder.accepted()
                 .data(settingService.updateSetting(settingKey, updateSettingRequest.getValue()))
                 .build();

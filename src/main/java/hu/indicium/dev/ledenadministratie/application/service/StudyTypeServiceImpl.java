@@ -15,7 +15,7 @@ public class StudyTypeServiceImpl implements StudyTypeService {
     private final StudyTypeRepository studyTypeRepository;
 
     @Override
-    @PreAuthorize("hasPermission('write:study_type')")
+    @PreAuthorize("hasPermission('update-studytypes')")
     public StudyTypeId createStudyType(NewStudyTypeCommand newStudyTypeCommand) {
         StudyTypeId studyTypeId = studyTypeRepository.nextIdentity();
 

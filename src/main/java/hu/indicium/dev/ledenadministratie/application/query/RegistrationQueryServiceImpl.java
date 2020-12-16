@@ -16,13 +16,13 @@ public class RegistrationQueryServiceImpl implements RegistrationQueryService {
     private final RegistrationRepository registrationRepository;
 
     @Override
-    @PreAuthorize("hasPermission('admin:registration') || hasPermission('read:registration')")
+    @PreAuthorize("hasPermission('view-registrations')")
     public Registration getRegistrationById(RegistrationId registrationId) {
         return registrationRepository.getRegistrationById(registrationId);
     }
 
     @Override
-    @PreAuthorize("hasPermission('admin:registration') || hasPermission('read:registration')")
+    @PreAuthorize("hasPermission('view-registrations')")
     public Collection<Registration> getAllRegistrations() {
         return registrationRepository.getAllRegistrations();
     }

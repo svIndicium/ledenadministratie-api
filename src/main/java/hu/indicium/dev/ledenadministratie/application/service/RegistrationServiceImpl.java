@@ -11,8 +11,8 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddr
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registration;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationRepository;
-import hu.indicium.dev.ledenadministratie.infrastructure.auth.Auth0User;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -49,20 +49,20 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    @PreAuthorize("hasPermission('create:member')")
+    @PreAuthorize("hasPermission('review-registrations')")
     public void reviewRegistration(ReviewRegistrationCommand reviewRegistrationCommand) {
         RegistrationId registrationId = RegistrationId.fromId(reviewRegistrationCommand.getId());
 
         Registration registration = registrationRepository.getRegistrationById(registrationId);
 
-        Auth0User auth0User = authService.getCurrentUser();
+        User user = authService.getCurrentUser();
 
         switch (reviewRegistrationCommand.getReviewStatus()) {
             case DENIED:
-                registration.deny(auth0User.getName(), reviewRegistrationCommand.getComment());
+                registration.deny(user.getName(), reviewRegistrationCommand.getComment());
                 break;
             case APPROVED:
-                registration.approve(auth0User.getName());
+                registration.approve(user.getName());
                 break;
             case PENDING:
             default:

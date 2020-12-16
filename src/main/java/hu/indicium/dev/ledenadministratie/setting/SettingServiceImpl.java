@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.setting;
 
-import hu.indicium.dev.ledenadministratie.infrastructure.auth.Auth0User;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.User;
 import hu.indicium.dev.ledenadministratie.setting.dto.SettingDTO;
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotFoundException;
 import hu.indicium.dev.ledenadministratie.setting.exceptions.SettingNotSetException;
@@ -43,10 +43,10 @@ public class SettingServiceImpl implements SettingService {
     @Override
     @PostAuthorize("hasPermission('write:' + returnObject.permission)")
     public SettingDTO updateSetting(String key, String value) {
-        Auth0User auth0User = authService.getCurrentUser();
+        User user = authService.getCurrentUser();
         Setting setting = getSetting(key);
         setting.setValue(value);
-        setting.setUpdatedBy(auth0User.getName());
+        setting.setUpdatedBy(user.getName());
         setting = settingRepository.save(setting);
         return SettingMapper.map(setting);
     }
