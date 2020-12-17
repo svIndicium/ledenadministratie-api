@@ -2,7 +2,6 @@ package hu.indicium.dev.ledenadministratie.infrastructure.persistency;
 
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.MembershipId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.MembershipRepository;
-import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.infrastructure.persistency.jpa.MembershipJpaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;

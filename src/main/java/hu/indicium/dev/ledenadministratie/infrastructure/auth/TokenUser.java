@@ -4,7 +4,7 @@ import org.springframework.security.core.Authentication;
 
 public class TokenUser implements User {
 
-    private String name;
+    private final String name;
 
     public TokenUser(Authentication authentication) {
         this.name = authentication.getName();

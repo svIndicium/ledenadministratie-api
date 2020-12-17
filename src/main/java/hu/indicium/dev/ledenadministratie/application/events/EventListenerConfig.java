@@ -1,8 +1,5 @@
 package hu.indicium.dev.ledenadministratie.application.events;
 
-import hu.indicium.dev.ledenadministratie.application.events.listeners.MemberCreatedListener;
-import hu.indicium.dev.ledenadministratie.application.events.listeners.RegistrationApprovedListener;
-import hu.indicium.dev.ledenadministratie.application.events.listeners.RegistrationCreatedListener;
 import hu.indicium.dev.ledenadministratie.application.service.MemberService;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventPublisher;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventSubscriber;
