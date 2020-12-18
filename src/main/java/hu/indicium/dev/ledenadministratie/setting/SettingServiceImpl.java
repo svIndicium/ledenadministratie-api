@@ -41,7 +41,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    @PostAuthorize("hasPermission('write:' + returnObject.permission)")
+    @PostAuthorize("hasPermission('update-' + returnObject.permission + '-setting')")
     public SettingDTO updateSetting(String key, String value) {
         User user = authService.getCurrentUser();
         Setting setting = getSetting(key);
@@ -52,8 +52,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    @PreAuthorize("hasPermission('read:settings')")
-    @PostFilter("hasPermission('read:' + filterObject.permission)")
+    @PostFilter("hasPermission('view-' + filterObject.permission + '-setting')")
     public List<SettingDTO> getAllSettings() {
         return settingRepository.findAll()
                 .stream()

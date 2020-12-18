@@ -26,4 +26,6 @@ public class NewRegistrationCommand {
     private boolean receivingNewsletter;
 
     private UUID studyTypeId;
+
+    private boolean acceptsStatuten;
 }
