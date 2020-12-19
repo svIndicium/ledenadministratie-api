@@ -10,16 +10,19 @@ import hu.indicium.dev.ledenadministratie.util.BaseUrl;
 import hu.indicium.dev.ledenadministratie.util.Response;
 import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping(BaseUrl.API_V1)
+@Slf4j
 public class MemberController {
     private final MemberQueryService memberQueryService;
 
@@ -40,7 +43,9 @@ public class MemberController {
     @GetMapping("/members/{authId}")
     @ResponseStatus(HttpStatus.OK)
     public Response<MemberDto> getMemberByAuthId(@PathVariable String authId) {
+        log.info(new Date().toString());
         MemberId memberId = MemberId.fromAuthId(authId);
+        log.info(new Date().toString());
         Member member = memberQueryService.getMemberById(memberId);
         MemberDto memberDto = new MemberDto(member);
         return ResponseBuilder.ok()

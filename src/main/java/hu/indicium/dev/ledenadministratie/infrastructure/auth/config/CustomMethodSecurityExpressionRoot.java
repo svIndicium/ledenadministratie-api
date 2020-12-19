@@ -1,10 +1,14 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.auth.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Date;
+
+@Slf4j
 public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
 
     Object filterObject;
@@ -46,6 +50,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     }
 
     public boolean hasPermission(String permission) {
+        log.info(new Date().toString());
         for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
             if (grantedAuthority.getAuthority().equals("SCOPE_ledenadministratie-api/" + permission)) {
                 return true;
