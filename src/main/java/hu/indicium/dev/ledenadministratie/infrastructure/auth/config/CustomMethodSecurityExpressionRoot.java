@@ -50,12 +50,15 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
     }
 
     public boolean hasPermission(String permission) {
-        log.info(new Date().toString());
         for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
             if (grantedAuthority.getAuthority().equals("SCOPE_ledenadministratie-api/" + permission)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean userIdEquals(String userId) {
+        return authentication.getName().equals(userId);
     }
 }

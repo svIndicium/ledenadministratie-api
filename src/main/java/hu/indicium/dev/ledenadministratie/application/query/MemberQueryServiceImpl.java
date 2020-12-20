@@ -19,9 +19,8 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final MemberRepository memberRepository;
 
     @Override
-    @PreAuthorize("hasPermission('manage-members') || (hasPermission('view-members') && #memberId.authId == principal)")
+    @PreAuthorize("hasPermission('manage-members') || (hasPermission('view-members') && userIdEquals(#memberId.authId))")
     public Member getMemberById(MemberId memberId) {
-        log.info(new Date().toString());
         return memberRepository.getMemberById(memberId);
     }
 

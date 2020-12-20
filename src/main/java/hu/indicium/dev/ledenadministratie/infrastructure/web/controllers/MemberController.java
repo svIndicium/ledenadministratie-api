@@ -43,9 +43,7 @@ public class MemberController {
     @GetMapping("/members/{authId}")
     @ResponseStatus(HttpStatus.OK)
     public Response<MemberDto> getMemberByAuthId(@PathVariable String authId) {
-        log.info(new Date().toString());
         MemberId memberId = MemberId.fromAuthId(authId);
-        log.info(new Date().toString());
         Member member = memberQueryService.getMemberById(memberId);
         MemberDto memberDto = new MemberDto(member);
         return ResponseBuilder.ok()
