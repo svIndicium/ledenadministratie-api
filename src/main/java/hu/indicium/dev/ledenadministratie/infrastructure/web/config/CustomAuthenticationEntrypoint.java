@@ -5,6 +5,7 @@ import hu.indicium.dev.ledenadministratie.util.ErrorDto;
 import hu.indicium.dev.ledenadministratie.util.Response;
 import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @AllArgsConstructor
+@Slf4j
 public class CustomAuthenticationEntrypoint implements AuthenticationEntryPoint {
 
     private final ObjectMapper objectMapper;
@@ -30,6 +32,8 @@ public class CustomAuthenticationEntrypoint implements AuthenticationEntryPoint 
             OAuth2Error error = ((OAuth2AuthenticationException) authException).getError();
             errorDto.setMessage(error.getDescription());
         }
+
+        log.error(authException.getMessage());
 
         Response<ErrorDto> error = ResponseBuilder.unauthorized()
                 .error(errorDto)

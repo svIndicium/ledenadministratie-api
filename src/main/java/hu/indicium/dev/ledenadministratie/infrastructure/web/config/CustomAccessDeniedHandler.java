@@ -5,6 +5,7 @@ import hu.indicium.dev.ledenadministratie.util.ErrorDto;
 import hu.indicium.dev.ledenadministratie.util.Response;
 import hu.indicium.dev.ledenadministratie.util.ResponseBuilder;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @AllArgsConstructor
+@Slf4j
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private final ObjectMapper objectMapper;
@@ -29,6 +31,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         Response<ErrorDto> error = ResponseBuilder.forbidden()
                 .error(errorDto)
                 .build();
+
+        log.error(accessDeniedException.getMessage());
 
         String body = objectMapper.writeValueAsString(error);
 
