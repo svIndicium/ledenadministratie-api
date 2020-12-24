@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -53,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     @PreAuthorize("hasPermission('manage-members')")
     public MemberId importMember(ImportMemberCommand importMemberCommand) {
         RegistrationId registrationId = registrationRepository.nextIdentity();
