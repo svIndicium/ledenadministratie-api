@@ -1,24 +1,14 @@
 {
   "properties": [
     {
-      "name": "auth0.apiAudience",
+      "name": "keycloak.server-url",
       "type": "java.lang.String",
-      "description": "Description for auth0.apiAudience."
+      "description": "Server url for the keycloak instance."
     },
     {
-      "name": "auth0.issuer",
+      "name": "keycloak.realm",
       "type": "java.lang.String",
-      "description": "Description for auth0.issuer."
-    },
-    {
-      "name": "auth0.clientSecret",
-      "type": "java.lang.String",
-      "description": "Description for auth0.clientSecret."
-    },
-    {
-      "name": "auth0.clientId",
-      "type": "java.lang.String",
-      "description": "Description for auth0.clientId."
+      "description": "The realm to authenticate to."
     }
   ]
 }

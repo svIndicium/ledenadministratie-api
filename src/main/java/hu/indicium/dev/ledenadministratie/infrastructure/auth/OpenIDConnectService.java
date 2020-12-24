@@ -5,6 +5,7 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddr
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import lombok.AllArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,9 @@ public class OpenIDConnectService implements AuthService {
 
     private final KeycloakProvider keycloakProvider;
 
+    @Value("${keycloak.realm}")
+    private final String realm;
+
     @Override
     public User getCurrentUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -34,7 +38,7 @@ public class OpenIDConnectService implements AuthService {
         try {
             UserRepresentation userRepresentation = UserRepresentationFactory.create(memberDetails, mailAddress);
             Response response = keycloakProvider.getKeycloak()
-                    .realm("indicium")
+                    .realm(realm)
                     .users()
                     .create(userRepresentation);
             String locationUri = response.getLocation().toString();
@@ -49,7 +53,7 @@ public class OpenIDConnectService implements AuthService {
     @Override
     public void requestPasswordReset(MemberId memberId) {
         keycloakProvider.getKeycloak()
-                .realm("indicium")
+                .realm(realm)
                 .users()
                 .get(memberId.getAuthId())
                 .executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));

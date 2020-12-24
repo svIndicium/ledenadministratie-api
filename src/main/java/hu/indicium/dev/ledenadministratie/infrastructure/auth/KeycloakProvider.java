@@ -14,6 +14,12 @@ public class KeycloakProvider {
     @Value("${spring.security.oauth2.client.registration.indicium.client-secret}")
     private String clientSecret;
 
+    @Value("${keycloak.server-url}")
+    private String serverUrl;
+
+    @Value("${keycloak.realm}")
+    private String realm;
+
     private Keycloak keycloak;
 
     public Keycloak getKeycloak() {
@@ -25,8 +31,8 @@ public class KeycloakProvider {
 
     private void createKeycloak() {
         this.keycloak = KeycloakBuilder.builder()
-                .serverUrl("http://keycloak:8080/auth")
-                .realm("indicium")
+                .serverUrl(serverUrl)
+                .realm(realm)
                 .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
