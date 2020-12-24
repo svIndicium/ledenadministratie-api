@@ -25,7 +25,7 @@ public class KeycloakProvider {
 
     private void createKeycloak() {
         this.keycloak = KeycloakBuilder.builder()
-                .serverUrl("https://auth.indicium.hu/auth")
+                .serverUrl("http://keycloak:8080/auth")
                 .realm("indicium")
                 .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .clientId(clientId)
