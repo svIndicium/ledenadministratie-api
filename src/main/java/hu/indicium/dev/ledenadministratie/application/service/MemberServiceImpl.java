@@ -81,12 +81,12 @@ public class MemberServiceImpl implements MemberService {
 
         if (importMemberCommand.isOldMember()) {
             MembershipId membershipId = membershipRepository.nextIdentity();
-            Membership membership = new Membership(membershipId, new Date(2019, Calendar.SEPTEMBER, 1), new Date(2020, Calendar.AUGUST, 31), member);
+            Membership membership = new Membership(membershipId, new Date(119, Calendar.SEPTEMBER, 1), new Date(120, Calendar.AUGUST, 31), member);
             member.addMembership(membership);
         }
         if (importMemberCommand.isNewMember()) {
             MembershipId membershipId = membershipRepository.nextIdentity();
-            Membership membership = new Membership(membershipId, new Date(2020, Calendar.SEPTEMBER, 1), new Date(2021, Calendar.AUGUST, 31), member);
+            Membership membership = new Membership(membershipId, new Date(120, Calendar.SEPTEMBER, 1), new Date(121, Calendar.AUGUST, 31), member);
             member.addMembership(membership);
         }
 
