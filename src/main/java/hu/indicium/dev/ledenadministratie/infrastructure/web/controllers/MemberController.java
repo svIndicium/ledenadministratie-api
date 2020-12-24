@@ -57,7 +57,7 @@ public class MemberController {
         MemberId memberId = memberService.importMember(importMemberCommand);
         Member member = memberQueryService.getMemberById(memberId);
         MemberDto memberDto = new MemberDto(member);
-        return ResponseBuilder.ok()
+        return ResponseBuilder.created()
                 .data(memberDto)
                 .build();
     }
