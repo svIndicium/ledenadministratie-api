@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ValidatorGroup<T> implements Validator<T> {
 
-    private List<Validator<T>> validators;
+    private final List<Validator<T>> validators;
 
     public ValidatorGroup(List<Validator<T>> validators) {
         this.validators = validators;

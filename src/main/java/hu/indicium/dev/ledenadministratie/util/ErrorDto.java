@@ -1,8 +1,11 @@
 package hu.indicium.dev.ledenadministratie.util;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ErrorDto {
     private String field;
     private String message;

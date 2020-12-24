@@ -108,21 +108,5 @@ class SettingControllerTest {
                 .andExpect(jsonPath("$.data.updatedBy", is(settingDTO.getUpdatedBy())));
     }
 
-    @Test
-    @DisplayName("Update setting")
-    void shouldThrowException_whenUpdateValueWithBlankValue() throws Exception {
-        String newValue = "";
-
-        UpdateSettingRequest updateSettingRequest = new UpdateSettingRequest();
-        updateSettingRequest.setValue(newValue);
-
-        mvc.perform(put("/api/v1/settings/lit/" + settingDTO.getKey())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(user("user"))
-                .with(csrf())
-                .content(objectMapper.writer().writeValueAsString(updateSettingRequest)))
-                .andExpect(status().isBadRequest());
-    }
-
 
 }
