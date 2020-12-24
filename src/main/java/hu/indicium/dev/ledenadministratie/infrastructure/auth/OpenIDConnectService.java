@@ -42,7 +42,7 @@ public class OpenIDConnectService implements AuthService {
             String id = parts[parts.length - 1];
             return MemberId.fromAuthId(id);
         } catch (Exception e) {
-            throw new AuthException(memberDetails.getName().getFullName());
+            throw new AuthException(memberDetails.getName().getFullName(), e);
         }
     }
 

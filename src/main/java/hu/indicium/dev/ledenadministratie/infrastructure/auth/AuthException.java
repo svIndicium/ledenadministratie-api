@@ -1,7 +1,7 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.auth;
 
 public class AuthException extends RuntimeException {
-    public AuthException(String name) {
-        super("Could not create user for " + name);
+    public AuthException(String name, Exception e) {
+        super("Could not create user for " + name + ". Reason: " + e.getMessage());
     }
 }
