@@ -4,6 +4,7 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -16,7 +17,6 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 
 @Service
-@AllArgsConstructor
 public class OpenIDConnectService implements AuthService {
 
     private final WebClient webClient;
@@ -24,7 +24,12 @@ public class OpenIDConnectService implements AuthService {
     private final KeycloakProvider keycloakProvider;
 
     @Value("${keycloak.realm}")
-    private final String realm;
+    private String realm;
+
+    public OpenIDConnectService(WebClient webClient, KeycloakProvider keycloakProvider) {
+        this.webClient = webClient;
+        this.keycloakProvider = keycloakProvider;
+    }
 
     @Override
     public User getCurrentUser() {
