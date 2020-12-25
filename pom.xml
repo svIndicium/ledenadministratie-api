@@ -131,7 +131,7 @@
 				<configuration>
 					<container>
 						<ports>
-							<port>80</port>
+							<port>8080</port>
 						</ports>
 					</container>
 					<from>
