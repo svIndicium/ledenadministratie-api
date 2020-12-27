@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/studytypes").permitAll()
+                .antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer()
