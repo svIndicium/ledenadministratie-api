@@ -30,6 +30,7 @@ public class RestTemplateConfig {
     WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client = new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
         return WebClient.builder()
+                .baseUrl("localhost/api/v1")
                 .apply(oauth2Client.oauth2Configuration())
                 .build();
     }

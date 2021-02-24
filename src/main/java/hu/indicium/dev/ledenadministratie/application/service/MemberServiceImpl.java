@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.application.service;
 
 import hu.indicium.dev.ledenadministratie.application.commands.ImportMemberCommand;
+import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeId;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeRepository;
@@ -17,6 +18,7 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registr
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationRepository;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.infrastructure.payment.PaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final MembershipRepository membershipRepository;
 
+    private final PaymentService paymentService;
+
     @Override
     public MemberId registerMember(RegistrationId registrationId) {
 
@@ -47,6 +51,14 @@ public class MemberServiceImpl implements MemberService {
         MemberId memberId = authService.createAccountForUser(registration.getMemberDetails(), registration.getMailAddress());
 
         Member member = Member.fromRegistration(registration, memberId);
+
+        MembershipId membershipId = membershipRepository.nextIdentity();
+
+        Membership membership = new Membership(membershipId, new Date(121, Calendar.SEPTEMBER, 1), new Date(122, Calendar.AUGUST, 31), member);
+
+        PaymentId paymentId = paymentService.createContributionPayment(member);
+
+        membership.assignPayment(paymentId);
 
         memberRepository.save(member);
 
