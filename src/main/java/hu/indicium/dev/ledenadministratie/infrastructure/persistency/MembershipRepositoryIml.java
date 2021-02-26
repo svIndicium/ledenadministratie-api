@@ -1,5 +1,7 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.persistency;
 
+import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
+import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.Membership;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.MembershipId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.MembershipRepository;
 import hu.indicium.dev.ledenadministratie.infrastructure.persistency.jpa.MembershipJpaRepository;
@@ -22,5 +24,15 @@ public class MembershipRepositoryIml implements MembershipRepository {
             return nextIdentity();
         }
         return membershipId;
+    }
+
+    @Override
+    public Membership getMembershipByPaymentId(PaymentId paymentId) {
+        return membershipJpaRepository.getMembershipByPaymentId(paymentId);
+    }
+
+    @Override
+    public Membership save(Membership membership) {
+        return membershipJpaRepository.save(membership);
     }
 }

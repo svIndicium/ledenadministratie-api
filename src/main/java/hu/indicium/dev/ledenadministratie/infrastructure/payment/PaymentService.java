@@ -5,4 +5,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 
 public interface PaymentService {
     PaymentId createContributionPayment(Member member);
+
+    Payment getPaymentByPaymentId(PaymentId paymentId);
 }

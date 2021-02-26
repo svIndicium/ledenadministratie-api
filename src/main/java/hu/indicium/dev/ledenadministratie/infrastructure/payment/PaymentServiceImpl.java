@@ -35,4 +35,18 @@ public class PaymentServiceImpl implements PaymentService {
         }
         return PaymentId.fromId(payment.getId());
     }
+
+    @Override
+    public Payment getPaymentByPaymentId(PaymentId paymentId) {
+        Payment payment = webClient.get()
+                .uri("/payments/" + paymentId.getId().toString())
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .retrieve()
+                .bodyToMono(Payment.class)
+                .block();
+        if (payment == null) {
+            throw new RuntimeException("Could not get payment");
+        }
+        return payment;
+    }
 }
