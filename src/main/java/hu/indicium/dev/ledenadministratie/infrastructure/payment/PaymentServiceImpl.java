@@ -2,17 +2,25 @@ package hu.indicium.dev.ledenadministratie.infrastructure.payment;
 
 import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
+import hu.indicium.dev.ledenadministratie.util.Response;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
+
+    @Value("${hu.indicium.api.payments.url}")
+    private String paymentUrl;
 
     private final WebClient webClient;
 
@@ -38,15 +46,15 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment getPaymentByPaymentId(PaymentId paymentId) {
-        Payment payment = webClient.get()
-                .uri("/payments/" + paymentId.getId().toString())
+        PaymentResponse paymentResponse = webClient.get()
+                .uri(paymentUrl + "/payments/" + paymentId.getId().toString())
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .retrieve()
-                .bodyToMono(Payment.class)
+                .bodyToMono(PaymentResponse.class)
                 .block();
-        if (payment == null) {
+        if (paymentResponse == null || paymentResponse.getData() == null) {
             throw new RuntimeException("Could not get payment");
         }
-        return payment;
+        return paymentResponse.getData();
     }
 }
