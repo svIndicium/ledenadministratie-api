@@ -17,7 +17,7 @@ public class PaymentUpdatedListener {
 
     private final MembershipService membershipService;
 
-    @RabbitListener(queues = "payment")
+    @RabbitListener(queues = "#{paymentQueue.name}")
     public void execute(String eventJson) {
         try {
             System.out.println(eventJson);

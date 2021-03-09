@@ -1,8 +1,6 @@
 package hu.indicium.dev.ledenadministratie.infrastructure.messaging.config;
 
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Exchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,12 +8,27 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
 
     @Bean
-    Queue queue() {
+    Queue paymentQueue() {
         return new Queue("payment");
     }
 
     @Bean
-    Exchange exchange() {
-        return new DirectExchange("indicium");
+    Binding paymentBinding() {
+        return BindingBuilder.bind(paymentQueue()).to(exchange()).with(paymentQueue().getName());
+    }
+
+    @Bean
+    Queue notificationQueue() {
+        return new Queue("notification");
+    }
+
+    @Bean
+    Binding notificationBinding() {
+        return BindingBuilder.bind(notificationQueue()).to(exchange()).with(notificationQueue().getName());
+    }
+
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange("indicium");
     }
 }
