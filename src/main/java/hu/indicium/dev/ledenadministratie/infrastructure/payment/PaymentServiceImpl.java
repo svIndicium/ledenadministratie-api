@@ -32,7 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .description("Contributie 2021-2022")
                 .build();
         Payment payment = webClient.post()
-                .uri("/payments")
+                .uri(paymentUrl + "/payments")
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .body(Mono.just(createPaymentRequest), CreatePaymentRequest.class)
                 .retrieve()
