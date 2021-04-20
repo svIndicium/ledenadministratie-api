@@ -9,9 +9,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewStatus;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
-import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddressNotVerifiedException;
-import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
-import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
 import hu.indicium.dev.ledenadministratie.util.TestDomainEventSubscriber;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -98,26 +95,9 @@ class RegistrationTest {
     }
 
     @Test
-    @DisplayName("Should throw exception when approving a registration without verified mailaddress")
-    void shouldThrowException_whenApproveRegistrationWithoutVerifiedMailAddress() {
-        Registration registration = new Registration(registrationId, memberDetails, mailAddress);
-
-        String reviewedBy = "Secretary's name";
-
-        try {
-            registration.approve(reviewedBy);
-            fail("Should throw an exception because the mail address is not verfied");
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(MailAddressNotVerifiedException.class);
-        }
-    }
-
-    @Test
     @DisplayName("Approve registration")
     void approveRegistration() {
         Registration registration = new Registration(registrationId, memberDetails, mailAddress);
-
-        mailAddress.verify();
 
         String reviewedBy = "Secretary's name";
 
@@ -135,8 +115,6 @@ class RegistrationTest {
     void shouldThrowException_whenApprovingAnAlreadyReviewedRegistration() {
 
         Registration registration = new Registration(registrationId, memberDetails, mailAddress);
-
-        mailAddress.verify();
 
         String reviewedBy = "Secretary's name";
 
