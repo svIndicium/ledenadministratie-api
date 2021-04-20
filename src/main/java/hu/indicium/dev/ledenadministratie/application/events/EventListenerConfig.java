@@ -6,6 +6,7 @@ import hu.indicium.dev.ledenadministratie.application.events.listeners.Registrat
 import hu.indicium.dev.ledenadministratie.application.service.MemberService;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventPublisher;
 import hu.indicium.dev.ledenadministratie.domain.DomainEventSubscriber;
+import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -22,12 +23,14 @@ public class EventListenerConfig implements CommandLineRunner {
 
     private final MemberService memberService;
 
+    private final AuthService authService;
+
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void run(String... args) throws Exception {
         List<DomainEventSubscriber> subscribers = Arrays.asList(
-                new RegistrationCreatedListener(mailService),
-                new RegistrationApprovedListener(memberService),
+                new RegistrationCreatedListener(authService),
+                new RegistrationApprovedListener(memberService, authService),
                 new MemberCreatedListener(mailService)
         );
         for (DomainEventSubscriber subscriber : subscribers) {
