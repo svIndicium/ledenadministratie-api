@@ -3,6 +3,7 @@ package hu.indicium.dev.ledenadministratie.infrastructure.auth;
 import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.MemberId;
+import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.ws.rs.core.Response;
-import java.util.Collections;
+import java.util.*;
 
 @Service
 public class OpenIDConnectService implements AuthService {
@@ -39,7 +40,7 @@ public class OpenIDConnectService implements AuthService {
     }
 
     @Override
-    public MemberId createAccountForUser(MemberDetails memberDetails, MailAddress mailAddress) {
+    public RegistrationId createAccountForUser(MemberDetails memberDetails, MailAddress mailAddress) {
         try {
             UserRepresentation userRepresentation = UserRepresentationFactory.create(memberDetails, mailAddress);
             Response response = keycloakProvider.getKeycloak()
@@ -49,18 +50,37 @@ public class OpenIDConnectService implements AuthService {
             String locationUri = response.getLocation().toString();
             String[] parts = locationUri.split("/");
             String id = parts[parts.length - 1];
-            return MemberId.fromAuthId(id);
+            UUID uuid = UUID.fromString(id);
+            return RegistrationId.fromId(uuid);
         } catch (Exception e) {
             throw new AuthException(memberDetails.getName().getFullName(), e);
         }
     }
 
     @Override
-    public void requestPasswordReset(MemberId memberId) {
+    public void requestPasswordReset(UUID authUuid) {
+        this.executeKeycloakEmailActions(authUuid.toString(), Collections.singletonList("UPDATE_PASSWORD"));
+    }
+
+    @Override
+    public void requestAccountSetup(RegistrationId registrationId) {
+        this.executeKeycloakEmailActions(registrationId.getId().toString(), Arrays.asList("UPDATE_PASSWORD", "VERIFY_EMAIL"));
+    }
+
+    @Override
+    public void moveUserToGroup(UUID authUuid, String group) {
         keycloakProvider.getKeycloak()
                 .realm(realm)
                 .users()
-                .get(memberId.getAuthId())
-                .executeActionsEmail(Collections.singletonList("UPDATE_PASSWORD"));
+                .get(authUuid.toString())
+                .joinGroup(group);
+    }
+
+    private void executeKeycloakEmailActions(String authUuid, List<String> actions) {
+        keycloakProvider.getKeycloak()
+                .realm(realm)
+                .users()
+                .get(authUuid)
+                .executeActionsEmail(actions);
     }
 }

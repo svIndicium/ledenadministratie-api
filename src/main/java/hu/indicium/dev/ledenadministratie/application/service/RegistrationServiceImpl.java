@@ -29,8 +29,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationId register(NewRegistrationCommand newRegistration) {
-        RegistrationId registrationId = registrationRepository.nextIdentity();
-
         StudyTypeId studyTypeId = StudyTypeId.fromId(newRegistration.getStudyTypeId());
 
         StudyType studyType = studyTypeRepository.getStudyTypeById(studyTypeId);
@@ -40,6 +38,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         MemberDetails memberDetails = new MemberDetails(name, newRegistration.getPhoneNumber(), newRegistration.getDateOfBirth(), studyType);
 
         MailAddress mailAddress = new MailAddress(newRegistration.getMailAddress(), newRegistration.isReceivingNewsletter());
+
+        RegistrationId registrationId = authService.createAccountForUser(memberDetails, mailAddress);
 
         Registration registration = new Registration(registrationId, memberDetails, mailAddress);
 

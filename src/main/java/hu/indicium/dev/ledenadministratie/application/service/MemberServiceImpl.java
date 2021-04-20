@@ -48,13 +48,11 @@ public class MemberServiceImpl implements MemberService {
 
         Registration registration = registrationRepository.getRegistrationById(registrationId);
 
-        MemberId memberId = authService.createAccountForUser(registration.getMemberDetails(), registration.getMailAddress());
-
-        Member member = Member.fromRegistration(registration, memberId);
+        Member member = Member.fromRegistration(registration);
 
         MembershipId membershipId = membershipRepository.nextIdentity();
 
-        Membership membership = new Membership(membershipId, new Date(121, Calendar.SEPTEMBER, 1), new Date(122, Calendar.AUGUST, 31), member);
+        Membership membership = new Membership(membershipId, new Date(120, Calendar.SEPTEMBER, 1), new Date(121, Calendar.AUGUST, 31), member);
 
         PaymentId paymentId = paymentService.createContributionPayment(member);
 
@@ -62,14 +60,13 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
 
-        return memberId;
+        return member.getMemberId();
     }
 
     @Override
     @Transactional
     @PreAuthorize("hasPermission('manage-members')")
     public MemberId importMember(ImportMemberCommand importMemberCommand) {
-        RegistrationId registrationId = registrationRepository.nextIdentity();
 
         StudyType studyType = studyTypeRepository.getStudyTypeById(StudyTypeId.fromId(importMemberCommand.getStudyTypeId()));
 
@@ -79,17 +76,15 @@ public class MemberServiceImpl implements MemberService {
 
         MailAddress mailAddress = new MailAddress(importMemberCommand.getMailAddress(), importMemberCommand.isReceivingNewsletter());
 
-        Registration registration = new Registration(registrationId, memberDetails, mailAddress);
+        RegistrationId registrationId = authService.createAccountForUser(memberDetails, mailAddress);
 
-        registration.getMailAddress().verify();
+        Registration registration = new Registration(registrationId, memberDetails, mailAddress);
 
         registration.approve("Joost Lekkerkerker");
 
         registration = registrationRepository.save(registration);
 
-        MemberId memberId = authService.createAccountForUser(registration.getMemberDetails(), registration.getMailAddress());
-
-        Member member = Member.fromRegistration(registration, memberId);
+        Member member = Member.fromRegistration(registration);
 
         member = memberRepository.save(member);
 
@@ -106,6 +101,6 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
 
-        return memberId;
+        return member.getMemberId();
     }
 }
