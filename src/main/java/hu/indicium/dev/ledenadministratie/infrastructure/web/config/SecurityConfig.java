@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers()
+                .antMatchers(HttpMethod.POST, "/api/v1/mail/verify")
                 .antMatchers(HttpMethod.POST, "/api/v1/registrations");
     }
 
