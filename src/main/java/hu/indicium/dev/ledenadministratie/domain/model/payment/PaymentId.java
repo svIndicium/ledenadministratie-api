@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class PaymentId implements Serializable {
-    @Column(name = "id")
+    @Column(name = "payment_id")
     private UUID id;
 
     private PaymentId(UUID id) {
