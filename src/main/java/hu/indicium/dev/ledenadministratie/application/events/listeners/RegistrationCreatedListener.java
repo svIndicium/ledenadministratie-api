@@ -16,9 +16,6 @@ public class RegistrationCreatedListener implements DomainEventSubscriber<Regist
 
     @Override
     public void handleEvent(RegistrationCreated registrationCreated) {
-        Map<String, Object> mailParams = new HashMap<>();
-        mailParams.put("token", registrationCreated.getMailAddress().getVerificationToken());
-        mailService.sendMail(registrationCreated.getMailAddress(), registrationCreated.getName(), MailType.VERIFY_EMAIL, mailParams);
     }
 
     @Override
