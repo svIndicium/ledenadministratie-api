@@ -16,7 +16,8 @@ public class RegistrationApprovedListener implements DomainEventSubscriber<Regis
     @Override
     public void handleEvent(RegistrationApproved event) {
         memberService.registerMember(event.getRegistration().getRegistrationId());
-        authService.moveUserToGroup(event.getRegistration().getRegistrationId().getId(), "Leden");
+        // TODO make group id variable
+        authService.moveUserToGroup(event.getRegistration().getRegistrationId().getId(), "33544d70-7dd5-49b7-ae56-cad5471db4ef");
     }
 
     @Override
