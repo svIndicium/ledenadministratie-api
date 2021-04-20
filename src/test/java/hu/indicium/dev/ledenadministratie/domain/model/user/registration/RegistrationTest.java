@@ -86,11 +86,6 @@ class RegistrationTest {
         assertThat(registrationCreated.occurredOn()).isBeforeOrEqualsTo(new Date());
         assertThat(registrationCreated.occurredOn()).isCloseTo(startDate, 1000);
         assertThat(registrationCreated.getCreatedAt()).isAfterOrEqualsTo(memberDetails.getCreatedAt());
-        assertThat(registrationCreated.getName()).isEqualTo(name);
-        assertThat(registrationCreated.getDateOfBirth()).isEqualTo(memberDetails.getDateOfBirth());
-        assertThat(registrationCreated.getPhoneNumber()).isEqualTo(memberDetails.getPhoneNumber());
-        assertThat(registrationCreated.getStudyTypeId()).isEqualTo(studyTypeId);
-        assertThat(registrationCreated.getMailAddress()).isEqualTo(mailAddress);
         assertThat(registrationCreated.eventVersion()).isGreaterThanOrEqualTo(0);
     }
 
