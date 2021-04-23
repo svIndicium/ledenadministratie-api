@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Embeddable
 @NoArgsConstructor
@@ -26,5 +27,8 @@ public class MemberId implements Serializable {
 
     public static MemberId fromRegistrationId(RegistrationId registrationId) {
         return new MemberId(registrationId.getId().toString());
+    }
+    public static MemberId fromUuid(UUID uuid) {
+        return new MemberId(uuid.toString());
     }
 }
