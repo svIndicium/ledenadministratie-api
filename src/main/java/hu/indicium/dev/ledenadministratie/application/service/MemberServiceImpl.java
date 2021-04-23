@@ -58,6 +58,8 @@ public class MemberServiceImpl implements MemberService {
 
         membership.assignPayment(paymentId);
 
+        member.addMembership(membership);
+
         memberRepository.save(member);
 
         return member.getMemberId();
