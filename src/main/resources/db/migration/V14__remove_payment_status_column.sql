@@ -1,0 +1,1 @@
+alter table membership drop column payment_status;

@@ -30,22 +30,22 @@ public class Membership {
 
     private PaymentId paymentId;
 
-    private PaymentStatus paymentStatus;
+    private MembershipStatus status;
 
     public Membership(MembershipId membershipId, Date startDate, Date endDate, Member member) {
         this.membershipId = membershipId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
+        this.status = MembershipStatus.PENDING;
     }
 
     public void assignPayment(PaymentId paymentId) {
         this.paymentId = paymentId;
-        this.paymentStatus = PaymentStatus.OPEN;
     }
 
-    public void updatePaymentStatus(PaymentStatus paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void activate() {
+        this.status = MembershipStatus.ACTIVE;
     }
 
     public boolean isActive() {

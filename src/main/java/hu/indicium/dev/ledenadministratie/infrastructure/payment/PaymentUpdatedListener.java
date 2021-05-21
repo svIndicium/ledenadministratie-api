@@ -6,7 +6,6 @@ import hu.indicium.dev.ledenadministratie.application.service.MembershipService;
 import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
 import hu.indicium.dev.ledenadministratie.infrastructure.payment.events.PaymentUpdatedEvent;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +21,7 @@ public class PaymentUpdatedListener {
             System.out.println(eventJson);
             PaymentUpdatedEvent payment = objectMapper.readerFor(PaymentUpdatedEvent.class).readValue(eventJson);
             PaymentId paymentId = PaymentId.fromId(payment.getPaymentId());
-            membershipService.updateMembershipPaymentByPaymentId(paymentId);
+            membershipService.updateMembershipStatusWithPaymentId(paymentId);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
