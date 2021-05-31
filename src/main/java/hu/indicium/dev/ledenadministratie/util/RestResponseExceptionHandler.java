@@ -28,6 +28,14 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
         return convertToResponseEntity(ResponseBuilder.notFound().error(toErrorDto(e)).build());
     }
 
+    @ExceptionHandler(value = {
+            IllegalArgumentException.class
+    })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> badRequest(IllegalArgumentException e, WebRequest request) {
+        return convertToResponseEntity(ResponseBuilder.badRequest().error(toErrorDto(e)).build());
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         BindingResult bindingResult = ex.getBindingResult();
