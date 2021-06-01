@@ -2,6 +2,7 @@ package hu.indicium.dev.ledenadministratie.infrastructure.payment;
 
 import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
+import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.Membership;
 import hu.indicium.dev.ledenadministratie.util.Response;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,11 @@ public class PaymentServiceImpl implements PaymentService {
     private final WebClient webClient;
 
     @Override
-    public PaymentId createContributionPayment(Member member) {
+    public PaymentId createContributionPayment(Membership membership) {
         CreatePaymentRequest createPaymentRequest = CreatePaymentRequest.builder()
                 .amount(15)
-                .authId(member.getMemberId().getAuthId())
-                .description("Contributie 2021-2022")
+                .authId(membership.getMember().getMemberId().getAuthId())
+                .description(getPaymentDescription(membership))
                 .build();
         PaymentResponse paymentResponse = webClient.post()
                 .uri(paymentUrl + "/payments")
@@ -56,5 +57,9 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("Could not get payment");
         }
         return paymentResponse.getData();
+    }
+
+    private String getPaymentDescription(Membership membership) {
+        return "Contributie " + membership.getStartYear() + "-" + membership.getEndYear();
     }
 }

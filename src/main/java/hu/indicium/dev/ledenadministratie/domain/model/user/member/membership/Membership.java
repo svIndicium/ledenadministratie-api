@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -38,6 +39,18 @@ public class Membership {
         this.endDate = endDate;
         this.member = member;
         this.status = MembershipStatus.PENDING;
+    }
+
+    public int getStartYear() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.startDate);
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public int getEndYear() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.endDate);
+        return calendar.get(Calendar.YEAR);
     }
 
     public void assignPayment(PaymentId paymentId) {

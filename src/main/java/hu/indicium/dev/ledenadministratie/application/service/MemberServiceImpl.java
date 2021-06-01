@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
         Membership membership = new Membership(membershipId, new Date(120, Calendar.SEPTEMBER, 1), new Date(121, Calendar.AUGUST, 31), member);
 
-        PaymentId paymentId = paymentService.createContributionPayment(member);
+        PaymentId paymentId = paymentService.createContributionPayment(membership);
 
         membership.assignPayment(paymentId);
 
