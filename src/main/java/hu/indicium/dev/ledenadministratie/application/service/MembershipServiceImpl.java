@@ -25,6 +25,7 @@ public class MembershipServiceImpl implements MembershipService {
 
         Membership membership = membershipRepository.getMembershipByPaymentId(paymentId);
 
+        log.info("Received update for payment " + paymentId.getId().toString() + ". Status was " + payment.getStatus().toString());
         if (payment.getStatus() == PaymentStatus.PAID) {
             membership.activate();
         } else {

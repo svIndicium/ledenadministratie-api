@@ -17,4 +17,6 @@ public interface MembershipJpaRepository extends JpaRepository<Membership, UUID>
     Membership getMembershipByPaymentId(PaymentId paymentId);
 
     Collection<Membership> getMembershipsByMemberMemberId(MemberId memberId);
+
+    Collection<Membership> getMembershipsByPaymentIdIsNull();
 }
