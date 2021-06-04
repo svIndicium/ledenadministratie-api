@@ -1,6 +1,7 @@
 package hu.indicium.dev.ledenadministratie.application.service;
 
 import hu.indicium.dev.ledenadministratie.application.commands.ImportMemberCommand;
+import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyType;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeId;
 import hu.indicium.dev.ledenadministratie.domain.model.studytype.StudyTypeRepository;
@@ -17,6 +18,7 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.registration.Registr
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.registration.RegistrationRepository;
 import hu.indicium.dev.ledenadministratie.infrastructure.auth.AuthService;
+import hu.indicium.dev.ledenadministratie.infrastructure.payment.PaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -39,25 +41,34 @@ public class MemberServiceImpl implements MemberService {
 
     private final MembershipRepository membershipRepository;
 
+    private final PaymentService paymentService;
+
     @Override
     public MemberId registerMember(RegistrationId registrationId) {
 
         Registration registration = registrationRepository.getRegistrationById(registrationId);
 
-        MemberId memberId = authService.createAccountForUser(registration.getMemberDetails(), registration.getMailAddress());
+        Member member = Member.fromRegistration(registration);
 
-        Member member = Member.fromRegistration(registration, memberId);
+        MembershipId membershipId = membershipRepository.nextIdentity();
+
+        Membership membership = new Membership(membershipId, new Date(120, Calendar.SEPTEMBER, 1), new Date(121, Calendar.AUGUST, 31), member);
+
+        PaymentId paymentId = paymentService.createContributionPayment(membership);
+
+        membership.assignPayment(paymentId);
+
+        member.addMembership(membership);
 
         memberRepository.save(member);
 
-        return memberId;
+        return member.getMemberId();
     }
 
     @Override
     @Transactional
     @PreAuthorize("hasPermission('manage-members')")
     public MemberId importMember(ImportMemberCommand importMemberCommand) {
-        RegistrationId registrationId = registrationRepository.nextIdentity();
 
         StudyType studyType = studyTypeRepository.getStudyTypeById(StudyTypeId.fromId(importMemberCommand.getStudyTypeId()));
 
@@ -67,17 +78,15 @@ public class MemberServiceImpl implements MemberService {
 
         MailAddress mailAddress = new MailAddress(importMemberCommand.getMailAddress(), importMemberCommand.isReceivingNewsletter());
 
-        Registration registration = new Registration(registrationId, memberDetails, mailAddress);
+        RegistrationId registrationId = authService.createAccountForUser(memberDetails, mailAddress);
 
-        registration.getMailAddress().verify();
+        Registration registration = new Registration(registrationId, memberDetails, mailAddress);
 
         registration.approve("Joost Lekkerkerker");
 
         registration = registrationRepository.save(registration);
 
-        MemberId memberId = authService.createAccountForUser(registration.getMemberDetails(), registration.getMailAddress());
-
-        Member member = Member.fromRegistration(registration, memberId);
+        Member member = Member.fromRegistration(registration);
 
         member = memberRepository.save(member);
 
@@ -94,6 +103,6 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
 
-        return memberId;
+        return member.getMemberId();
     }
 }

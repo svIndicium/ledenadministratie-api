@@ -44,8 +44,8 @@ public class Member extends AssertionConcern {
     @JoinColumn(name = "registration_id")
     private Registration registration;
 
-    private Member(Registration registration, MemberId memberId) {
-        this.memberId = memberId;
+    private Member(Registration registration) {
+        this.memberId = MemberId.fromRegistrationId(registration.getRegistrationId());
         this.memberDetails = registration.getMemberDetails();
         this.reviewDetails = registration.getReviewDetails();
         this.registration = registration;
@@ -53,8 +53,8 @@ public class Member extends AssertionConcern {
         registration.setMember(this);
     }
 
-    public static Member fromRegistration(Registration registration, MemberId memberId) {
-        return new Member(registration, memberId);
+    public static Member fromRegistration(Registration registration) {
+        return new Member(registration);
     }
 
     public void addMembership(Membership membership) {

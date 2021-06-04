@@ -9,6 +9,16 @@
       "name": "keycloak.realm",
       "type": "java.lang.String",
       "description": "The realm to authenticate to."
+    },
+    {
+      "name": "hu.indicium.api.payments.url",
+      "type": "java.lang.String",
+      "description": "Description for hu.indicium.api.payments.url."
+    },
+    {
+      "name": "hu.indicium.mq.exchange-name",
+      "type": "java.lang.String",
+      "description": "Description for hu.indicium.mq.exchange-name."
     }
   ]
 }

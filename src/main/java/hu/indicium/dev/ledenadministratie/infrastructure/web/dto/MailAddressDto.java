@@ -14,10 +14,6 @@ public class MailAddressDto {
 
     private String address;
 
-    private Date verificationRequestedAt;
-
-    private Date verifiedAt;
-
     private boolean receivesNewsletter;
 
     private Date createdAt;
@@ -27,8 +23,6 @@ public class MailAddressDto {
     public MailAddressDto(MailAddress mailAddress) {
         this.id = mailAddress.getId();
         this.address = mailAddress.getAddress();
-        this.verificationRequestedAt = mailAddress.getVerificationRequestedAt();
-        this.verifiedAt = mailAddress.getVerifiedAt();
         this.receivesNewsletter = mailAddress.isReceivesNewsletter();
         this.createdAt = mailAddress.getCreatedAt();
         this.updatedAt = mailAddress.getUpdatedAt();
