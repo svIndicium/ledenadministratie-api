@@ -35,10 +35,9 @@ jobs:
                   "username": "joostlek",
                   "password": "${{ secrets.ACCESS_TOKEN }}"
             }]
-      - name: Set up image tags
+      - name: Build image
         run: |
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           [ "$VERSION" == "master" ] && VERSION=stable
           [ "$VERSION" == "dev" ] && VERSION=latest
-      - name: Build image
-        run: mvn compile jib:build -Djib.to.tags=$VERSION
+          mvn compile jib:build -Djib.to.tags=$VERSION
