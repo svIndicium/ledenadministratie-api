@@ -16,7 +16,6 @@ import java.util.UUID;
 public class RegistrationId implements Serializable {
 
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "registration_id")
     private UUID id;
 

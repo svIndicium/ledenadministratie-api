@@ -11,27 +11,15 @@ import java.util.Date;
 @Getter
 public class RegistrationCreated implements DomainEvent {
 
-    private final Name name;
-
-    private final MailAddress mailAddress;
-
-    private final String phoneNumber;
-
-    private final Date dateOfBirth;
+    private final Registration registration;
 
     private final Date createdAt;
-
-    private final StudyTypeId studyTypeId;
 
     private final int eventVersion;
 
     public RegistrationCreated(Registration registration) {
-        this.name = registration.getMemberDetails().getName();
-        this.mailAddress = registration.getMailAddress();
-        this.phoneNumber = registration.getMemberDetails().getPhoneNumber();
-        this.dateOfBirth = registration.getMemberDetails().getDateOfBirth();
+        this.registration = registration;
         this.createdAt = registration.getMemberDetails().getCreatedAt();
-        this.studyTypeId = registration.getMemberDetails().getStudyType().getStudyTypeId();
         this.eventVersion = 1;
     }
 

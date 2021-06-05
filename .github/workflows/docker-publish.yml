@@ -1,0 +1,43 @@
+name: Docker with Maven
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+    tags:
+      - v*
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out repository
+        uses: actions/checkout@v2
+      - name: Cacheing maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Set up the JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Generate maven settings
+        uses: s4u/maven-settings-action@v2.3.0
+        with:
+          servers: |
+            [{
+                  "id": "ghcr.io",
+                  "username": "joostlek",
+                  "password": "${{ secrets.ACCESS_TOKEN }}"
+            }]
+      - name: Build image
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [ "$VERSION" == "master" ] && VERSION=stable
+          [ "$VERSION" == "dev" ] && VERSION=latest
+          mvn compile jib:build -Djib.to.tags=$VERSION

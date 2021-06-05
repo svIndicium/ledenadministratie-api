@@ -30,15 +30,6 @@ public class MailAddress extends AssertionConcern {
     @Column(nullable = false, updatable = false)
     private String address;
 
-    @Column(unique = true)
-    private String verificationToken;
-
-    @Column
-    private Date verificationRequestedAt;
-
-    @Column
-    private Date verifiedAt;
-
     @Column
     private boolean receivesNewsletter;
 
@@ -58,34 +49,6 @@ public class MailAddress extends AssertionConcern {
         this.setAddress(address);
         this.setReceivesNewsletter(receivesNewsletter);
         this.createdAt = new Date();
-        this.requestVerification(verificationToken);
-    }
-
-    public void requestVerification(String verificationToken) {
-        if (this.isVerified()) {
-            throw new MailAddressAlreadyVerifiedException(this);
-        }
-        this.setVerificationRequestedAt(new Date());
-        this.generateVerificationToken();
-        DomainEventPublisher.instance()
-                .publish(new MailAddressVerificationRequested(getAddress(), verificationToken));
-    }
-
-    public void verify() {
-        if (this.isVerified()) {
-            throw new MailAddressAlreadyVerifiedException(this);
-        }
-        this.setVerifiedAt(new Date());
-        DomainEventPublisher.instance()
-                .publish(new MailAddressVerified(getAddress(), getVerifiedAt()));
-    }
-
-    public boolean isVerified() {
-        return this.verifiedAt != null;
-    }
-
-    private void generateVerificationToken() {
-        this.setVerificationToken(Util.randomAlphaNumeric(10).toUpperCase());
     }
 
     public void setId(UUID id) {
@@ -98,24 +61,6 @@ public class MailAddress extends AssertionConcern {
         assertArgumentNotNull(address, "Mail address must be provided");
 
         this.address = address;
-    }
-
-    public void setVerificationToken(String verificationToken) {
-        assertArgumentNotNull(verificationToken, "A verification token for the mail address must be provided");
-
-        this.verificationToken = verificationToken;
-    }
-
-    public void setVerificationRequestedAt(Date verificationRequestedAt) {
-        assertArgumentNotNull(verificationRequestedAt, "A date for the mail verification must be provided");
-
-        this.verificationRequestedAt = verificationRequestedAt;
-    }
-
-    public void setVerifiedAt(Date verifiedAt) {
-        assertArgumentNotNull(verifiedAt, "A date when the mail address was verified must be provided");
-
-        this.verifiedAt = verifiedAt;
     }
 
     public void setReceivesNewsletter(boolean receivesNewsletter) {

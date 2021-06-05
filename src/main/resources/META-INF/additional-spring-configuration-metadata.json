@@ -1,24 +1,24 @@
 {
   "properties": [
     {
-      "name": "auth0.apiAudience",
+      "name": "keycloak.server-url",
       "type": "java.lang.String",
-      "description": "Description for auth0.apiAudience."
+      "description": "Server url for the keycloak instance."
     },
     {
-      "name": "auth0.issuer",
+      "name": "keycloak.realm",
       "type": "java.lang.String",
-      "description": "Description for auth0.issuer."
+      "description": "The realm to authenticate to."
     },
     {
-      "name": "auth0.clientSecret",
+      "name": "hu.indicium.api.payments.url",
       "type": "java.lang.String",
-      "description": "Description for auth0.clientSecret."
+      "description": "Description for hu.indicium.api.payments.url."
     },
     {
-      "name": "auth0.clientId",
+      "name": "hu.indicium.mq.exchange-name",
       "type": "java.lang.String",
-      "description": "Description for auth0.clientId."
+      "description": "Description for hu.indicium.mq.exchange-name."
     }
   ]
 }

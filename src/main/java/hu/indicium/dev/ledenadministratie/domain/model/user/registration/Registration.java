@@ -6,7 +6,6 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.MemberDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewDetails;
 import hu.indicium.dev.ledenadministratie.domain.model.user.ReviewStatus;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
-import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddressNotVerifiedException;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,17 +43,11 @@ public class Registration extends AssertionConcern {
                 .publish(new RegistrationCreated(this));
     }
 
-    public boolean isEligibleForAccount() {
-        return reviewStatus == ReviewStatus.PENDING && !mailAddress.isVerified();
-    }
-
     public void approve(String reviewedBy) {
         if (reviewStatus != ReviewStatus.PENDING) {
             throw new RegistrationAlreadyReviewedException(this);
         }
-        if (!mailAddress.isVerified()) {
-            throw new MailAddressNotVerifiedException(mailAddress);
-        }
+//      TODO: Check Keycloak if the mailaddress is verified
         this.setReviewDetails(ReviewDetails.approve(reviewedBy));
         this.setReviewStatus(ReviewStatus.APPROVED);
         DomainEventPublisher.instance()
