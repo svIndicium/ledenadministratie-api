@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-admin-client</artifactId>
-			<version>11.0.3</version>
+			<version>13.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
