@@ -28,13 +28,13 @@ public class EventListenerConfig implements CommandLineRunner {
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void run(String... args) throws Exception {
-//        List<DomainEventSubscriber> subscribers = Arrays.asList(
-//                new RegistrationCreatedListener(authService),
-//                new RegistrationApprovedListener(memberService, authService),
-//                new MemberCreatedListener(mailService)
-//        );
-//        for (DomainEventSubscriber subscriber : subscribers) {
-//            DomainEventPublisher.instance().subscribe(subscriber);
-//        }
+        List<DomainEventSubscriber> subscribers = Arrays.asList(
+                new RegistrationCreatedListener(authService),
+                new RegistrationApprovedListener(memberService, authService),
+                new MemberCreatedListener(mailService)
+        );
+        for (DomainEventSubscriber subscriber : subscribers) {
+            DomainEventPublisher.instance().subscribe(subscriber);
+        }
     }
 }

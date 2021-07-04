@@ -28,6 +28,8 @@ public class MembershipServiceImpl implements MembershipService {
         log.info("Received update for payment " + paymentId.getId().toString() + ". Status was " + payment.getStatus().toString());
         if (payment.getStatus() == PaymentStatus.PAID) {
             membership.activate();
+        } else if (payment.getStatus() == PaymentStatus.CANCELLED) {
+            membership.cancel();
         } else {
             log.info("Received update for payment " + paymentId.getId().toString() + ". Status was " + payment.getStatus().toString());
         }

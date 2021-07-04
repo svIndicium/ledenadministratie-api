@@ -4,6 +4,7 @@ import hu.indicium.dev.ledenadministratie.domain.model.user.Name;
 import hu.indicium.dev.ledenadministratie.domain.model.user.mailaddress.MailAddress;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailListType;
 import hu.indicium.dev.ledenadministratie.infrastructure.mail.list.requests.AddMailingListMemberRequest;
+import hu.indicium.dev.ledenadministratie.infrastructure.mail.list.requests.AddTagRequest;
 import hu.indicium.dev.ledenadministratie.setting.SettingService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Service
 public class MailChimpService implements MailListService {
@@ -46,5 +49,19 @@ public class MailChimpService implements MailListService {
         httpHeaders.setBasicAuth(settingService.getValueByKey("MAILCHIMP_USERNAME"), settingService.getValueByKey("MAILCHIMP_API_KEY"));
         HttpEntity<AddMailingListMemberRequest> httpEntity = new HttpEntity<>(new AddMailingListMemberRequest(mailAddress, name), httpHeaders);
         restTemplate.delete("https://" + settingService.getValueByKey("MAILCHIMP_REGION") + ".api.mailchimp.com/3.0/lists/" + mailListId + "/members/" + emailHash, httpEntity, String.class);
+    }
+
+    public void addTagToUser(MailAddress mailAddress, List<String> tags, MailListType mailListType) {
+        String mailListId = mailChimpMailListIdFactory.getListId(mailListType);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        String emailHash = DigestUtils.md5DigestAsHex(mailAddress.getAddress().getBytes());
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        httpHeaders.setBasicAuth(settingService.getValueByKey("MAILCHIMP_USERNAME"), settingService.getValueByKey("MAILCHIMP_API_KEY"));
+        AddTagRequest addTagRequest = new AddTagRequest();
+        for (String tag : tags) {
+            addTagRequest.addTag(tag);
+        }
+        HttpEntity<AddTagRequest> httpEntity = new HttpEntity<>(addTagRequest, httpHeaders);
+        restTemplate.postForEntity("https://" + settingService.getValueByKey("MAILCHIMP_REGION") + ".api.mailchimp.com/3.0/lists/" + mailListId + "/members/" + emailHash + "/tags", httpEntity, String.class);
     }
 }
