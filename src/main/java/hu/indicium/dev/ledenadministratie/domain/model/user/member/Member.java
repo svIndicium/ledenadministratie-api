@@ -34,7 +34,7 @@ public class Member extends AssertionConcern {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MailAddress> mailAddresses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Membership> memberships = new ArrayList<>();
 
     @UpdateTimestamp
