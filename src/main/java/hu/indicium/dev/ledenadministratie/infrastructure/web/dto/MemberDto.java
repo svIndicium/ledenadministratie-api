@@ -13,6 +13,8 @@ import java.util.HashSet;
 public class MemberDto {
     private String id;
 
+    private boolean active;
+
     private MemberDetailsDto memberDetails;
 
     private ReviewDetailsDto reviewDetails;
@@ -21,6 +23,7 @@ public class MemberDto {
 
     public MemberDto(Member member) {
         this.id = member.getMemberId().getAuthId();
+        this.active = member.isActive();
         this.memberDetails = new MemberDetailsDto(member.getMemberDetails());
         this.reviewDetails = new ReviewDetailsDto(member.getReviewDetails());
         this.mailAddresses = new HashSet<>();

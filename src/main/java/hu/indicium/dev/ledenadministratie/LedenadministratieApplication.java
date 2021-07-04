@@ -6,6 +6,8 @@ import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.Membership;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.MembershipStatus;
+import hu.indicium.dev.ledenadministratie.infrastructure.mail.MailListType;
+import hu.indicium.dev.ledenadministratie.infrastructure.mail.list.MailChimpService;
 import hu.indicium.dev.ledenadministratie.infrastructure.payment.CreatePaymentRequest;
 import hu.indicium.dev.ledenadministratie.infrastructure.payment.PaymentResponse;
 import hu.indicium.dev.ledenadministratie.infrastructure.payment.PaymentService;
@@ -45,6 +47,9 @@ public class LedenadministratieApplication implements CommandLineRunner {
     @Autowired
     private WebClient webClient;
 
+    @Autowired
+    private MailChimpService mailChimpService;
+
     @Value("${hu.indicium.api.payments.url}")
     private String paymentUrl;
 
@@ -82,6 +87,7 @@ public class LedenadministratieApplication implements CommandLineRunner {
                     .bodyToMono(String.class)
                     .block();
         }
+        List<String> failedIds = new ArrayList<>();
         for (Member member : memberJpaRepository.findAll()) {
             List<String> tags = new ArrayList<>();
             for (Membership membership : member.getMemberships()) {
@@ -89,9 +95,15 @@ public class LedenadministratieApplication implements CommandLineRunner {
                     tags.add(getPaymentDescription(membership));
                 }
             }
+            try {
+                mailChimpService.addTagToUser(member.getMailAddresses().get(0), tags, MailListType.GENERAL);
+            } catch (Exception e) {
+                failedIds.add(member.getMemberId().getAuthId());
+            }
             log.info(Util.getFullLastName(member.getMemberDetails().getName().getMiddleName(), member.getMemberDetails().getName().getLastName()));
             log.info(String.join(",", tags));
         }
+        log.info(String.join(",", failedIds));
     }
 
     private String getPaymentDescription(Membership membership) {
