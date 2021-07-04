@@ -66,6 +66,6 @@ public class Membership {
     }
 
     public boolean isActive() {
-        return this.endDate.before(new Date()) && status == MembershipStatus.ACTIVE;
+        return this.endDate.after(new Date()) && status == MembershipStatus.ACTIVE;
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import hu.indicium.dev.ledenadministratie.domain.model.payment.PaymentId;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.Member;
 import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.Membership;
+import hu.indicium.dev.ledenadministratie.domain.model.user.member.membership.MembershipStatus;
 import hu.indicium.dev.ledenadministratie.infrastructure.payment.CreatePaymentRequest;
 import hu.indicium.dev.ledenadministratie.infrastructure.payment.PaymentResponse;
 import hu.indicium.dev.ledenadministratie.infrastructure.payment.PaymentService;
@@ -84,7 +85,7 @@ public class LedenadministratieApplication implements CommandLineRunner {
         for (Member member : memberJpaRepository.findAll()) {
             List<String> tags = new ArrayList<>();
             for (Membership membership : member.getMemberships()) {
-                if (membership.isActive()) {
+                if (membership.getStatus() == MembershipStatus.ACTIVE) {
                     tags.add(getPaymentDescription(membership));
                 }
             }
