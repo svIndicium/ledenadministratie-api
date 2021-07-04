@@ -61,7 +61,11 @@ public class Membership {
         this.status = MembershipStatus.ACTIVE;
     }
 
+    public void cancel() {
+        this.status = MembershipStatus.CANCELLED;
+    }
+
     public boolean isActive() {
-        return this.endDate.before(new Date());
+        return this.endDate.before(new Date()) && status == MembershipStatus.ACTIVE;
     }
 }
