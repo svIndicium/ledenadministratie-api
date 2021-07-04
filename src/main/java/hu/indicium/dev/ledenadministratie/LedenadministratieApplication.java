@@ -88,8 +88,8 @@ public class LedenadministratieApplication implements CommandLineRunner {
                     tags.add(getPaymentDescription(membership));
                 }
             }
-            log.info(Util.getFullLastName(member.getMemberDetails().getName().getMiddleName(), member.getMemberDetails().getName().getMiddleName()));
-            log.info(tags.toArray().toString());
+            log.info(Util.getFullLastName(member.getMemberDetails().getName().getMiddleName(), member.getMemberDetails().getName().getLastName()));
+            log.info(String.join(",", tags));
         }
     }
 
